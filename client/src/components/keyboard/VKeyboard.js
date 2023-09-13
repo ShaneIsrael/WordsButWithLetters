@@ -29,15 +29,12 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys }) => {
   React.useEffect(() => {
     function handleKeyDown(e) {
       if (/^[a-zA-Z]$/.test(e.key)) {
-        console.log(`${e.key} is a letter`)
         return onKeyPressed(e.key.toUpperCase())
       }
       if (e.key === 'Delete' || e.key === 'Backspace') {
-        console.log(`DELETE`)
         return onDelete()
       }
       if (e.key === 'Enter') {
-        console.log(`ENTER`)
         return onEnter()
       }
     }
