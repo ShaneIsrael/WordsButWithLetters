@@ -7,5 +7,7 @@ until [ "`docker inspect -f {{.State.Running}} postgres-db`"=="true" ]; do
     sleep 5;
 done;
 
+sleep 10;
+
 npm i
 npm run local

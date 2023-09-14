@@ -5,7 +5,7 @@ import Login from './views/Login'
 import Register from './views/Register'
 import Home from './views/Home'
 import User from './views/User'
-import Pyramid from './views/Pyramid'
+import TestPage from './views/TestPage'
 
 function App() {
   return (
@@ -15,7 +15,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/user/:id" element={<User />} />
-        <Route path="/pyramid" element={<Pyramid />} />
+        <Route path="/test" element={<TestPage />} />
         <Route path="*" element={<div>not found</div>} />
       </Routes>
     </Router>
