@@ -106,6 +106,7 @@ VKeyboard.defaultProps = {
   onDelete: () => {},
   onEnter: () => {},
   disabledKeys: [],
+  highlightKeys: [],
 }
 
 export default VKeyboard

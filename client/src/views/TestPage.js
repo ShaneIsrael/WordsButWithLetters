@@ -85,7 +85,7 @@ const TestPage = (props) => {
         onKeyPressed={handleKeyPress}
         onDelete={handleDelete}
         disabledKeys={disabledKeys}
-        highlightKeys={boardData.boardRowLetters[activeRow] || []}
+        highlightKeys={boardData.boardRowLetters[activeRow]}
         onEnter={handleSubmit}
       />
     </PageWrapper>
