@@ -78,7 +78,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
               {key !== 'ENTER' && key !== 'DELETE' && (
                 <KeyButton
                   disabled={disabledKeys.indexOf(key) >= 0}
-                  highlight={highlightKeys.indexOf(key) >= 0}
+                  highlight={highlightKeys.indexOf(key) >= 0 ? 1 : 0}
                   color={disabledKeys.indexOf(key) >= 0 ? 'neutral' : 'primary'}
                   variant="outlined"
                   onClick={() => onKeyPressed(key)}

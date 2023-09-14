@@ -10,8 +10,8 @@ const LetterHolder = styled(Sheet)(({ theme, active }) => ({
   alignItems: 'center',
   borderRadius: 2,
   border: active
-    ? `1px solid ${theme.palette.mode === 'dark' ? '#fff' : 'black'}`
-    : `1px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
+    ? `2px solid ${theme.palette.mode === 'dark' ? '#fff' : 'black'}`
+    : `2px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
   // color: theme.vars.palette.text.secondary,
   width: 60,
   height: 60,
@@ -24,7 +24,11 @@ const BoardRow = ({ active, letters }) => {
     return (
       <Grid container gap={1}>
         {letters.map((letter, index) => (
-          <LetterHolder key={(letter ? letter : 'blank_') + index} active={letter}>
+          <LetterHolder
+            key={(letter ? letter : 'blank_') + index}
+            className={letter ? 'tilt-shake' : ''}
+            active={letter}
+          >
             {letter}
           </LetterHolder>
         ))}
