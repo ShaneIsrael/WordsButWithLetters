@@ -2,14 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Button, Grid, Sheet, styled } from '@mui/joy'
 import BackspaceIcon from '@mui/icons-material/Backspace'
+import { useTheme } from '@emotion/react'
 
-const KeyButton = styled(Button)(({ theme }) => ({
-  // backgroundColor: theme.palette.mode === 'dark' ? '#3D3D4F' : '#bdbdbd',
+const KeyButton = styled(Button)(({ theme, highlight }) => ({
+  backgroundColor: highlight ? '#EACB4F59' : false,
   ...theme.typography['body-sm'],
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 4,
+  borderColor: highlight ? theme.palette.warning[200] : false,
   // border: '1px solid #00000040',
   // color: theme.vars.palette.text.secondary,
   width: 43,
@@ -25,7 +27,9 @@ const layout = [
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
 ]
 
-const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys }) => {
+const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys }) => {
+  const theme = useTheme()
+
   React.useEffect(() => {
     function handleKeyDown(e) {
       if (/^[a-zA-Z]$/.test(e.key)) {
@@ -48,6 +52,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys }) => {
 
   return (
     <Sheet
+      variant="outlined"
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -73,6 +78,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys }) => {
               {key !== 'ENTER' && key !== 'DELETE' && (
                 <KeyButton
                   disabled={disabledKeys.indexOf(key) >= 0}
+                  highlight={highlightKeys.indexOf(key) >= 0}
                   color={disabledKeys.indexOf(key) >= 0 ? 'neutral' : 'primary'}
                   variant="outlined"
                   onClick={() => onKeyPressed(key)}
@@ -93,6 +99,7 @@ VKeyboard.propTypes = {
   onDelete: PropTypes.func,
   onEnter: PropTypes.func,
   disabledKeys: PropTypes.array,
+  highlightKeys: PropTypes.array,
 }
 VKeyboard.defaultProps = {
   onKeyPressed: () => {},
