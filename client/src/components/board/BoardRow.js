@@ -47,7 +47,7 @@ const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder 
     ? `2px solid ${theme.palette.mode === 'dark' ? '#fff' : 'black'}`
     : `2px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
   borderColor: highlightborder || false,
-  color: '#fff',
+  color: theme.palette.mode === 'dark' ? '#fff' : 'black',
   width: 60,
   height: 60,
   fontSize: '1.25em',
