@@ -2,6 +2,10 @@
   animation: tilt-shaking 0.15s;
 }
 
+.skew-shake-infinite {
+  animation: skew-x-shake 1.3s infinite;
+}
+
 @keyframes tilt-shaking {
   0% {
     transform: rotate(0deg);
@@ -17,5 +21,25 @@
   }
   100% {
     transform: rotate(0deg);
+  }
+}
+@keyframes skew-x-shake {
+  0% {
+    transform: skewX(-15deg);
+  }
+  2% {
+    transform: skewX(15deg);
+  }
+  4% {
+    transform: skewX(-15deg);
+  }
+  6% {
+    transform: skewX(15deg);
+  }
+  8% {
+    transform: skewX(0deg);
+  }
+  100% {
+    transform: skewX(0deg);
   }
 }
