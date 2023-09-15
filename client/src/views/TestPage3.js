@@ -9,17 +9,24 @@ import PuzzleService from '../services/PuzzleService'
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
 
-function generateTwoUniqueNumbers(n) {
-  // Generate unique random numbers
-  let numbers = []
-  while (numbers.length < 2) {
-    let randomNum = Math.floor(Math.random() * n)
-    if (!numbers.includes(randomNum)) {
-      numbers.push(randomNum)
-    }
+var alphabet = []
+for (var i = 65; i <= 90; i++) {
+  alphabet.push(String.fromCharCode(i))
+}
+
+function jumblify(word) {
+  // Convert the word into an array of characters
+  var wordArray = word.split('')
+
+  // Randomly shuffle the characters using the Fisher-Yates algorithm
+  for (var i = wordArray.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1))
+    var temp = wordArray[i]
+    wordArray[i] = wordArray[j]
+    wordArray[j] = temp
   }
 
-  return numbers
+  return wordArray
 }
 
 function createRowLetters() {
@@ -30,29 +37,22 @@ function createRowLetters() {
   return rows
 }
 
-function createRowHighlights() {
+function createRowHighlights(rowHints) {
   let rows = []
-  for (let i = 0; i < MAX_BOARD_ROWS - 1; i++) {
+  for (let i = 0; i < MAX_BOARD_ROWS; i++) {
     // odd rows only highlight 1 letter, even highlight 2
-    if (i % 2 !== 0) {
-      rows.push([
-        {
-          index: generateTwoUniqueNumbers(BOARD_ROW_LENGTH)[0],
-          color: 'red',
-          animation: 'skew-shake-infinite',
-        },
-      ])
-    } else {
+    if (rowHints[i].length > 0) {
       rows.push(
-        generateTwoUniqueNumbers(BOARD_ROW_LENGTH).map((num) => ({
-          index: num,
-          color: 'red',
-          animation: 'skew-shake-infinite',
+        rowHints[i].map((hint) => ({
+          index: hint.index,
+          color: 'yellow',
+          animation: '',
         })),
       )
+    } else {
+      rows.push([])
     }
   }
-  rows.push([])
   return rows
 }
 
@@ -60,7 +60,9 @@ const TestPage3 = (props) => {
   const [disabledKeys, setDisabledKeys] = React.useState([])
   const [boardData, setBoardData] = React.useState()
   const [showPuzzle, setShowPuzzle] = React.useState(false)
-  const [activeRow, setActiveRow] = React.useState(0)
+  const [activeRow, setActiveRow] = React.useState(null)
+  const [failedAttempts, setFailedAttempts] = React.useState(0)
+  const [puzzleComplete, setPuzzleComplete] = React.useState(false)
 
   const handleKeyPress = (key) => {
     if (disabledKeys.indexOf(key) >= 0) return
@@ -71,7 +73,8 @@ const TestPage3 = (props) => {
         let trow = row
         if (rowIndex === activeRow) {
           for (let i = 0; i < trow.length; i++) {
-            if (!trow[i]) {
+            const hint = board.rowHints[activeRow].filter((hint) => hint.index === i)[0]
+            if (!trow[i] && !hint) {
               trow[i] = key
               // setDisabledKeys((prev) => [...prev, key])
               break
@@ -94,11 +97,28 @@ const TestPage3 = (props) => {
         let trow = row
         if (rowIndex === activeRow) {
           for (let i = trow.length; i >= 0; i--) {
-            if (trow[i] !== undefined) {
-              const letterRemoved = trow[i]
+            const hint = board.rowHints[activeRow].filter((hint) => hint.index === i)[0]
+            if (trow[i] !== undefined && !hint) {
               trow[i] = undefined
-              // setDisabledKeys((prev) => prev.filter((l) => l !== letterRemoved))
               break
+            }
+          }
+        }
+        return trow
+      }),
+    }))
+  }
+
+  const clearRow = () => {
+    setBoardData((board) => ({
+      ...board,
+      rowLetters: board.rowLetters.map((row, rowIndex) => {
+        let trow = row
+        if (rowIndex === activeRow) {
+          for (let i = trow.length; i >= 0; i--) {
+            const hint = board.rowHints[activeRow].filter((hint) => hint.index === i)[0]
+            if (trow[i] !== undefined && !hint) {
+              trow[i] = undefined
             }
           }
         }
@@ -111,23 +131,72 @@ const TestPage3 = (props) => {
     if (activeRow < MAX_BOARD_ROWS) {
       // if the row is not completely filled, do not allow submission
       if (boardData.rowLetters[activeRow].filter((l) => !l).length > 0) return
-      const currentRowHighlights = boardData.rowHighlights[activeRow]
-      const currentRowLetters = boardData.rowLetters[activeRow]
 
-      for (let i = 0; i < currentRowHighlights.length; i++) {
-        setDisabledKeys((prev) => [...prev, currentRowLetters[currentRowHighlights[i]]])
+      const submittedWord = boardData.rowLetters[activeRow].join('')
+      if (submittedWord === boardData.rowSolutions[activeRow]) {
+        if (activeRow === MAX_BOARD_ROWS - 1) {
+          setPuzzleComplete(true)
+        }
+        setActiveRow((prev) => prev + 1)
+        setFailedAttempts(0)
+      } else {
+        // clearRow()
+        setFailedAttempts((prev) => prev + 1)
       }
-      setActiveRow((prev) => prev + 1)
     }
   }
 
   React.useEffect(() => {
-    setBoardData({
-      rowLetters: createRowLetters(),
-      rowSolutions: [],
-      rowHighlights: createRowHighlights(),
-    })
-    PuzzleService.getRandomWords(5).then((resp) => console.log(resp))
+    if (boardData && activeRow < MAX_BOARD_ROWS) {
+      setDisabledKeys(alphabet.filter((c) => !boardData.rowJumbled[activeRow].includes(c)))
+    }
+  }, [activeRow, boardData?.rowJumbled])
+
+  React.useEffect(() => {
+    if (failedAttempts > 0) {
+      const tempRowHints = boardData.rowHints
+      const solutionWord = boardData.rowSolutions[activeRow]
+      while (true) {
+        const randomIndex = Math.floor(Math.random() * BOARD_ROW_LENGTH)
+        if (tempRowHints[activeRow].filter((rh) => rh.index === randomIndex).length === 0) {
+          tempRowHints[activeRow].push({ index: randomIndex, letter: solutionWord[randomIndex] })
+          break
+        }
+      }
+
+      setBoardData((prev) => ({
+        ...prev,
+        rowHints: tempRowHints,
+        rowLetters: prev.rowLetters.map((row, rowIndex) => {
+          let trow = row
+          if (rowIndex === activeRow) {
+            for (let i = 0; i < trow.length; i++) {
+              const hint = tempRowHints[activeRow].filter((hint) => hint.index === i)[0]
+              if (hint) {
+                trow[i] = hint.letter
+              }
+            }
+          }
+          return trow
+        }),
+        rowHighlights: createRowHighlights(tempRowHints),
+      }))
+    }
+  }, [failedAttempts])
+
+  React.useEffect(() => {
+    async function setup() {
+      const words = (await PuzzleService.getRandomWords(MAX_BOARD_ROWS)).data
+      setBoardData({
+        rowLetters: createRowLetters(),
+        rowHints: words.map((x) => []),
+        rowJumbled: words.map((word) => jumblify(word.toUpperCase())),
+        rowSolutions: words.map((word) => word.toUpperCase()),
+        // rowHighlights: createRowHighlights(),
+      })
+      setActiveRow(0)
+    }
+    setup()
   }, [])
 
   return (
@@ -141,6 +210,8 @@ const TestPage3 = (props) => {
             rowLetters={boardData.rowLetters}
             rowHighlights={boardData.rowHighlights}
             onStart={() => setShowPuzzle(true)}
+            failedAttempt={failedAttempts}
+            puzzleComplete={puzzleComplete}
           />
 
           <div style={{ marginBottom: 25 }} />

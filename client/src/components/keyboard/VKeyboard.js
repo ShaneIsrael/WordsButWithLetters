@@ -52,26 +52,27 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
 
   return (
     <Sheet
-      variant="outlined"
+      variant="plain"
       sx={{
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: 1,
         padding: 2,
+        borderRadius: 8,
       }}
     >
       {layout.map((row, index) => (
-        <Grid key={`${row[0]}-${index}`} container gap={1}>
+        <Grid key={`${row[0]}-${index}`} container gap={1} flexWrap="nowrap" justifyContent={'center'}>
           {row.map((key) => (
             <div key={key}>
               {key === 'DELETE' && (
-                <KeyButton variant="outlined" onClick={onDelete} sx={{ width: 65.4 }}>
+                <KeyButton variant="outlined" onClick={onDelete} sx={{ maxWidth: 65.4, width: '100%' }}>
                   <BackspaceIcon />
                 </KeyButton>
               )}
               {key === 'ENTER' && (
-                <KeyButton variant="outlined" onClick={onEnter} sx={{ width: 65.4, fontSize: 12 }}>
+                <KeyButton variant="outlined" onClick={onEnter} sx={{ maxWidth: 65.4, width: '100%', fontSize: 12 }}>
                   {key}
                 </KeyButton>
               )}
