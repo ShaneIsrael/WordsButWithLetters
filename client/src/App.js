@@ -6,6 +6,7 @@ import Register from './views/Register'
 import Home from './views/Home'
 import User from './views/User'
 import TestPage from './views/TestPage'
+import TestPage3 from './views/TestPage3'
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/user/:id" element={<User />} />
         <Route path="/test" element={<TestPage />} />
+        <Route path="/test3" element={<TestPage3 />} />
         <Route path="*" element={<div>not found</div>} />
       </Routes>
     </Router>
