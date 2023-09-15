@@ -35,9 +35,21 @@ function createBoardRowHighlights() {
   for (let i = 0; i < MAX_BOARD_ROWS - 1; i++) {
     // odd rows only highlight 1 letter, even highlight 2
     if (i % 2 !== 0) {
-      rows.push([generateTwoUniqueNumbers(BOARD_ROW_LENGTH)[0]])
+      rows.push([
+        {
+          index: generateTwoUniqueNumbers(BOARD_ROW_LENGTH)[0],
+          color: 'red',
+          animation: 'skew-shake-infinite',
+        },
+      ])
     } else {
-      rows.push(generateTwoUniqueNumbers(BOARD_ROW_LENGTH))
+      rows.push(
+        generateTwoUniqueNumbers(BOARD_ROW_LENGTH).map((num) => ({
+          index: num,
+          color: 'red',
+          animation: 'skew-shake-infinite',
+        })),
+      )
     }
   }
   rows.push([])

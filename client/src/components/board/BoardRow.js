@@ -18,16 +18,36 @@ const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder 
   fontWeight: 'bold',
 }))
 
-const HighlightLetterHolder = styled(Sheet)(({ theme, active }) => ({
-  backgroundColor: theme.palette.mode === 'dark' ? '#ff000026' : '#FF000057',
+const HIGHLIGHT_COLORS = {
+  red: {
+    backgroundLight: '#FF000057',
+    backgroundDark: '#ff000026',
+    borderLight: '#ff000026',
+    borderDark: '#FF000057',
+    borderActiveLight: 'red',
+    borderActiveDark: 'red',
+  },
+  green: {},
+  yellow: {},
+}
+
+const HighlightLetterHolder = styled(Sheet)(({ theme, active, color }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].backgroundDark : HIGHLIGHT_COLORS[color].backgroundLight,
   ...theme.typography['body-sm'],
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 2,
   border: active
-    ? `2px solid ${theme.palette.mode === 'dark' ? 'red' : 'red'}`
-    : `2px solid ${theme.palette.mode === 'dark' ? '#ff000026' : '#FF000057'}`,
+    ? `2px solid ${
+        theme.palette.mode === 'dark'
+          ? HIGHLIGHT_COLORS[color].borderActiveDark
+          : HIGHLIGHT_COLORS[color].borderActiveLight
+      }`
+    : `2px solid ${
+        theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderDark : HIGHLIGHT_COLORS[color].borderLight
+      }`,
   width: 60,
   height: 60,
   fontSize: '1.25em',
@@ -38,14 +58,15 @@ const BoardRow = ({ active, letters, highlightIndexes }) => {
   if (letters) {
     return (
       <Grid container gap={1}>
-        {letters.map((letter, index) =>
-          highlightIndexes.includes(index) ? (
+        {letters.map((letter, index) => {
+          const highlight = highlightIndexes.filter((e) => e.index === index)[0]
+
+          return highlight ? (
             <HighlightLetterHolder
               key={(letter ? letter : 'blank_') + index}
-              className={'skew-shake-infinite'}
+              className={highlight.animation}
               active={letter}
-              highlight={highlightIndexes.includes(index) ? '#ff000026' : 0}
-              highlightborder={highlightIndexes.includes(index) ? '#ff0000f2' : 0}
+              color={highlight.color}
             >
               {letter}
             </HighlightLetterHolder>
@@ -57,20 +78,21 @@ const BoardRow = ({ active, letters, highlightIndexes }) => {
             >
               {letter}
             </LetterHolder>
-          ),
-        )}
+          )
+        })}
       </Grid>
     )
   }
   return (
     <Grid container gap={1}>
-      {letters.map((_, index) =>
-        highlightIndexes.includes(index) ? (
-          <HighlightLetterHolder key={'blank_' + index} className="tilt-shake-infinite" />
+      {letters.map((_, index) => {
+        const highlight = highlightIndexes.filter((e) => e.index === index)[0]
+        return highlight ? (
+          <HighlightLetterHolder key={'blank_' + index} className={highlight.animation} color={highlight.color} />
         ) : (
           <LetterHolder key={'blank_' + index} />
-        ),
-      )}
+        )
+      })}
     </Grid>
   )
 }
