@@ -6,20 +6,63 @@ import GameBoard from '../components/board/GameBoard'
 
 // This is a test page used to place and test new components
 
-const MAX_BOARD_ROWS = 5
+const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
+
+function generateTwoUniqueNumbers(n) {
+  // Generate unique random numbers
+  let numbers = []
+  while (numbers.length < 2) {
+    let randomNum = Math.floor(Math.random() * n)
+    if (!numbers.includes(randomNum)) {
+      numbers.push(randomNum)
+    }
+  }
+
+  return numbers
+}
+
+function createBoardRowLetters() {
+  let rows = []
+  for (let i = 0; i < MAX_BOARD_ROWS; i++) {
+    rows.push(new Array(BOARD_ROW_LENGTH).fill())
+  }
+  return rows
+}
+
+function createBoardRowHighlights() {
+  let rows = []
+  for (let i = 0; i < MAX_BOARD_ROWS - 1; i++) {
+    // odd rows only highlight 1 letter, even highlight 2
+    if (i % 2 !== 0) {
+      rows.push([
+        {
+          index: generateTwoUniqueNumbers(BOARD_ROW_LENGTH)[0],
+          color: 'red',
+          animation: 'skew-shake-infinite',
+        },
+      ])
+    } else {
+      rows.push(
+        generateTwoUniqueNumbers(BOARD_ROW_LENGTH).map((num) => ({
+          index: num,
+          color: 'red',
+          animation: 'skew-shake-infinite',
+        })),
+      )
+    }
+  }
+  rows.push([])
+  return rows
+}
 
 const TestPage = (props) => {
   const [disabledKeys, setDisabledKeys] = React.useState([])
   const [boardData, setBoardData] = React.useState({
-    boardRowLetters: [
-      new Array(BOARD_ROW_LENGTH).fill(),
-      new Array(BOARD_ROW_LENGTH).fill(),
-      new Array(BOARD_ROW_LENGTH).fill(),
-      new Array(BOARD_ROW_LENGTH).fill(),
-      new Array(BOARD_ROW_LENGTH).fill(),
-    ],
+    boardRowLetters: createBoardRowLetters(),
+    boardRowHighlights: createBoardRowHighlights(),
   })
+  const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [activeRow, setActiveRow] = React.useState(0)
 
   const handleKeyPress = (key) => {
@@ -71,15 +114,26 @@ const TestPage = (props) => {
     if (activeRow < MAX_BOARD_ROWS) {
       // if the row is not completely filled, do not allow submission
       if (boardData.boardRowLetters[activeRow].filter((l) => !l).length > 0) return
-      const randomLetter = boardData.boardRowLetters[activeRow][Math.floor(Math.random() * BOARD_ROW_LENGTH)]
-      setDisabledKeys((prev) => [...prev, randomLetter])
+      const currentRowHighlights = boardData.boardRowHighlights[activeRow]
+      const currentRowLetters = boardData.boardRowLetters[activeRow]
+
+      for (let i = 0; i < currentRowHighlights.length; i++) {
+        setDisabledKeys((prev) => [...prev, currentRowLetters[currentRowHighlights[i]]])
+      }
       setActiveRow((prev) => prev + 1)
     }
   }
 
   return (
     <PageWrapper>
-      <GameBoard rows={MAX_BOARD_ROWS} activeRow={activeRow} rowLetters={boardData.boardRowLetters} />
+      <GameBoard
+        hide={!showPuzzle}
+        rows={MAX_BOARD_ROWS}
+        activeRow={activeRow}
+        rowLetters={boardData.boardRowLetters}
+        rowHighlights={boardData.boardRowHighlights}
+        onStart={() => setShowPuzzle(true)}
+      />
       <div style={{ marginBottom: 25 }} />
       <VKeyboard
         onKeyPressed={handleKeyPress}
