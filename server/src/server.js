@@ -40,6 +40,7 @@ app.use(
 // API Routes
 require('./routes/auth')(app)
 require('./routes/comment')(app)
+require('./routes/word')(app)
 require('./routes')(app)
 
 // Error Handler
