@@ -2,20 +2,27 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 import { Button, Grid, Sheet, Typography } from '@mui/joy'
-import BoardRow from './BoardRow'
 import { useTheme } from '@emotion/react'
+import useSound from 'use-sound'
+import BoardRow from './BoardRow'
+import wrongSfx from '../../sounds/wrong.wav'
 
 const GameBoard = ({ hide, rows, activeRow, rowLetters, rowHighlights, onStart, failedAttempt, puzzleComplete }) => {
   const theme = useTheme()
 
   const [invalidAnimationOn, setInvalidAnimationOn] = React.useState(false)
 
+  const [playInvalid] = useSound(wrongSfx)
+
   React.useEffect(() => {
+    if (failedAttempt > 0 && failedAttempt < rowLetters[0].length) {
+      playInvalid()
+    }
     if (failedAttempt > 0) {
       setInvalidAnimationOn(true)
       const timeout = setTimeout(() => {
         setInvalidAnimationOn(false)
-      }, 1000)
+      }, 500)
       return () => clearTimeout(timeout)
     }
   }, [failedAttempt])

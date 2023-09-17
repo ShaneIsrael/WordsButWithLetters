@@ -30,3 +30,5 @@ export const getSessionUser = () => {
   if (!cookie) return null
   return JSON.parse(cookie)
 }
+
+export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))

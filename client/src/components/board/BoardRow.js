@@ -1,7 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import useSound from 'use-sound'
+import popSound from '../../sounds/pop.wav'
 import { Grid, Sheet, styled } from '@mui/joy'
+import { sleep } from '../../common/utils'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -79,6 +82,18 @@ const HighlightLetterHolder = styled(Sheet)(({ theme, active, color }) => ({
 }))
 
 const BoardRow = ({ active, completed, letters, highlightIndexes, puzzleComplete }) => {
+  const [playPop] = useSound(popSound)
+
+  React.useEffect(() => {
+    async function play() {
+      for (let i = 0; i < letters.length; i += 1) {
+        playPop()
+        await sleep(300)
+      }
+    }
+    completed && play()
+  }, [completed])
+
   if (letters) {
     return (
       <Grid container gap={1}>
