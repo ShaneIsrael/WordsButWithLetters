@@ -1,8 +1,10 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import PageWrapper from '../components/wrappers/PageWrapper'
 import VKeyboard from '../components/keyboard/VKeyboard'
 import GameBoard from '../components/board/GameBoard'
+import PuzzleService from '../services/PuzzleService'
+import RemovedLettersComponent from '../components/board/RemovedLetters'
+import _ from 'lodash'
 
 // This is a test page used to place and test new components
 
@@ -34,6 +36,7 @@ function createBoardRowHighlights() {
   let rows = []
   for (let i = 0; i < MAX_BOARD_ROWS - 1; i++) {
     // odd rows only highlight 1 letter, even highlight 2
+
     if (i % 2 !== 0) {
       rows.push([
         {
@@ -64,6 +67,7 @@ const TestPage = (props) => {
   })
   const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [activeRow, setActiveRow] = React.useState(0)
+  const [removedLetters, setRemovedLetters] = React.useState([])
 
   const handleKeyPress = (key) => {
     if (disabledKeys.indexOf(key) >= 0) return
@@ -110,16 +114,22 @@ const TestPage = (props) => {
     }))
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (activeRow < MAX_BOARD_ROWS) {
       // if the row is not completely filled, do not allow submission
       if (boardData.boardRowLetters[activeRow].filter((l) => !l).length > 0) return
-      const currentRowHighlights = boardData.boardRowHighlights[activeRow]
-      const currentRowLetters = boardData.boardRowLetters[activeRow]
 
-      for (let i = 0; i < currentRowHighlights.length; i++) {
-        setDisabledKeys((prev) => [...prev, currentRowLetters[currentRowHighlights[i]]])
-      }
+      const thisWord = boardData.boardRowLetters[activeRow].join('').toLowerCase()
+      const isValid = (await PuzzleService.validateWord(thisWord)).data
+
+      if (!isValid?.valid) return
+
+      const indexesToRemove = boardData.boardRowHighlights[activeRow].map((i) => i.index)
+      const lettersToRemove = _.uniq(thisWord.split('').filter((l, index) => indexesToRemove.includes(index)))
+
+      setDisabledKeys((prev) => {
+        return [...prev, ...lettersToRemove.map((l) => l.toUpperCase())].sort()
+      })
       setActiveRow((prev) => prev + 1)
     }
   }
@@ -134,6 +144,8 @@ const TestPage = (props) => {
         rowHighlights={boardData.boardRowHighlights}
         onStart={() => setShowPuzzle(true)}
       />
+      <div style={{ marginBottom: 25 }} />
+      <RemovedLettersComponent letters={disabledKeys} />
       <div style={{ marginBottom: 25 }} />
       <VKeyboard
         onKeyPressed={handleKeyPress}
