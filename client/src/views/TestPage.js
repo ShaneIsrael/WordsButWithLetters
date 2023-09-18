@@ -67,7 +67,7 @@ const TestPage = (props) => {
   })
   const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [activeRow, setActiveRow] = React.useState(0)
-  const [removedLetters, setRemovedLetters] = React.useState([])
+  const [failedAttempt, setFailedAttempt] = React.useState(false)
 
   const handleKeyPress = (key) => {
     if (disabledKeys.indexOf(key) >= 0) return
@@ -122,7 +122,11 @@ const TestPage = (props) => {
       const thisWord = boardData.boardRowLetters[activeRow].join('').toLowerCase()
       const isValid = (await PuzzleService.validateWord(thisWord)).data
 
-      if (!isValid?.valid) return
+      if (!isValid?.valid) {
+        setFailedAttempt(true)
+
+        return
+      }
 
       const indexesToRemove = boardData.boardRowHighlights[activeRow].map((i) => i.index)
       const lettersToRemove = _.uniq(thisWord.split('').filter((l, index) => indexesToRemove.includes(index)))
@@ -143,6 +147,8 @@ const TestPage = (props) => {
         rowLetters={boardData.boardRowLetters}
         rowHighlights={boardData.boardRowHighlights}
         onStart={() => setShowPuzzle(true)}
+        failedAttempt={failedAttempt}
+        setFailedAttempt={setFailedAttempt}
       />
       <div style={{ marginBottom: 25 }} />
       <RemovedLettersComponent letters={disabledKeys} />

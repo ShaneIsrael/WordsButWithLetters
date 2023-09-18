@@ -6,8 +6,19 @@ import { useTheme } from '@emotion/react'
 import useSound from 'use-sound'
 import BoardRow from './BoardRow'
 import wrongSfx from '../../sounds/wrong.wav'
+import _ from 'lodash'
 
-const GameBoard = ({ hide, rows, activeRow, rowLetters, rowHighlights, onStart, failedAttempt, puzzleComplete }) => {
+const GameBoard = ({
+  hide,
+  rows,
+  activeRow,
+  rowLetters,
+  rowHighlights,
+  onStart,
+  failedAttempt,
+  setFailedAttempt,
+  puzzleComplete,
+}) => {
   const theme = useTheme()
 
   const [invalidAnimationOn, setInvalidAnimationOn] = React.useState(false)
@@ -15,13 +26,17 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, rowHighlights, onStart, 
   const [playInvalid] = useSound(wrongSfx)
 
   React.useEffect(() => {
-    if (failedAttempt > 0 && failedAttempt < rowLetters[0].length) {
+    if (
+      (_.isNumber(failedAttempt) && failedAttempt > 0 && failedAttempt < rowLetters[0].length) ||
+      (_.isBoolean(failedAttempt) && failedAttempt)
+    ) {
       playInvalid()
     }
-    if (failedAttempt > 0) {
+    if (failedAttempt > 0 || (_.isBoolean(failedAttempt) && failedAttempt)) {
       setInvalidAnimationOn(true)
       const timeout = setTimeout(() => {
         setInvalidAnimationOn(false)
+        setFailedAttempt(false)
       }, 500)
       return () => clearTimeout(timeout)
     }
@@ -75,6 +90,8 @@ GameBoard.propTypes = {
   rowHighlights: PropTypes.array,
   onStart: PropTypes.func,
   puzzleComplete: PropTypes.bool,
+  failedAttempt: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+  setFailedAttempt: PropTypes.func,
 }
 
 GameBoard.defaultProps = {
@@ -84,6 +101,8 @@ GameBoard.defaultProps = {
   rowHighlights: [],
   onStart: () => {},
   puzzleComplete: false,
+  failedAttempt: false,
+  setFailedAttempt: () => {},
 }
 
 export default GameBoard
