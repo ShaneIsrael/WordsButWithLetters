@@ -9,6 +9,7 @@
     "@mui/icons-material": "^5.14.1",
     "@mui/joy": "^5.0.0-alpha.89",
     "axios": "^1.4.0",
+    "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "email-validator": "^2.0.4",
@@ -23,7 +24,8 @@
     "rehype-stringify": "^9.0.4",
     "remark-gfm": "^3.0.1",
     "remark-parse": "^10.0.2",
-    "remark-rehype": "^10.1.0"
+    "remark-rehype": "^10.1.0",
+    "use-sound": "^4.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
