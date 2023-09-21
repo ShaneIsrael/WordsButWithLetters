@@ -1,9 +1,9 @@
 const { authorize } = require('../middleware/authorize')
 
 module.exports = (app) => {
-  app.get('/', (req, res, next) =>
+  app.get('/api', (req, res, next) =>
     res.status(200).json({
-      message: 'Welcome to Books REST API by The JavaScript Dojo',
+      message: 'Welcome to the API',
     }),
   )
 

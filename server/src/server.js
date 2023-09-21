@@ -10,8 +10,11 @@ const app = express()
 const logger = require('./utils/logger')
 const db = require('./database/models')
 
-const { NODE_ENV, PORT = 3001 } = process.env
+const { NODE_ENV } = process.env
 const isProduction = NODE_ENV === 'production'
+
+const PORT = isProduction ? 8080 : 3001
+
 app.set('trust proxy', true)
 
 app.use(

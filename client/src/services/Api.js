@@ -6,7 +6,7 @@ const URL = getUrl()
 const cancelToken = axios.CancelToken.source()
 
 const instance = axios.create({
-  baseURL: URL,
+  baseURL: `${URL}/api`,
   timeout: 10000,
 })
 
