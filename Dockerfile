@@ -1,0 +1,35 @@
+# build environment
+FROM node:16.15-alpine3.16 as build
+WORKDIR .
+ENV PATH node_modules/.bin:$PATH
+COPY client/package.json ./
+COPY client/package-lock.json ./
+COPY client/public ./
+RUN npm i -g --silent npm@9.1.3
+RUN npm i --silent
+RUN npm install react-scripts@5.0.1 -g --silent
+COPY client/ ./
+RUN npm run build
+
+# production environment
+FROM node:18.18-alpine3.18
+RUN apk add --update nginx bash
+COPY --from=build /build /app/build
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY entrypoint.sh /
+
+# Create app directory
+WORKDIR /app
+
+# Install app dependencies
+COPY server/package*.json ./
+RUN npm ci --omit=dev
+
+# Move source
+COPY server/ .
+
+EXPOSE 80
+ENV NODE_ENV=production
+
+WORKDIR /
+CMD ["bash", "/entrypoint.sh"]

@@ -2,7 +2,7 @@ const { register, login, logout } = require('../controllers/authController')
 const { authorize } = require('../middleware/authorize')
 
 module.exports = (app) => {
-  app.post('/auth/register', register)
-  app.post('/auth/login', login)
-  app.post('/auth/logout', authorize, logout)
+  app.post('/api/auth/register', register)
+  app.post('/api/auth/login', login)
+  app.post('/api/auth/logout', authorize, logout)
 }

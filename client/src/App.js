@@ -16,8 +16,8 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/user/:id" element={<User />} />
-        <Route path="/test" element={<TestPage />} />
-        <Route path="/test3" element={<TestPage3 />} />
+        <Route path="/game1" element={<TestPage />} />
+        <Route path="/game2" element={<TestPage3 />} />
         <Route path="*" element={<div>not found</div>} />
       </Routes>
     </Router>
