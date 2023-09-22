@@ -159,6 +159,7 @@ const TestPage = (props) => {
         disabledKeys={disabledKeys}
         highlightKeys={boardData.boardRowLetters[activeRow]}
         onEnter={handleSubmit}
+        disabled={!showPuzzle}
       />
     </PageWrapper>
   )

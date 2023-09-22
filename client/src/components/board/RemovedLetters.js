@@ -1,6 +1,6 @@
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box, Sheet, Typography } from '@mui/joy'
+import { Box, Divider, Sheet, Typography } from '@mui/joy'
 import React from 'react'
 
 const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder }) => ({
@@ -37,9 +37,13 @@ function RemovedLettersComponent({ letters }) {
         width: 534,
         height: 120,
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        // border: '1px solid ' + theme.palette.primary[600],
       }}
     >
-      <Typography>Removed Letters</Typography>
+      <Typography sx={{ fontWeight: 'bold', fontSize: '20px', color: theme.palette.primary[200] }}>
+        Removed Letters
+      </Typography>
+      <Divider sx={{ background: theme.palette.primary[600] }} />
       <Box
         sx={{
           display: 'flex',
@@ -49,9 +53,11 @@ function RemovedLettersComponent({ letters }) {
           gap: 1,
         }}
       >
-        {letters.map((letter) => (
-          <LetterHolder key={`removed-letter-${letter}`}>{letter}</LetterHolder>
-        ))}
+        {letters.length > 0 ? (
+          letters.map((letter) => <LetterHolder key={`removed-letter-${letter}`}>{letter}</LetterHolder>)
+        ) : (
+          <Box sx={{ height: 40, width: 40 }} />
+        )}
       </Box>
     </Sheet>
   )
