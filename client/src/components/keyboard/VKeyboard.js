@@ -3,6 +3,9 @@ import PropTypes from 'prop-types'
 import { Button, Grid, Sheet, styled } from '@mui/joy'
 import BackspaceIcon from '@mui/icons-material/Backspace'
 import { useTheme } from '@emotion/react'
+import wrongSfx from '../../sounds/wrong.wav'
+import useSound from 'use-sound'
+import clsx from 'clsx'
 
 const KeyButton = styled(Button)(({ theme, highlight }) => ({
   backgroundColor: highlight ? '#EACB4F59' : false,
@@ -27,13 +30,24 @@ const layout = [
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
 ]
 
-const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys }) => {
+const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys, disabled }) => {
   const theme = useTheme()
+
+  const [invalidAnimationOn, setInvalidAnimationOn] = React.useState(false)
+  const [playInvalid] = useSound(wrongSfx)
 
   React.useEffect(() => {
     function handleKeyDown(e) {
       if (/^[a-zA-Z]$/.test(e.key)) {
-        return onKeyPressed(e.key.toUpperCase())
+        if (disabledKeys.indexOf(e.key.toUpperCase()) >= 0) {
+          playInvalid()
+          setInvalidAnimationOn(true)
+          setTimeout(() => {
+            setInvalidAnimationOn(false)
+          }, 500)
+        } else {
+          return onKeyPressed(e.key.toUpperCase())
+        }
       }
       if (e.key === 'Delete' || e.key === 'Backspace') {
         return onDelete()
@@ -43,7 +57,9 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
       }
     }
 
-    document.addEventListener('keydown', handleKeyDown)
+    if (!disabled) {
+      document.addEventListener('keydown', handleKeyDown)
+    }
 
     return function cleanup() {
       document.removeEventListener('keydown', handleKeyDown)
@@ -67,22 +83,35 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
           {row.map((key) => (
             <div key={key}>
               {key === 'DELETE' && (
-                <KeyButton variant="outlined" onClick={onDelete} sx={{ maxWidth: 65.4, width: '100%' }}>
+                <KeyButton
+                  disabled={disabled}
+                  variant="outlined"
+                  onClick={onDelete}
+                  sx={{ maxWidth: 65.4, width: '100%' }}
+                >
                   <BackspaceIcon />
                 </KeyButton>
               )}
               {key === 'ENTER' && (
-                <KeyButton variant="outlined" onClick={onEnter} sx={{ maxWidth: 65.4, width: '100%', fontSize: 12 }}>
+                <KeyButton
+                  disabled={disabled}
+                  variant="outlined"
+                  onClick={onEnter}
+                  sx={{ maxWidth: 65.4, width: '100%', fontSize: 12 }}
+                >
                   {key}
                 </KeyButton>
               )}
               {key !== 'ENTER' && key !== 'DELETE' && (
                 <KeyButton
-                  disabled={disabledKeys.indexOf(key) >= 0}
+                  disabled={disabledKeys.indexOf(key) >= 0 || disabled}
                   highlight={highlightKeys.indexOf(key) >= 0 ? 1 : 0}
                   color={disabledKeys.indexOf(key) >= 0 ? 'neutral' : 'primary'}
+                  className={clsx({ invalid: invalidAnimationOn && disabledKeys.indexOf(key) >= 0 })}
                   variant="outlined"
-                  onClick={() => onKeyPressed(key)}
+                  onClick={() => {
+                    onKeyPressed(key)
+                  }}
                 >
                   {key}
                 </KeyButton>
