@@ -40,7 +40,7 @@ const GameBoard = ({
       }, 500)
       return () => clearTimeout(timeout)
     }
-  }, [failedAttempt])
+  }, [failedAttempt, rowLetters, playInvalid, setFailedAttempt])
 
   function getBoard() {
     if (!hide)
