@@ -30,6 +30,12 @@ const layout = [
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
 ]
 
+const titleLayout = [
+  [' ', ' ', 'W', 'O', 'R', 'D', 'S', '', ' ', ' '],
+  [' ', 'B', 'U', 'T', ' ', 'W', 'I', 'T', 'H'],
+  ['ENTER', 'L', 'E', 'T', 'T', 'E', 'R', 'S', 'DELETE'],
+]
+
 const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys, keyboardEnabled }) => {
   const theme = useTheme()
 
@@ -37,7 +43,9 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
   const [invalidAnimationOn, setInvalidAnimationOn] = React.useState(false)
   const [playInvalid] = useSound(wrongSfx)
 
-  React.useEffect(() => setDisabled(!keyboardEnabled), [keyboardEnabled])
+  React.useEffect(() => {
+    setDisabled(!keyboardEnabled)
+  }, [keyboardEnabled])
 
   React.useEffect(() => {
     function handleKeyDown(e) {

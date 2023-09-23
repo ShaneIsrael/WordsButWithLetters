@@ -8,6 +8,7 @@ import _ from 'lodash'
 import ScoreModifiers from '../components/board/ScoreModifiers'
 import BonusWordComponent from '../components/board/BonusWordComponent'
 import { Box, Grid } from '@mui/joy'
+import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 
 // This is a test page used to place and test new components
 
@@ -228,14 +229,18 @@ const TestPage = (props) => {
       <div style={{ marginBottom: 4 }} />
       <BonusWordComponent letters={playData.banishedLetters} maxLetters={8} bonusWordFound={'SHOUT'} />
       <div style={{ marginBottom: 4 }} />
-      <VKeyboard
-        onKeyPressed={handleKeyPress}
-        onDelete={handleDelete}
-        disabledKeys={playData.banishedLetters}
-        highlightKeys={playData.wordMatrix[playData.activeRow]}
-        onEnter={handleSubmit}
-        keyboardEnabled={showPuzzle}
-      />
+      {showPuzzle ? (
+        <VKeyboard
+          onKeyPressed={handleKeyPress}
+          onDelete={handleDelete}
+          disabledKeys={playData.banishedLetters}
+          highlightKeys={playData.wordMatrix[playData.activeRow]}
+          onEnter={handleSubmit}
+          keyboardEnabled={showPuzzle}
+        />
+      ) : (
+        <TitleKeyboard />
+      )}
     </PageWrapper>
   )
 }
