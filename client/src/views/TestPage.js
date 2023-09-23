@@ -7,6 +7,7 @@ import RemovedLettersComponent from '../components/board/BonusWordComponent'
 import _ from 'lodash'
 import ScoreModifiers from '../components/board/ScoreModifiers'
 import BonusWordComponent from '../components/board/BonusWordComponent'
+import { Grid } from '@mui/joy'
 
 // This is a test page used to place and test new components
 
@@ -189,21 +190,27 @@ const TestPage = (props) => {
 
   return (
     <PageWrapper>
-      <ScoreModifiers modifiers={boardData.boardScoreModifiers} />
-      <div style={{ marginBottom: 12 }} />
-      <GameBoard
-        hide={!showPuzzle}
-        rows={MAX_BOARD_ROWS}
-        activeRow={activeRow}
-        rowLetters={boardData.boardRowLetters}
-        rowHighlights={boardData.boardRowHighlights}
-        onStart={() => setShowPuzzle(true)}
-        failedAttempt={failedAttempt}
-        setFailedAttempt={setFailedAttempt}
-      />
-      <div style={{ marginBottom: 12 }} />
+      <Grid container>
+        <Grid item>
+          <GameBoard
+            hide={!showPuzzle}
+            rows={MAX_BOARD_ROWS}
+            activeRow={activeRow}
+            rowLetters={boardData.boardRowLetters}
+            rowHighlights={boardData.boardRowHighlights}
+            onStart={() => setShowPuzzle(true)}
+            failedAttempt={failedAttempt}
+            setFailedAttempt={setFailedAttempt}
+          />
+        </Grid>
+        <Grid item sx={{ ml: '4px' }}>
+          <ScoreModifiers modifiers={boardData.boardScoreModifiers} />
+        </Grid>
+      </Grid>
+
+      <div style={{ marginBottom: 4 }} />
       <BonusWordComponent letters={disabledKeys} maxLetters={8} />
-      <div style={{ marginBottom: 12 }} />
+      <div style={{ marginBottom: 4 }} />
       <VKeyboard
         onKeyPressed={handleKeyPress}
         onDelete={handleDelete}

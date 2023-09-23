@@ -14,8 +14,8 @@ const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder 
     : `2px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
   borderColor: highlightborder || false,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
-  width: 38,
-  height: 38,
+  width: 46,
+  height: 46,
   fontSize: '1.25em',
   fontWeight: 'bold',
 }))
@@ -36,14 +36,13 @@ function BonusWordComponent({ letters, maxLetters }) {
         paddingRight: 2,
         paddingBottom: 2,
         paddingTop: 1,
-        borderRadius: 8,
-        width: 366,
+        width: 535,
         height: 'auto',
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         // border: '1px solid ' + theme.palette.primary[600],
       }}
     >
-      <Typography level="h2" sx={{ fontWeight: 'bold', fontSize: 32 }}>
+      <Typography level="h2" sx={{ fontWeight: 'bold', fontSize: 26 }}>
         Bonus Word
       </Typography>
       {/* <Divider sx={{ background: theme.palette.primary[600] }} /> */}
@@ -54,6 +53,7 @@ function BonusWordComponent({ letters, maxLetters }) {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 0.5,
+          mt: 1,
         }}
       >
         {new Array(maxLetters).fill().map((_, index) => (
