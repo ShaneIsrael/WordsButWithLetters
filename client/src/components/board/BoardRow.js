@@ -53,8 +53,9 @@ const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder 
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
   width: 60,
   height: 60,
-  fontSize: '1.25em',
+  fontSize: '1.75em',
   fontWeight: 'bold',
+  // fontFamily: 'Bubblegum Sans',
 }))
 
 const HighlightLetterHolder = styled(Sheet)(({ theme, active, color }) => ({
@@ -77,8 +78,9 @@ const HighlightLetterHolder = styled(Sheet)(({ theme, active, color }) => ({
   color: '#fff',
   width: 60,
   height: 60,
-  fontSize: '1.25em',
+  fontSize: '1.75em',
   fontWeight: 'bold',
+  // fontFamily: 'Bubblegum Sans',
 }))
 
 const BoardRow = ({ active, completed, letters, highlightIndexes, puzzleComplete }) => {

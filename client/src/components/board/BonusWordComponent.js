@@ -14,15 +14,15 @@ const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder 
     : `2px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
   borderColor: highlightborder || false,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
-  width: 40,
-  height: 40,
+  width: 38,
+  height: 38,
   fontSize: '1.25em',
   fontWeight: 'bold',
 }))
 
-function RemovedLettersComponent({ letters }) {
+function BonusWordComponent({ letters, maxLetters }) {
   const theme = useTheme()
-
+  console.log(letters)
   return (
     <Sheet
       variant="plain"
@@ -31,36 +31,43 @@ function RemovedLettersComponent({ letters }) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 1,
-        padding: 1,
+        gap: 0.25,
+        paddingLeft: 2,
+        paddingRight: 2,
+        paddingBottom: 2,
+        paddingTop: 1,
         borderRadius: 8,
-        width: 534,
-        height: 120,
+        width: 366,
+        height: 'auto',
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         // border: '1px solid ' + theme.palette.primary[600],
       }}
     >
-      <Typography sx={{ fontWeight: 'bold', fontSize: '20px', color: theme.palette.primary[200] }}>
-        Removed Letters
+      <Typography level="h2" sx={{ fontWeight: 'bold', fontSize: 32 }}>
+        Bonus Word
       </Typography>
-      <Divider sx={{ background: theme.palette.primary[600] }} />
+      {/* <Divider sx={{ background: theme.palette.primary[600] }} /> */}
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: 1,
+          gap: 0.5,
         }}
       >
-        {letters.length > 0 ? (
+        {new Array(maxLetters).fill().map((_, index) => (
+          <LetterHolder key={`bonus_word_letter_${letters[index] || index}`}>{letters[index] || ''}</LetterHolder>
+        ))}
+
+        {/* {letters.length > 0 ? (
           letters.map((letter) => <LetterHolder key={`removed-letter-${letter}`}>{letter}</LetterHolder>)
         ) : (
-          <Box sx={{ height: 40, width: 40 }} />
-        )}
+          <LetterHolder key={`placeholder`} />
+        )} */}
       </Box>
     </Sheet>
   )
 }
 
-export default RemovedLettersComponent
+export default BonusWordComponent

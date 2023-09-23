@@ -10,9 +10,6 @@ import clsx from 'clsx'
 const KeyButton = styled(Button)(({ theme, highlight }) => ({
   backgroundColor: highlight ? '#EACB4F59' : false,
   ...theme.typography['body-sm'],
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
   borderRadius: 4,
   borderColor: highlight ? theme.palette.warning[200] : false,
   // border: '1px solid #00000040',
