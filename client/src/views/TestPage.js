@@ -7,7 +7,7 @@ import RemovedLettersComponent from '../components/board/BonusWordComponent'
 import _ from 'lodash'
 import ScoreModifiers from '../components/board/ScoreModifiers'
 import BonusWordComponent from '../components/board/BonusWordComponent'
-import { Grid } from '@mui/joy'
+import { Box, Grid } from '@mui/joy'
 
 // This is a test page used to place and test new components
 
@@ -81,7 +81,7 @@ function createBoardScoreModifiers() {
       let char
       do {
         char = getRandomChar()
-      } while (array2.includes(char) || array3.includes(char))
+      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
       array1.push(char)
     }
 
@@ -89,7 +89,7 @@ function createBoardScoreModifiers() {
       let char
       do {
         char = getRandomChar()
-      } while (array1.includes(char) || array3.includes(char))
+      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
       array2.push(char)
     }
 
@@ -97,7 +97,7 @@ function createBoardScoreModifiers() {
       let char
       do {
         char = getRandomChar()
-      } while (array1.includes(char) || array2.includes(char))
+      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
       array3.push(char)
     }
 
@@ -191,21 +191,19 @@ const TestPage = (props) => {
   return (
     <PageWrapper>
       <Grid container>
-        <Grid item>
-          <GameBoard
-            hide={!showPuzzle}
-            rows={MAX_BOARD_ROWS}
-            activeRow={activeRow}
-            rowLetters={boardData.boardRowLetters}
-            rowHighlights={boardData.boardRowHighlights}
-            onStart={() => setShowPuzzle(true)}
-            failedAttempt={failedAttempt}
-            setFailedAttempt={setFailedAttempt}
-          />
-        </Grid>
-        <Grid item sx={{ ml: '4px' }}>
+        <GameBoard
+          hide={!showPuzzle}
+          rows={MAX_BOARD_ROWS}
+          activeRow={activeRow}
+          rowLetters={boardData.boardRowLetters}
+          rowHighlights={boardData.boardRowHighlights}
+          onStart={() => setShowPuzzle(true)}
+          failedAttempt={failedAttempt}
+          setFailedAttempt={setFailedAttempt}
+        />
+        <Box sx={{ ml: '4px' }}>
           <ScoreModifiers modifiers={boardData.boardScoreModifiers} />
-        </Grid>
+        </Box>
       </Grid>
 
       <div style={{ marginBottom: 4 }} />
@@ -217,7 +215,7 @@ const TestPage = (props) => {
         disabledKeys={disabledKeys}
         highlightKeys={boardData.boardRowLetters[activeRow]}
         onEnter={handleSubmit}
-        disabled={!showPuzzle}
+        keyboardEnabled={showPuzzle}
       />
     </PageWrapper>
   )

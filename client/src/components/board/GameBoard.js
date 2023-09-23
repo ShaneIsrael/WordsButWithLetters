@@ -57,7 +57,9 @@ const GameBoard = ({
       ))
     return (
       <Button onClick={onStart} size="lg">
-        Begin Todays Puzzle
+        <Typography level="h2" fontSize={22}>
+          Begin Todays Puzzle
+        </Typography>
       </Button>
     )
   }

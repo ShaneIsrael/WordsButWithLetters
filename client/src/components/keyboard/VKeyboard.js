@@ -19,6 +19,9 @@ const KeyButton = styled(Button)(({ theme, highlight }) => ({
   fontSize: '1.25em',
   fontWeight: 'bold',
   cursor: 'pointer',
+  ':hover': {
+    opacity: 0.5,
+  },
 }))
 
 const layout = [
@@ -27,11 +30,14 @@ const layout = [
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
 ]
 
-const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys, disabled }) => {
+const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys, keyboardEnabled }) => {
   const theme = useTheme()
 
+  const [disabled, setDisabled] = React.useState(!keyboardEnabled)
   const [invalidAnimationOn, setInvalidAnimationOn] = React.useState(false)
   const [playInvalid] = useSound(wrongSfx)
+
+  React.useEffect(() => setDisabled(!keyboardEnabled), [keyboardEnabled])
 
   React.useEffect(() => {
     function handleKeyDown(e) {
@@ -61,7 +67,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
     return function cleanup() {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [onKeyPressed, onDelete, onEnter])
+  }, [onKeyPressed, onDelete, onEnter, disabled])
 
   const getPrimaryButton = (key, functionKey, onClick, disabled, sx) => {
     const keyDisabled = (!functionKey && disabledKeys.indexOf(key) >= 0) || disabled
@@ -82,9 +88,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
           border: keyDisabled ? `1px solid grey` : `1px solid ${border}`,
           ...sx,
         }}
-        onClick={() => {
-          onKeyPressed(key)
-        }}
+        onClick={onClick}
       >
         {key}
       </KeyButton>
@@ -127,7 +131,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
                 </Box>
               )}
               {key !== 'ENTER' && key !== 'DELETE' && (
-                <Box>{getPrimaryButton(key, false, () => onKeyPressed(key))}</Box>
+                <Box>{getPrimaryButton(key, false, () => onKeyPressed(key), disabled)}</Box>
               )}
             </div>
           ))}
@@ -143,6 +147,7 @@ VKeyboard.propTypes = {
   onEnter: PropTypes.func,
   disabledKeys: PropTypes.array,
   highlightKeys: PropTypes.array,
+  keyboardEnabled: PropTypes.bool,
 }
 VKeyboard.defaultProps = {
   onKeyPressed: () => {},
@@ -150,6 +155,7 @@ VKeyboard.defaultProps = {
   onEnter: () => {},
   disabledKeys: [],
   highlightKeys: [],
+  keyboardEnabled: false,
 }
 
 export default VKeyboard
