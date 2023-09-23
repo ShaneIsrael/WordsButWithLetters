@@ -24,7 +24,6 @@ const LetterHolder = styled(Sheet)(({ theme }) => ({
 }))
 
 const ScoreModifiers = ({ modifiers }) => {
-  console.log(modifiers)
   const theme = useTheme()
 
   return (
@@ -35,7 +34,8 @@ const ScoreModifiers = ({ modifiers }) => {
           borderTopRightRadius: 8,
           paddingTop: 1,
           paddingBottom: 1,
-          borderBottom: `2px solid #616161`,
+          marginBottom: 0.5,
+          // borderBottom: `2px solid #616161`,
           background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         }}
       >
@@ -48,37 +48,37 @@ const ScoreModifiers = ({ modifiers }) => {
         sx={{
           padding: '28px 8px 8px 8px',
           width: 140,
-          height: 356,
+          height: 354,
           background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         }}
       >
         <Grid container height="100%" direction="column">
-          <Grid item xs>
+          <Grid xs>
             <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
               x2
             </Typography>
-            <Grid item container xs justifyContent="center" gap={0.5}>
+            <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[0].map((letter) => (
                 <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
               ))}
             </Grid>
           </Grid>
-          <Grid item xs>
+          <Grid xs>
             <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
               x3
             </Typography>
-            <Grid item container xs justifyContent="center" gap={0.5}>
+            <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[1].map((letter) => (
                 <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
               ))}
             </Grid>
           </Grid>
 
-          <Grid item xs>
+          <Grid xs>
             <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
               x4
             </Typography>
-            <Grid item container xs justifyContent="center" gap={0.5}>
+            <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[2].map((letter) => (
                 <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
               ))}

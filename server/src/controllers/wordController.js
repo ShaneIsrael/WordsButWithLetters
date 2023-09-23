@@ -39,7 +39,7 @@ controller.validateWord = (req, res, next) => {
   try {
     const { word } = req.query
     return res.status(200).send({
-      valid: WORDS.includes(word),
+      valid: WORDS.includes(word.toLowerCase()),
     })
   } catch (err) {
     return next(err)

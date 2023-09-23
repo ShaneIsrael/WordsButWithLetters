@@ -7,7 +7,8 @@ import RemovedLettersComponent from '../components/board/BonusWordComponent'
 import _ from 'lodash'
 import ScoreModifiers from '../components/board/ScoreModifiers'
 import BonusWordComponent from '../components/board/BonusWordComponent'
-import { Grid } from '@mui/joy'
+import { Box, Grid } from '@mui/joy'
+import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 
 // This is a test page used to place and test new components
 
@@ -27,7 +28,7 @@ function generateTwoUniqueNumbers(n) {
   return numbers
 }
 
-function createBoardRowLetters() {
+function initBoardRows() {
   let rows = []
   for (let i = 0; i < MAX_BOARD_ROWS; i++) {
     rows.push(new Array(BOARD_ROW_LENGTH).fill())
@@ -35,7 +36,7 @@ function createBoardRowLetters() {
   return rows
 }
 
-function createBoardRowHighlights() {
+function createBoardBanishedIndexes() {
   let rows = []
   for (let i = 0; i < MAX_BOARD_ROWS - 1; i++) {
     // odd rows only highlight 1 letter, even highlight 2
@@ -81,7 +82,7 @@ function createBoardScoreModifiers() {
       let char
       do {
         char = getRandomChar()
-      } while (array2.includes(char) || array3.includes(char))
+      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
       array1.push(char)
     }
 
@@ -89,7 +90,7 @@ function createBoardScoreModifiers() {
       let char
       do {
         char = getRandomChar()
-      } while (array1.includes(char) || array3.includes(char))
+      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
       array2.push(char)
     }
 
@@ -97,7 +98,7 @@ function createBoardScoreModifiers() {
       let char
       do {
         char = getRandomChar()
-      } while (array1.includes(char) || array2.includes(char))
+      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
       array3.push(char)
     }
 
@@ -109,28 +110,31 @@ function createBoardScoreModifiers() {
 }
 
 const TestPage = (props) => {
-  const [disabledKeys, setDisabledKeys] = React.useState([])
   const [boardData, setBoardData] = React.useState({
-    boardRowLetters: createBoardRowLetters(),
-    boardRowHighlights: createBoardRowHighlights(),
+    boardBanishedIndexes: createBoardBanishedIndexes(),
     boardScoreModifiers: createBoardScoreModifiers(),
   })
+  const [playData, setPlayData] = React.useState({
+    activeRow: 0,
+    wordMatrix: initBoardRows(),
+    banishedLetters: [],
+    bonusWordFound: '',
+    wordScores: [],
+  })
   const [showPuzzle, setShowPuzzle] = React.useState(false)
-  const [activeRow, setActiveRow] = React.useState(0)
   const [failedAttempt, setFailedAttempt] = React.useState(false)
 
   const handleKeyPress = (key) => {
-    if (disabledKeys.indexOf(key) >= 0) return
+    if (playData.banishedLetters.indexOf(key) >= 0) return
 
-    setBoardData((board) => ({
-      ...board,
-      boardRowLetters: board.boardRowLetters.map((row, rowIndex) => {
+    setPlayData((data) => ({
+      ...data,
+      wordMatrix: data.wordMatrix.map((row, rowIndex) => {
         let trow = row
-        if (rowIndex === activeRow) {
+        if (rowIndex === playData.activeRow) {
           for (let i = 0; i < trow.length; i++) {
             if (!trow[i]) {
               trow[i] = key
-              // setDisabledKeys((prev) => [...prev, key])
               break
             }
           }
@@ -142,19 +146,17 @@ const TestPage = (props) => {
 
   const handleDelete = () => {
     // if no letters in the row, do nothing
-    if (activeRow === MAX_BOARD_ROWS) return
-    if (boardData.boardRowLetters[activeRow].filter((l) => l).length === 0) return
+    if (playData.activeRow === MAX_BOARD_ROWS) return
+    if (playData.wordMatrix[playData.activeRow].filter((l) => l).length === 0) return
 
-    setBoardData((board) => ({
-      ...board,
-      boardRowLetters: board.boardRowLetters.map((row, rowIndex) => {
+    setPlayData((data) => ({
+      ...data,
+      wordMatrix: data.wordMatrix.map((row, rowIndex) => {
         let trow = row
-        if (rowIndex === activeRow) {
+        if (rowIndex === playData.activeRow) {
           for (let i = trow.length; i >= 0; i--) {
             if (trow[i] !== undefined) {
-              const letterRemoved = trow[i]
               trow[i] = undefined
-              // setDisabledKeys((prev) => prev.filter((l) => l !== letterRemoved))
               break
             }
           }
@@ -165,11 +167,11 @@ const TestPage = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (activeRow < MAX_BOARD_ROWS) {
+    if (playData.activeRow < MAX_BOARD_ROWS) {
       // if the row is not completely filled, do not allow submission
-      if (boardData.boardRowLetters[activeRow].filter((l) => !l).length > 0) return
+      if (playData.wordMatrix[playData.activeRow].filter((l) => !l).length > 0) return
 
-      const thisWord = boardData.boardRowLetters[activeRow].join('').toLowerCase()
+      const thisWord = playData.wordMatrix[playData.activeRow].join('').toLowerCase()
       const isValid = (await PuzzleService.validateWord(thisWord)).data
 
       if (!isValid?.valid) {
@@ -178,47 +180,67 @@ const TestPage = (props) => {
         return
       }
 
-      const indexesToRemove = boardData.boardRowHighlights[activeRow].map((i) => i.index)
+      const indexesToRemove = boardData.boardBanishedIndexes[playData.activeRow].map((i) => i.index)
       const lettersToRemove = _.uniq(thisWord.split('').filter((l, index) => indexesToRemove.includes(index)))
 
-      setDisabledKeys((prev) => {
-        return [...prev, ...lettersToRemove.map((l) => l.toUpperCase())]
-      })
-      setActiveRow((prev) => prev + 1)
+      setPlayData((prev) => ({
+        ...prev,
+        banishedLetters: prev.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())]),
+        activeRow: prev.activeRow + 1,
+      }))
     }
   }
+
+  React.useEffect(() => {
+    async function checkForBonus() {
+      for (let i = 0; i < 3; i += 1) {
+        const wordToCheck = playData.banishedLetters.slice(i, 5 + i).join('')
+        const isValid = (await PuzzleService.validateWord(wordToCheck)).data?.valid
+        console.log(wordToCheck, isValid)
+        if (isValid) {
+          setPlayData((prev) => ({ ...prev, bonusWordFound: wordToCheck }))
+          break
+        }
+      }
+    }
+    if (playData.banishedLetters.length === 8) {
+      checkForBonus()
+    }
+  }, [playData.banishedLetters, playData.activeRow, playData.bonusWordFound])
 
   return (
     <PageWrapper>
       <Grid container>
-        <Grid item>
-          <GameBoard
-            hide={!showPuzzle}
-            rows={MAX_BOARD_ROWS}
-            activeRow={activeRow}
-            rowLetters={boardData.boardRowLetters}
-            rowHighlights={boardData.boardRowHighlights}
-            onStart={() => setShowPuzzle(true)}
-            failedAttempt={failedAttempt}
-            setFailedAttempt={setFailedAttempt}
-          />
-        </Grid>
-        <Grid item sx={{ ml: '4px' }}>
+        <GameBoard
+          hide={!showPuzzle}
+          rows={MAX_BOARD_ROWS}
+          activeRow={playData.activeRow}
+          rowLetters={playData.wordMatrix}
+          rowHighlights={boardData.boardBanishedIndexes}
+          onStart={() => setShowPuzzle(true)}
+          failedAttempt={failedAttempt}
+          setFailedAttempt={setFailedAttempt}
+        />
+        <Box sx={{ ml: '4px' }}>
           <ScoreModifiers modifiers={boardData.boardScoreModifiers} />
-        </Grid>
+        </Box>
       </Grid>
 
       <div style={{ marginBottom: 4 }} />
-      <BonusWordComponent letters={disabledKeys} maxLetters={8} />
+      <BonusWordComponent letters={playData.banishedLetters} maxLetters={8} bonusWordFound={'SHOUT'} />
       <div style={{ marginBottom: 4 }} />
-      <VKeyboard
-        onKeyPressed={handleKeyPress}
-        onDelete={handleDelete}
-        disabledKeys={disabledKeys}
-        highlightKeys={boardData.boardRowLetters[activeRow]}
-        onEnter={handleSubmit}
-        disabled={!showPuzzle}
-      />
+      {showPuzzle ? (
+        <VKeyboard
+          onKeyPressed={handleKeyPress}
+          onDelete={handleDelete}
+          disabledKeys={playData.banishedLetters}
+          highlightKeys={playData.wordMatrix[playData.activeRow]}
+          onEnter={handleSubmit}
+          keyboardEnabled={showPuzzle}
+        />
+      ) : (
+        <TitleKeyboard />
+      )}
     </PageWrapper>
   )
 }
