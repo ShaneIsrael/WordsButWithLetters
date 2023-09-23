@@ -72,8 +72,8 @@ const GameBoard = ({
         justifyContent: 'center',
         gap: 1,
         padding: 2,
-        borderRadius: 8,
-        width: (366 / 5) * rowLetters[0]?.length || 5,
+        borderTopLeftRadius: 8,
+        width: (390 / 5) * rowLetters[0]?.length || 5,
         height: (434 / 6) * rows,
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
       }}

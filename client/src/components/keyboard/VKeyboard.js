@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Button, Grid, Sheet, styled } from '@mui/joy'
+import { Box, Button, Grid, Sheet, styled } from '@mui/joy'
 import BackspaceIcon from '@mui/icons-material/Backspace'
 import { useTheme } from '@emotion/react'
 import wrongSfx from '../../sounds/wrong.wav'
@@ -10,7 +10,7 @@ import clsx from 'clsx'
 const KeyButton = styled(Button)(({ theme, highlight }) => ({
   backgroundColor: highlight ? '#EACB4F59' : false,
   ...theme.typography['body-sm'],
-  borderRadius: 4,
+  borderRadius: 0,
   borderColor: highlight ? theme.palette.warning[200] : false,
   // border: '1px solid #00000040',
   // color: theme.vars.palette.text.secondary,
@@ -63,6 +63,34 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
     }
   }, [onKeyPressed, onDelete, onEnter])
 
+  const getPrimaryButton = (key, functionKey, onClick, disabled, sx) => {
+    const keyDisabled = (!functionKey && disabledKeys.indexOf(key) >= 0) || disabled
+    const darkMode = theme.palette.mode === 'dark'
+
+    const border = darkMode ? theme.palette.primary[600] : theme.palette.primary[600]
+    const background = darkMode ? 'primary.900' : 'primary.300'
+
+    return (
+      <KeyButton
+        disabled={keyDisabled}
+        highlight={!functionKey && highlightKeys.indexOf(key) >= 0 ? 1 : 0}
+        color={keyDisabled ? 'neutral' : 'white'}
+        className={clsx({ invalid: invalidAnimationOn && keyDisabled })}
+        variant="outlined"
+        sx={{
+          backgroundColor: keyDisabled ? 'transparent' : background,
+          border: keyDisabled ? `1px solid grey` : `1px solid ${border}`,
+          ...sx,
+        }}
+        onClick={() => {
+          onKeyPressed(key)
+        }}
+      >
+        {key}
+      </KeyButton>
+    )
+  }
+
   return (
     <Sheet
       variant="plain"
@@ -72,7 +100,9 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
         alignItems: 'center',
         gap: 1,
         padding: 2,
-        borderRadius: 8,
+        borderBottomRightRadius: 8,
+        borderBottomLeftRadius: 8,
+        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
       }}
     >
       {layout.map((row, index) => (
@@ -80,38 +110,24 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
           {row.map((key) => (
             <div key={key}>
               {key === 'DELETE' && (
-                <KeyButton
-                  disabled={disabled}
-                  variant="outlined"
-                  onClick={onDelete}
-                  sx={{ maxWidth: 65.4, width: '100%' }}
-                >
-                  <BackspaceIcon />
-                </KeyButton>
+                <Box>
+                  {getPrimaryButton(<BackspaceIcon />, true, () => onDelete(), disabled, {
+                    maxWidth: 65.4,
+                    width: '100%',
+                  })}
+                </Box>
               )}
               {key === 'ENTER' && (
-                <KeyButton
-                  disabled={disabled}
-                  variant="outlined"
-                  onClick={onEnter}
-                  sx={{ maxWidth: 65.4, width: '100%', fontSize: 12 }}
-                >
-                  {key}
-                </KeyButton>
+                <Box>
+                  {getPrimaryButton(key, true, () => onEnter(), disabled, {
+                    maxWidth: 65.4,
+                    width: '100%',
+                    fontSize: 12,
+                  })}
+                </Box>
               )}
               {key !== 'ENTER' && key !== 'DELETE' && (
-                <KeyButton
-                  disabled={disabledKeys.indexOf(key) >= 0 || disabled}
-                  highlight={highlightKeys.indexOf(key) >= 0 ? 1 : 0}
-                  color={disabledKeys.indexOf(key) >= 0 ? 'neutral' : 'primary'}
-                  className={clsx({ invalid: invalidAnimationOn && disabledKeys.indexOf(key) >= 0 })}
-                  variant="outlined"
-                  onClick={() => {
-                    onKeyPressed(key)
-                  }}
-                >
-                  {key}
-                </KeyButton>
+                <Box>{getPrimaryButton(key, false, () => onKeyPressed(key))}</Box>
               )}
             </div>
           ))}

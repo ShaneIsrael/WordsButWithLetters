@@ -15,7 +15,7 @@ const LetterHolder = styled(Sheet)(({ theme }) => ({
   //   : `3px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
   // borderColor: highlightborder || false,
   border: `2px solid #FFC934`,
-  background: '#5C4300',
+  background: theme.palette.mode === 'dark' ? '#5C4300' : 'gold',
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
   width: 30,
   height: 30,
@@ -31,59 +31,54 @@ const ScoreModifiers = ({ modifiers }) => {
     <>
       <Sheet
         sx={{
-          width: 366,
-          borderTopLeftRadius: 8,
+          width: 140,
           borderTopRightRadius: 8,
           paddingTop: 1,
-          borderBottom: `2px solid ${theme.palette.primary[500]}`,
+          paddingBottom: 1,
+          borderBottom: `2px solid #616161`,
+          background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         }}
       >
-        <Typography level="h2" fontSize={28} fontWeight={800} textAlign="center">
+        <Typography level="h2" fontSize={24} fontWeight={800} textAlign="center">
           Score Modifiers
         </Typography>
       </Sheet>
       <Sheet
         variant="plain"
         sx={{
-          gap: 1,
-          padding: 1,
-          borderBottomLeftRadius: 8,
-          borderBottomRightRadius: 8,
-          width: 366,
-          height: 100,
+          padding: '28px 8px 8px 8px',
+          width: 140,
+          height: 356,
           background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         }}
       >
-        <Grid container height="100%">
-          <Grid container xs={12}>
-            <Grid xs>
-              <Typography level="h2" fontSize={32} fontWeight={900} textAlign="center">
-                x2
-              </Typography>
-            </Grid>
-            <Grid xs>
-              <Typography level="h2" fontSize={32} fontWeight={900} textAlign="center">
-                x3
-              </Typography>
-            </Grid>
-            <Grid xs>
-              <Typography level="h2" fontSize={32} fontWeight={900} textAlign="center">
-                x4
-              </Typography>
-            </Grid>
-          </Grid>
-          <Grid container xs={12} alignItems="stretch">
-            <Grid container xs justifyContent="center" gap={0.5}>
+        <Grid container height="100%" direction="column">
+          <Grid item xs>
+            <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
+              x2
+            </Typography>
+            <Grid item container xs justifyContent="center" gap={0.5}>
               {modifiers[0].map((letter) => (
                 <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
               ))}
             </Grid>
-            <Grid container xs justifyContent="center" gap={0.5}>
+          </Grid>
+          <Grid item xs>
+            <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
+              x3
+            </Typography>
+            <Grid item container xs justifyContent="center" gap={0.5}>
               {modifiers[1].map((letter) => (
                 <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
               ))}
             </Grid>
-            <Grid container xs justifyContent="center" gap={0.5}>
+          </Grid>
+
+          <Grid item xs>
+            <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
+              x4
+            </Typography>
+            <Grid item container xs justifyContent="center" gap={0.5}>
               {modifiers[2].map((letter) => (
                 <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
               ))}
