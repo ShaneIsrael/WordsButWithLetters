@@ -10,6 +10,9 @@ import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 
 const theme = extendTheme({
+  fontFamily: {
+    display: 'Bubblegum Sans',
+  },
   components: {
     JoyButton: {
       styleOverrides: {

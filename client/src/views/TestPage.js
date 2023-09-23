@@ -3,8 +3,10 @@ import PageWrapper from '../components/wrappers/PageWrapper'
 import VKeyboard from '../components/keyboard/VKeyboard'
 import GameBoard from '../components/board/GameBoard'
 import PuzzleService from '../services/PuzzleService'
-import RemovedLettersComponent from '../components/board/RemovedLetters'
+import RemovedLettersComponent from '../components/board/BonusWordComponent'
 import _ from 'lodash'
+import ScoreModifiers from '../components/board/ScoreModifiers'
+import BonusWordComponent from '../components/board/BonusWordComponent'
 
 // This is a test page used to place and test new components
 
@@ -59,11 +61,58 @@ function createBoardRowHighlights() {
   return rows
 }
 
+function createBoardScoreModifiers() {
+  function generateUniqueArrays(size1, size2, size3) {
+    // Create an array with all alphabets (a-z)
+    const alphabet = [...Array(26)].map((_, i) => String.fromCharCode(97 + i).toUpperCase())
+
+    // Function to get a random character from the alphabet
+    const getRandomChar = () => {
+      return alphabet[Math.floor(Math.random() * alphabet.length)]
+    }
+
+    const array1 = []
+    const array2 = []
+    const array3 = []
+
+    // Generate unique characters for each array
+    for (let i = 0; i < size1; i++) {
+      let char
+      do {
+        char = getRandomChar()
+      } while (array2.includes(char) || array3.includes(char))
+      array1.push(char)
+    }
+
+    for (let i = 0; i < size2; i++) {
+      let char
+      do {
+        char = getRandomChar()
+      } while (array1.includes(char) || array3.includes(char))
+      array2.push(char)
+    }
+
+    for (let i = 0; i < size3; i++) {
+      let char
+      do {
+        char = getRandomChar()
+      } while (array1.includes(char) || array2.includes(char))
+      array3.push(char)
+    }
+
+    // Return the result as an object
+    return [array1, array2, array3]
+  }
+
+  return generateUniqueArrays(3, 3, 2)
+}
+
 const TestPage = (props) => {
   const [disabledKeys, setDisabledKeys] = React.useState([])
   const [boardData, setBoardData] = React.useState({
     boardRowLetters: createBoardRowLetters(),
     boardRowHighlights: createBoardRowHighlights(),
+    boardScoreModifiers: createBoardScoreModifiers(),
   })
   const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [activeRow, setActiveRow] = React.useState(0)
@@ -132,7 +181,7 @@ const TestPage = (props) => {
       const lettersToRemove = _.uniq(thisWord.split('').filter((l, index) => indexesToRemove.includes(index)))
 
       setDisabledKeys((prev) => {
-        return [...prev, ...lettersToRemove.map((l) => l.toUpperCase())].sort()
+        return [...prev, ...lettersToRemove.map((l) => l.toUpperCase())]
       })
       setActiveRow((prev) => prev + 1)
     }
@@ -140,6 +189,8 @@ const TestPage = (props) => {
 
   return (
     <PageWrapper>
+      <ScoreModifiers modifiers={boardData.boardScoreModifiers} />
+      <div style={{ marginBottom: 12 }} />
       <GameBoard
         hide={!showPuzzle}
         rows={MAX_BOARD_ROWS}
@@ -150,9 +201,9 @@ const TestPage = (props) => {
         failedAttempt={failedAttempt}
         setFailedAttempt={setFailedAttempt}
       />
-      <div style={{ marginBottom: 25 }} />
-      <RemovedLettersComponent letters={disabledKeys} />
-      <div style={{ marginBottom: 25 }} />
+      <div style={{ marginBottom: 12 }} />
+      <BonusWordComponent letters={disabledKeys} maxLetters={8} />
+      <div style={{ marginBottom: 12 }} />
       <VKeyboard
         onKeyPressed={handleKeyPress}
         onDelete={handleDelete}
