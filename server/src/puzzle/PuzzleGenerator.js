@@ -4,10 +4,12 @@ class PuzzleGenerator {
    * @param {number} rows The number of rows in the puzzle
    * @param {number} rowLength The word size
    * @param {Array} scoreModifierSizes The number of modifiers [x1, x2, x3] e.x input [3, 3, 2]
+   * @param {number} secondsToComplete The time the puzzle must be completed in
    */
-  constructor(rows, rowLength, scoreModifierSizes) {
+  constructor(rows, rowLength, scoreModifierSizes, secondsToComplete = 300) {
     this.boardRows = rows
     this.boardRowLength = rowLength
+    this.timeToComplete = secondsToComplete
     this.banishedIndexes = PuzzleGenerator.#initBanishedIndexes(rows, rowLength)
     this.scoreModifiers = PuzzleGenerator.#initScoreModifiers(
       scoreModifierSizes[0],

@@ -7,7 +7,7 @@ const { getTodaysDate } = require('../utils')
 async function GenerateDayAndPuzzle() {
   try {
     const day = await Day.create()
-    const puzzle = new PuzzleGenerator(6, 5, [3, 3, 2])
+    const puzzle = new PuzzleGenerator(6, 5, [3, 3, 2], 300)
     await Puzzle.create({
       dayId: day.id,
       board: puzzle.getPuzzle(),
