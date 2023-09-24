@@ -7,8 +7,6 @@ import { useTheme } from '@emotion/react'
 const KeyButton = styled(Button)(({ theme }) => ({
   ...theme.typography['body-sm'],
   borderRadius: 0,
-  // border: '1px solid #00000040',
-  // color: theme.vars.palette.text.secondary,
   width: 43,
   height: 58,
   fontSize: '1.25em',
@@ -16,6 +14,9 @@ const KeyButton = styled(Button)(({ theme }) => ({
   cursor: 'pointer',
   ':hover': {
     opacity: 0.5,
+  },
+  '&.Mui-disabled': {
+    border: theme.palette.mode === 'light' && '1px solid lightGrey',
   },
 }))
 
