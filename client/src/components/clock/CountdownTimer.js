@@ -22,13 +22,13 @@ const CountdownTimer = ({ targetDate, onExpire, start }) => {
         </Grid>
         <Grid container gap={0.5}>
           <Typography level="h2" display="inline">
-            {expired || minutes === 0 ? '--' : minutes}
+            {expired || minutes === 0 ? '5' : minutes}
           </Typography>
           <Typography level="h2" display="inline">
             :
           </Typography>
           <Typography level="h2" display="inline">
-            {expired || seconds === 0 ? '--' : seconds}
+            {expired || seconds === 0 ? '00' : seconds}
           </Typography>
         </Grid>
       </Grid>
