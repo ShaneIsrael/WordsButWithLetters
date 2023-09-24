@@ -47,9 +47,6 @@ require('./routes/word')(app)
 require('./routes/puzzle')(app)
 require('./routes')(app)
 
-// Start cron jobs
-require('./cron').start()
-
 // Error Handler
 app.use((err, req, res, next) => {
   logger.error(
@@ -63,6 +60,8 @@ app.use((err, req, res, next) => {
 
 db.sequelize.sync().then(() => {
   console.log('Database models synced...')
+  // Start cron jobs
+  require('./cron').start()
   app.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
 })
 
