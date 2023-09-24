@@ -66,8 +66,8 @@ const TitleKeyboard = ({ props }) => {
     >
       {layout.map((row, index) => (
         <Grid key={`${row[0]}-${index}`} container gap={1} flexWrap="nowrap" justifyContent={'center'}>
-          {row.map((key) => (
-            <div key={key}>
+          {row.map((key, index) => (
+            <div key={`${key}_${index}`}>
               {key === 'DELETE' && (
                 <Box>
                   {getPrimaryButton(<BackspaceIcon />, true, {
