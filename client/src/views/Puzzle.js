@@ -10,23 +10,8 @@ import BonusWordComponent from '../components/board/BonusWordComponent'
 import { Box, Grid } from '@mui/joy'
 import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 
-// This is a test page used to place and test new components
-
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
-
-function generateTwoUniqueNumbers(n) {
-  // Generate unique random numbers
-  let numbers = []
-  while (numbers.length < 2) {
-    let randomNum = Math.floor(Math.random() * n)
-    if (!numbers.includes(randomNum)) {
-      numbers.push(randomNum)
-    }
-  }
-
-  return numbers
-}
 
 function initBoardRows() {
   let rows = []
@@ -36,83 +21,10 @@ function initBoardRows() {
   return rows
 }
 
-function createBoardBanishedIndexes() {
-  let rows = []
-  for (let i = 0; i < MAX_BOARD_ROWS - 1; i++) {
-    // odd rows only highlight 1 letter, even highlight 2
-
-    if (i % 2 !== 0) {
-      rows.push([
-        {
-          index: generateTwoUniqueNumbers(BOARD_ROW_LENGTH)[0],
-          color: 'red',
-          animation: 'skew-shake-infinite',
-        },
-      ])
-    } else {
-      rows.push(
-        generateTwoUniqueNumbers(BOARD_ROW_LENGTH).map((num) => ({
-          index: num,
-          color: 'red',
-          animation: 'skew-shake-infinite',
-        })),
-      )
-    }
-  }
-  rows.push([])
-  return rows
-}
-
-function createBoardScoreModifiers() {
-  function generateUniqueArrays(size1, size2, size3) {
-    // Create an array with all alphabets (a-z)
-    const alphabet = [...Array(26)].map((_, i) => String.fromCharCode(97 + i).toUpperCase())
-
-    // Function to get a random character from the alphabet
-    const getRandomChar = () => {
-      return alphabet[Math.floor(Math.random() * alphabet.length)]
-    }
-
-    const array1 = []
-    const array2 = []
-    const array3 = []
-
-    // Generate unique characters for each array
-    for (let i = 0; i < size1; i++) {
-      let char
-      do {
-        char = getRandomChar()
-      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
-      array1.push(char)
-    }
-
-    for (let i = 0; i < size2; i++) {
-      let char
-      do {
-        char = getRandomChar()
-      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
-      array2.push(char)
-    }
-
-    for (let i = 0; i < size3; i++) {
-      let char
-      do {
-        char = getRandomChar()
-      } while (array1.includes(char) || array2.includes(char) || array3.includes(char))
-      array3.push(char)
-    }
-
-    // Return the result as an object
-    return [array1, array2, array3]
-  }
-
-  return generateUniqueArrays(3, 3, 2)
-}
-
-const TestPage = (props) => {
+const Puzzle = (props) => {
   const [boardData, setBoardData] = React.useState({
-    boardBanishedIndexes: createBoardBanishedIndexes(),
-    boardScoreModifiers: createBoardScoreModifiers(),
+    banishedIndexes: [],
+    scoreModifiers: [[], [], []],
   })
   const [playData, setPlayData] = React.useState({
     activeRow: 0,
@@ -123,6 +35,12 @@ const TestPage = (props) => {
   })
   const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [failedAttempt, setFailedAttempt] = React.useState(false)
+
+  const handleBegin = async () => {
+    const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
+    setBoardData(puzzleData.Puzzle.board)
+    setShowPuzzle(true)
+  }
 
   const handleKeyPress = (key) => {
     if (playData.banishedLetters.indexOf(key) >= 0) return
@@ -180,7 +98,7 @@ const TestPage = (props) => {
         return
       }
 
-      const indexesToRemove = boardData.boardBanishedIndexes[playData.activeRow].map((i) => i.index)
+      const indexesToRemove = boardData.banishedIndexes[playData.activeRow].map((i) => i.index)
       const lettersToRemove = _.uniq(thisWord.split('').filter((l, index) => indexesToRemove.includes(index)))
 
       setPlayData((prev) => ({
@@ -216,13 +134,13 @@ const TestPage = (props) => {
           rows={MAX_BOARD_ROWS}
           activeRow={playData.activeRow}
           rowLetters={playData.wordMatrix}
-          rowHighlights={boardData.boardBanishedIndexes}
-          onStart={() => setShowPuzzle(true)}
+          rowHighlights={boardData.banishedIndexes}
+          onStart={handleBegin}
           failedAttempt={failedAttempt}
           setFailedAttempt={setFailedAttempt}
         />
         <Box sx={{ ml: '4px' }}>
-          <ScoreModifiers modifiers={boardData.boardScoreModifiers} />
+          <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
         </Box>
       </Grid>
 
@@ -245,6 +163,6 @@ const TestPage = (props) => {
   )
 }
 
-TestPage.propTypes = {}
+Puzzle.propTypes = {}
 
-export default TestPage
+export default Puzzle

@@ -6,6 +6,7 @@ module.exports = {
     database: process.env.DEV_DB_NAME,
     host: process.env.DEV_DB_HOSTNAME,
     dialect: 'postgres',
+    timezone: 'utc',
     logging: console.log,
     pool: {
       max: 5,
@@ -27,6 +28,7 @@ module.exports = {
     database: process.env.PROD_DB_NAME,
     host: process.env.PROD_DB_HOSTNAME,
     dialect: 'postgres',
+    timezone: 'utc',
     pool: {
       max: 20,
       min: 0,

@@ -7,6 +7,9 @@ class PuzzleService {
   validateWord(word) {
     return Api().get('/word/validate', { params: { word } })
   }
+  getTodaysPuzzle() {
+    return Api().get('/puzzle/today')
+  }
 }
 
 const service = new PuzzleService()
