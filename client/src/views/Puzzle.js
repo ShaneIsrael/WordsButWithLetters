@@ -6,9 +6,11 @@ import PuzzleService from '../services/PuzzleService'
 import _ from 'lodash'
 import ScoreModifiers from '../components/board/ScoreModifiers'
 import BonusWordComponent from '../components/board/BonusWordComponent'
-import { Box, Grid } from '@mui/joy'
+import { Box, Button, Grid, Sheet, Typography } from '@mui/joy'
 import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 import Clock from '../components/clock/Clock'
+import clsx from 'clsx'
+import { useTheme } from '@emotion/react'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -22,6 +24,8 @@ function initBoardRows() {
 }
 
 const Puzzle = (props) => {
+  const theme = useTheme()
+
   const [boardData, setBoardData] = React.useState({
     banishedIndexes: [[], [], [], [], []],
     scoreModifiers: [[], [], []],
@@ -137,26 +141,55 @@ const Puzzle = (props) => {
 
   return (
     <PageWrapper>
-      <Grid container>
-        <GameBoard
-          hide={!showPuzzle}
-          rows={MAX_BOARD_ROWS}
-          activeRow={playData.activeRow}
-          rowLetters={playData.wordMatrix}
-          rowHighlights={boardData.banishedIndexes}
-          onStart={handleBegin}
-          failedAttempt={failedAttempt}
-          setFailedAttempt={setFailedAttempt}
-        />
-        <Box sx={{ ml: '4px' }}>
-          <Clock seconds={boardData.timeToComplete || 300} start={showPuzzle} handleExpire={handleTimeExpire} />
-          <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
+      <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
+        <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
+          <Sheet
+            className={clsx('card-face')}
+            sx={{
+              height: '100%',
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderTopLeftRadius: 8,
+              borderTopRightRadius: 8,
+              background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+            }}
+          >
+            <Button onClick={handleBegin} size="lg">
+              <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                Begin Todays Puzzle
+              </Typography>
+            </Button>
+          </Sheet>
+          <Box className={clsx('card-face', 'card-back')}>
+            <Grid container>
+              <GameBoard
+                hide={!showPuzzle}
+                rows={MAX_BOARD_ROWS}
+                activeRow={playData.activeRow}
+                rowLetters={playData.wordMatrix}
+                rowHighlights={boardData.banishedIndexes}
+                onStart={handleBegin}
+                failedAttempt={failedAttempt}
+                setFailedAttempt={setFailedAttempt}
+              />
+              <Box sx={{ ml: '4px' }}>
+                <Clock seconds={boardData.timeToComplete || 300} start={showPuzzle} handleExpire={handleTimeExpire} />
+                <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
+              </Box>
+            </Grid>
+            <div style={{ marginBottom: 4 }} />
+            <BonusWordComponent
+              letters={playData.banishedLetters}
+              maxLetters={8}
+              bonusWordFound={playData.bonusWordFound}
+            />
+            <div style={{ marginBottom: 4 }} />
+          </Box>
         </Box>
-      </Grid>
+      </Box>
 
-      <div style={{ marginBottom: 4 }} />
-      <BonusWordComponent letters={playData.banishedLetters} maxLetters={8} bonusWordFound={playData.bonusWordFound} />
-      <div style={{ marginBottom: 4 }} />
       {showPuzzle ? (
         <VKeyboard
           onKeyPressed={handleKeyPress}

@@ -86,7 +86,7 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
         paddingRight: 2,
         paddingBottom: 2,
         paddingTop: 1,
-        width: 535,
+        width: 534,
         height: 'auto',
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         // border: '1px solid ' + theme.palette.primary[600],

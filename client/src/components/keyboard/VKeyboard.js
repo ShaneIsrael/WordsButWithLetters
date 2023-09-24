@@ -12,8 +12,6 @@ const KeyButton = styled(Button)(({ theme, highlight }) => ({
   ...theme.typography['body-sm'],
   borderRadius: 0,
   borderColor: highlight ? theme.palette.warning[200] : false,
-  // border: '1px solid #00000040',
-  // color: theme.vars.palette.text.secondary,
   width: 43,
   height: 58,
   fontSize: '1.25em',
@@ -22,18 +20,15 @@ const KeyButton = styled(Button)(({ theme, highlight }) => ({
   ':hover': {
     opacity: 0.5,
   },
+  '&.Mui-disabled': {
+    border: theme.palette.mode === 'light' && '1px solid lightGrey',
+  },
 }))
 
 const layout = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
   ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
-]
-
-const titleLayout = [
-  [' ', ' ', 'W', 'O', 'R', 'D', 'S', '', ' ', ' '],
-  [' ', 'B', 'U', 'T', ' ', 'W', 'I', 'T', 'H'],
-  ['ENTER', 'L', 'E', 'T', 'T', 'E', 'R', 'S', 'DELETE'],
 ]
 
 const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys, keyboardEnabled }) => {
@@ -93,7 +88,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
         variant="outlined"
         sx={{
           backgroundColor: keyDisabled ? 'transparent' : background,
-          border: keyDisabled ? `1px solid grey` : `1px solid ${border}`,
+          border: `1px solid ${border}`,
           ...sx,
         }}
         onClick={onClick}
