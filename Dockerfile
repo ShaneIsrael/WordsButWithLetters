@@ -1,5 +1,5 @@
 # build environment
-FROM node:16.15-alpine3.16 as build
+FROM node:18.18-alpine3.18 as build
 WORKDIR .
 ENV PATH node_modules/.bin:$PATH
 COPY client/package.json ./
@@ -14,6 +14,7 @@ RUN npm run build
 # production environment
 FROM node:18.18-alpine3.18
 RUN apk add --update nginx bash
+RUN mkdir /var/cache/nginx
 COPY --from=build /build /app/build
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh /
