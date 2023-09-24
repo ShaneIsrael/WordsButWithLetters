@@ -141,7 +141,7 @@ const Puzzle = (props) => {
 
   return (
     <PageWrapper>
-      <Box className="scene" sx={{ mb: '2px', width: 536, height: 552 }}>
+      <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
         <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
           <Sheet
             className={clsx('card-face')}
