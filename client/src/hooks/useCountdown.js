@@ -17,6 +17,8 @@ const useCountdown = (targetDate) => {
 }
 
 const getReturnValues = (countDown) => {
+  if (countDown < 0) return [0, 0]
+
   const minutes = Math.floor((countDown % (1000 * 60 * 60)) / (1000 * 60))
   let seconds = Math.floor((countDown % (1000 * 60)) / 1000)
   if (seconds < 10) seconds = `${0}${seconds}`

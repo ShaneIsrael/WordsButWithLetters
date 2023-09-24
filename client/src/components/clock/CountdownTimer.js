@@ -3,16 +3,16 @@ import { useCountdown } from '../../hooks/useCountdown'
 import TimerIcon from '@mui/icons-material/Timer'
 import React from 'react'
 
-const CountdownTimer = ({ targetDate, onExpire }) => {
+const CountdownTimer = ({ targetDate, onExpire, start }) => {
   const [minutes, seconds] = useCountdown(targetDate)
   const [expired, setExpired] = React.useState(false)
 
   React.useEffect(() => {
-    if (minutes <= 0 && seconds === '00') {
+    if (start && minutes <= 0 && seconds === '00') {
       setExpired(true)
       onExpire()
     }
-  }, [minutes, seconds, onExpire])
+  }, [minutes, seconds, onExpire, start])
 
   return (
     <>
@@ -22,13 +22,13 @@ const CountdownTimer = ({ targetDate, onExpire }) => {
         </Grid>
         <Grid container gap={0.5}>
           <Typography level="h2" display="inline">
-            {expired ? '0' : minutes}
+            {expired || minutes === 0 ? '--' : minutes}
           </Typography>
           <Typography level="h2" display="inline">
             :
           </Typography>
           <Typography level="h2" display="inline">
-            {expired ? '00' : seconds}
+            {expired || seconds === 0 ? '--' : seconds}
           </Typography>
         </Grid>
       </Grid>
