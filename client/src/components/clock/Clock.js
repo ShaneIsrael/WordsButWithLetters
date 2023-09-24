@@ -6,8 +6,13 @@ import CountdownTimer from './CountdownTimer'
 
 const Clock = ({ seconds, start, handleExpire }) => {
   const theme = useTheme()
-  const NOW_IN_MS = new Date().getTime()
-  const SECONDS_IN_MS = seconds * 1000
+  const [nowInMs, setNowInMs] = React.useState(null)
+  const [secondsInMs, setSecondsInMs] = React.useState(null)
+
+  React.useEffect(() => {
+    setNowInMs(new Date().getTime())
+    setSecondsInMs(seconds * 1000)
+  }, [start])
 
   return (
     <Sheet
@@ -21,7 +26,7 @@ const Clock = ({ seconds, start, handleExpire }) => {
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
       }}
     >
-      {start && <CountdownTimer targetDate={NOW_IN_MS + SECONDS_IN_MS} onExpire={handleExpire} />}
+      {start && <CountdownTimer targetDate={nowInMs + secondsInMs} onExpire={handleExpire} />}
     </Sheet>
   )
 }
