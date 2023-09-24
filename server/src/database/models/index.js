@@ -37,6 +37,7 @@ sequelize
     console.error('Unable to connect to the database: ', error)
   })
 
+console.log(db)
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 

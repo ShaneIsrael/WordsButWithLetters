@@ -44,7 +44,11 @@ app.use(
 require('./routes/auth')(app)
 require('./routes/comment')(app)
 require('./routes/word')(app)
+require('./routes/puzzle')(app)
 require('./routes')(app)
+
+// Start cron jobs
+require('./cron').start()
 
 // Error Handler
 app.use((err, req, res, next) => {
