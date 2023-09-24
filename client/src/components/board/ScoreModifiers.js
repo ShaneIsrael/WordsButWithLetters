@@ -32,11 +32,7 @@ const ScoreModifiers = ({ modifiers, hide }) => {
       <Sheet
         sx={{
           width: 140,
-          borderTopRightRadius: 8,
           paddingTop: 1,
-          paddingBottom: 1,
-          marginBottom: 0.5,
-          // borderBottom: `2px solid #616161`,
           background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         }}
       >
@@ -50,9 +46,9 @@ const ScoreModifiers = ({ modifiers, hide }) => {
             <Sheet
               variant="plain"
               sx={{
-                padding: '28px 8px 8px 8px',
+                padding: '14px 8px 8px 8px',
                 width: 140,
-                height: 354,
+                height: 262,
                 background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
               }}
             >
@@ -97,7 +93,7 @@ const ScoreModifiers = ({ modifiers, hide }) => {
               sx={{
                 padding: '28px 8px 8px 8px',
                 width: 140,
-                height: 354,
+                height: 254,
                 background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
               }}
             />

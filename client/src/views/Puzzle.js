@@ -9,6 +9,7 @@ import ScoreModifiers from '../components/board/ScoreModifiers'
 import BonusWordComponent from '../components/board/BonusWordComponent'
 import { Box, Grid } from '@mui/joy'
 import TitleKeyboard from '../components/keyboard/TitleKeyboard'
+import Clock from '../components/clock/Clock'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -109,6 +110,15 @@ const Puzzle = (props) => {
     }
   }
 
+  const handleTimeExpire = () => {
+    setShowPuzzle(false)
+    // On timeout, hit the timeout route (doesnt yet exist)
+    // on the server which will force the server to compare
+    // the timestamps and finalize the score if the time allotted
+    // has in fact expired. This check will also be done on every
+    // row submission.
+  }
+
   React.useEffect(() => {
     async function checkForBonus() {
       for (let i = 0; i < 3; i += 1) {
@@ -140,6 +150,7 @@ const Puzzle = (props) => {
           setFailedAttempt={setFailedAttempt}
         />
         <Box sx={{ ml: '4px' }}>
+          <Clock minutes={5} start={showPuzzle} handleExpire={handleTimeExpire} />
           <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
         </Box>
       </Grid>
