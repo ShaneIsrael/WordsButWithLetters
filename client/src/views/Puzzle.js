@@ -3,7 +3,6 @@ import PageWrapper from '../components/wrappers/PageWrapper'
 import VKeyboard from '../components/keyboard/VKeyboard'
 import GameBoard from '../components/board/GameBoard'
 import PuzzleService from '../services/PuzzleService'
-import RemovedLettersComponent from '../components/board/BonusWordComponent'
 import _ from 'lodash'
 import ScoreModifiers from '../components/board/ScoreModifiers'
 import BonusWordComponent from '../components/board/BonusWordComponent'
@@ -23,7 +22,7 @@ function initBoardRows() {
 
 const Puzzle = (props) => {
   const [boardData, setBoardData] = React.useState({
-    banishedIndexes: [],
+    banishedIndexes: [[], [], [], [], []],
     scoreModifiers: [[], [], []],
   })
   const [playData, setPlayData] = React.useState({
@@ -145,7 +144,7 @@ const Puzzle = (props) => {
       </Grid>
 
       <div style={{ marginBottom: 4 }} />
-      <BonusWordComponent letters={playData.banishedLetters} maxLetters={8} bonusWordFound={'SHOUT'} />
+      <BonusWordComponent letters={playData.banishedLetters} maxLetters={8} bonusWordFound={playData.bonusWordFound} />
       <div style={{ marginBottom: 4 }} />
       {showPuzzle ? (
         <VKeyboard
