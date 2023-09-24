@@ -8,7 +8,7 @@ const CountdownTimer = ({ targetDate, onExpire }) => {
   const [expired, setExpired] = React.useState(false)
 
   React.useEffect(() => {
-    if (minutes === 0 && seconds === '00') {
+    if (minutes <= 0 && seconds === '00') {
       setExpired(true)
       onExpire()
     }
