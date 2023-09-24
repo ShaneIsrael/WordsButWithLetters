@@ -150,7 +150,7 @@ const Puzzle = (props) => {
           setFailedAttempt={setFailedAttempt}
         />
         <Box sx={{ ml: '4px' }}>
-          <Clock minutes={5} start={showPuzzle} handleExpire={handleTimeExpire} />
+          <Clock seconds={boardData.timeToComplete || 300} start={showPuzzle} handleExpire={handleTimeExpire} />
           <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
         </Box>
       </Grid>

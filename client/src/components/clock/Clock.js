@@ -4,10 +4,10 @@ import { Sheet } from '@mui/joy'
 import { useTheme } from '@emotion/react'
 import CountdownTimer from './CountdownTimer'
 
-const Clock = ({ minutes, start, handleExpire }) => {
+const Clock = ({ seconds, start, handleExpire }) => {
   const theme = useTheme()
   const NOW_IN_MS = new Date().getTime()
-  const SECONDS_IN_MS = minutes * 60 * 1000
+  const SECONDS_IN_MS = seconds * 1000
 
   return (
     <Sheet
