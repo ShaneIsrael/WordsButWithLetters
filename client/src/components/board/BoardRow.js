@@ -101,6 +101,10 @@ const BoardRow = ({ active, completed, letters, highlightIndexes, puzzleComplete
       <Grid container gap={1}>
         {letters.map((letter, index) => {
           const highlight = highlightIndexes.filter((e) => e.index === index)[0]
+          let animationDelay = 'unset'
+          if (completed) animationDelay = `${300 * index}ms`
+          if (puzzleComplete) animationDelay = `${100 * index}ms`
+
           if (highlight)
             return (
               <HighlightLetterHolder
@@ -112,6 +116,7 @@ const BoardRow = ({ active, completed, letters, highlightIndexes, puzzleComplete
                 )}
                 active={letter}
                 color={highlight.color}
+                sx={{ animationDelay }}
               >
                 {letter}
               </HighlightLetterHolder>
@@ -124,6 +129,7 @@ const BoardRow = ({ active, completed, letters, highlightIndexes, puzzleComplete
                 className={clsx({ [`hop${index}`]: !puzzleComplete }, { [`puzzleComplete${index}`]: puzzleComplete })}
                 active={letter}
                 color={'completed'}
+                sx={{ animationDelay }}
               >
                 {letter}
               </HighlightLetterHolder>
@@ -133,6 +139,7 @@ const BoardRow = ({ active, completed, letters, highlightIndexes, puzzleComplete
               key={(letter ? letter : 'blank_') + index}
               className={letter ? 'tilt-shake' : ''}
               active={letter}
+              sx={{ animationDelay }}
             >
               {letter}
             </LetterHolder>
