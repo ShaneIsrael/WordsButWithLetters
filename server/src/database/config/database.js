@@ -34,6 +34,7 @@ module.exports = {
       host: process.env.PROD_DB_HOSTNAME,
       dialect: 'postgres',
       timezone: 'utc',
+      logging: false,
       pool: {
         max: 20,
         min: 0,
