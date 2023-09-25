@@ -59,10 +59,10 @@ app.use((err, req, res, next) => {
 })
 
 db.sequelize.sync().then(() => {
-  console.log('Database models synced...')
+  logger.info('Database models synced...')
   // Start cron jobs
   require('./cron').start()
-  app.listen(PORT, () => console.log(`Server listening on port ${PORT}`))
+  app.listen(PORT, () => logger.info(`Server listening on port ${PORT}`))
 })
 
 module.exports = app

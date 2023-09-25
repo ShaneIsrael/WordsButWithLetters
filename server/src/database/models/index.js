@@ -1,17 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
+const logger = require('../../utils/logger')
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || 'production'
 const config = require(__dirname + '/../config/database')[env]
 const db = {}
 
-let sequelize
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env[config.use_env_variable], config)
-} else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config)
-}
+const sequelize = new Sequelize(config.database, config.username, config.password, config.options)
 
 fs.readdirSync(__dirname)
   .filter((file) => {
@@ -31,10 +27,10 @@ Object.keys(db).forEach((modelName) => {
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Database connection has been established successfully.')
+    logger.info('Database connection has been established successfully.')
   })
   .catch((error) => {
-    console.error('Unable to connect to the database: ', error)
+    logger.error(error)
   })
 
 db.sequelize = sequelize
