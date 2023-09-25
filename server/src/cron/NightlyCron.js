@@ -29,7 +29,9 @@ function start() {
 
     // Initialize a puzzle for today if one doesn't already exist
     Day.findOne({
-      order: [['createdAt', 'DESC']],
+      where: {
+        date: getTodaysDate(),
+      },
       include: [Puzzle],
     }).then((day) => {
       if (!day) {

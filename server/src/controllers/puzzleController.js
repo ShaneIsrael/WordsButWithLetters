@@ -5,11 +5,9 @@ const controller = {}
 
 controller.getTodaysPuzzle = async (req, res, next) => {
   try {
-    const todaysDate = getTodaysDate()
+    // todays puzzle should ALWAYS be the latest puzzle
     const today = await Day.findOne({
-      where: {
-        date: todaysDate,
-      },
+      order: [['createdAt', 'DESC']],
       include: [Puzzle],
     })
 
