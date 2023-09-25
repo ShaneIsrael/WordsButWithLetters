@@ -75,7 +75,6 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
   const getPrimaryButton = (key, functionKey, onClick, disabled, sx) => {
     const keyDisabled = (!functionKey && disabledKeys.indexOf(key) >= 0) || disabled
     const darkMode = theme.palette.mode === 'dark'
-
     const border = darkMode ? theme.palette.primary[600] : theme.palette.primary[600]
     const background = darkMode ? 'primary.900' : 'primary.300'
 
@@ -113,7 +112,14 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
       }}
     >
       {layout.map((row, index) => (
-        <Grid key={`${row[0]}-${index}`} container gap={1} flexWrap="nowrap" justifyContent={'center'}>
+        <Grid
+          key={`${row[0]}-${index}`}
+          container
+          gap={1}
+          flexWrap="nowrap"
+          justifyContent={'center'}
+          sx={{ height: 58 }}
+        >
           {row.map((key) => (
             <div key={key}>
               {key === 'DELETE' && (

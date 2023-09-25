@@ -149,7 +149,7 @@ const Puzzle = (props) => {
           <Sheet
             className={clsx('card-face')}
             sx={{
-              height: '100%',
+              height: 'calc(100% - 2px)',
               width: '100%',
               display: 'flex',
               alignItems: 'center',
@@ -194,7 +194,6 @@ const Puzzle = (props) => {
               maxLetters={8}
               bonusWordFound={playData.bonusWordFound}
             />
-            <div style={{ marginBottom: 4 }} />
           </Box>
         </Box>
       </Box>
