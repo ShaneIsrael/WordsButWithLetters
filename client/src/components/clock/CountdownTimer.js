@@ -3,7 +3,7 @@ import { useCountdown } from '../../hooks/useCountdown'
 import TimerIcon from '@mui/icons-material/Timer'
 import React from 'react'
 
-const CountdownTimer = ({ targetDate, onExpire, start }) => {
+const CountdownTimer = ({ targetDate, onExpire, start, finalTimeMinutes, finalTimeSeconds }) => {
   const [minutes, seconds] = useCountdown(targetDate)
   const [expired, setExpired] = React.useState(false)
 
@@ -21,15 +21,31 @@ const CountdownTimer = ({ targetDate, onExpire, start }) => {
           <TimerIcon sx={{ fontSize: 32 }} />
         </Grid>
         <Grid container gap={0.5}>
-          <Typography level="h2" display="inline">
-            {expired || minutes === 0 ? '5' : minutes}
-          </Typography>
-          <Typography level="h2" display="inline">
-            :
-          </Typography>
-          <Typography level="h2" display="inline">
-            {expired || seconds === 0 ? '00' : seconds}
-          </Typography>
+          {finalTimeMinutes && finalTimeSeconds ? (
+            <>
+              <Typography level="h2" display="inline">
+                {finalTimeMinutes}
+              </Typography>
+              <Typography level="h2" display="inline">
+                :
+              </Typography>
+              <Typography level="h2" display="inline">
+                {finalTimeSeconds}
+              </Typography>
+            </>
+          ) : (
+            <>
+              <Typography level="h2" display="inline">
+                {expired || (minutes === 0 && seconds === 0) ? '5' : minutes}
+              </Typography>
+              <Typography level="h2" display="inline">
+                :
+              </Typography>
+              <Typography level="h2" display="inline">
+                {expired || seconds === 0 ? '00' : seconds}
+              </Typography>
+            </>
+          )}
         </Grid>
       </Grid>
     </>

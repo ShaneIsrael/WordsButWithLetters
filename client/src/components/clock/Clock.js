@@ -3,11 +3,14 @@ import PropTypes from 'prop-types'
 import { Sheet } from '@mui/joy'
 import { useTheme } from '@emotion/react'
 import CountdownTimer from './CountdownTimer'
+import NoLimit from './NoLimit'
 
-const Clock = ({ seconds, start, handleExpire }) => {
+const Clock = ({ seconds, start, handleExpire, finalTime, noLimit }) => {
   const theme = useTheme()
   const [nowInMs, setNowInMs] = React.useState(0)
   const [secondsInMs, setSecondsInMs] = React.useState(0)
+  const [finalMinutes, setFinalMinutes] = React.useState(null)
+  const [finalSeconds, setFinalSeconds] = React.useState(null)
 
   React.useEffect(() => {
     if (start) {
@@ -15,6 +18,15 @@ const Clock = ({ seconds, start, handleExpire }) => {
       setSecondsInMs(seconds * 1000)
     }
   }, [start, seconds])
+
+  React.useEffect(() => {
+    if (finalTime) {
+      const mins = Math.floor(finalTime / 60)
+      const secs = finalTime - mins * 60
+      setFinalMinutes(mins)
+      setFinalSeconds(secs)
+    }
+  }, [finalTime])
 
   return (
     <Sheet
@@ -28,7 +40,16 @@ const Clock = ({ seconds, start, handleExpire }) => {
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
       }}
     >
-      {start && <CountdownTimer targetDate={nowInMs + secondsInMs} onExpire={handleExpire} start={start} />}
+      {start && !noLimit && (
+        <CountdownTimer
+          targetDate={nowInMs + secondsInMs}
+          onExpire={handleExpire}
+          start={start}
+          finalTimeMinutes={finalMinutes}
+          finalTimeSeconds={finalSeconds}
+        />
+      )}
+      {start && noLimit && <NoLimit />}
     </Sheet>
   )
 }
