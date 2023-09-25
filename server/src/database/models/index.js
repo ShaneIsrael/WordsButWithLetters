@@ -1,6 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
+const logger = require('../../utils/logger')
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || 'production'
 const config = require(__dirname + '/../config/database')[env]
@@ -26,10 +27,10 @@ Object.keys(db).forEach((modelName) => {
 sequelize
   .authenticate()
   .then(() => {
-    console.log('Database connection has been established successfully.')
+    logger.info('Database connection has been established successfully.')
   })
   .catch((error) => {
-    console.error('Unable to connect to the database: ', error)
+    logger.error(error)
   })
 
 db.sequelize = sequelize
