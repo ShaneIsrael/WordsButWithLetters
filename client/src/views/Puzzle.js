@@ -36,6 +36,8 @@ const Puzzle = (props) => {
     banishedLetters: [],
     bonusWordFound: '',
     wordScores: [],
+    puzzleComplete: false,
+    finalTime: null,
   })
   const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [failedAttempt, setFailedAttempt] = React.useState(false)
@@ -109,6 +111,7 @@ const Puzzle = (props) => {
         ...prev,
         banishedLetters: prev.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())]),
         activeRow: prev.activeRow + 1,
+        puzzleComplete: prev.activeRow === 5,
       }))
     }
   }
@@ -175,7 +178,13 @@ const Puzzle = (props) => {
                 setFailedAttempt={setFailedAttempt}
               />
               <Box sx={{ ml: '4px' }}>
-                <Clock seconds={boardData.timeToComplete || 300} start={showPuzzle} handleExpire={handleTimeExpire} />
+                <Clock
+                  seconds={boardData.timeToComplete || 300}
+                  start={showPuzzle}
+                  handleExpire={handleTimeExpire}
+                  finalTime={playData.finalTime}
+                  noLimit
+                />
                 <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
               </Box>
             </Grid>
