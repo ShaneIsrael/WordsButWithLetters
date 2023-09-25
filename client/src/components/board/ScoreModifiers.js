@@ -33,9 +33,11 @@ const ScoreModifiers = ({ modifiers, hide }) => {
           width: 140,
           paddingTop: 1,
           background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+          display: 'flex',
+          justifyContent: 'center',
         }}
       >
-        <Typography level="h2" fontSize={24} fontWeight={800} textAlign="center">
+        <Typography level="h2" fontSize={24} fontWeight={800} textAlign="center" width={135}>
           Score Modifiers
         </Typography>
       </Sheet>

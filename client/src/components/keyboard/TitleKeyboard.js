@@ -42,7 +42,7 @@ const TitleKeyboard = ({ props }) => {
         variant="outlined"
         sx={{
           backgroundColor: keyDisabled ? 'transparent' : background,
-          border: keyDisabled ? `1px solid grey` : `1px solid ${border}`,
+          border: `1px solid ${border}`,
           ...sx,
         }}
       >
@@ -66,7 +66,14 @@ const TitleKeyboard = ({ props }) => {
       }}
     >
       {layout.map((row, index) => (
-        <Grid key={`${row[0]}-${index}`} container gap={1} flexWrap="nowrap" justifyContent={'center'}>
+        <Grid
+          key={`${row[0]}-${index}`}
+          container
+          gap={1}
+          flexWrap="nowrap"
+          justifyContent={'center'}
+          sx={{ height: 58 }}
+        >
           {row.map((key, index) => (
             <div key={`${key}_${index}`}>
               {key === 'DELETE' && (
