@@ -1,4 +1,4 @@
-const cron = require('node-cron')
+const { Cron } = require('croner')
 const logger = require('../utils/logger')
 const { Day, Puzzle } = require('../database/models')
 const PuzzleGenerator = require('../puzzle/PuzzleGenerator')
@@ -21,17 +21,15 @@ async function GenerateDayAndPuzzle() {
 
 function start() {
   try {
-    logger.info('...Nightly cron initialized, will run at 1:00 AM server time.')
-    cron.schedule('0 1 * * *', async () => {
+    logger.info('Nightly cron initialized, will run at 12:00 AM UTC')
+    Cron('0 0 0 * * *', { timezone: 'Etc/UTC' }, async () => {
       logger.info('Running Nightly cron..')
       await GenerateDayAndPuzzle().catch((err) => logger.error(err))
     })
 
     // Initialize a puzzle for today if one doesn't already exist
     Day.findOne({
-      where: {
-        date: getTodaysDate(),
-      },
+      order: [['createdAt', 'DESC']],
       include: [Puzzle],
     }).then((day) => {
       if (!day) {

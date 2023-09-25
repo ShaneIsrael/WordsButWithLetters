@@ -4,7 +4,7 @@ const environment = process.env.NODE_ENV || 'production'
 // define the custom settings for each transport (file, console)
 const options = {
   console: {
-    level: 'info',
+    level: 'debug',
     handleExceptions: true,
     json: false,
     colorize: true,
@@ -60,6 +60,9 @@ const logger = createLogger({
 // create a stream object with a 'write' function that will be used by `morgan`
 logger.stream = {
   write(message, encoding) {
+    logger.info(message)
+  },
+  log(message) {
     logger.info(message)
   },
 }
