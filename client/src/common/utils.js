@@ -32,3 +32,33 @@ export const getSessionUser = () => {
 }
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+
+export const getPuzzleProgress = (date) => {
+  const progress = localStorage.getItem('progress')
+  if (!progress) return null
+  return JSON.parse(localStorage.getItem('progress'))[date]
+}
+
+export const setPuzzleProgress = (date, board, progress) => {
+  const existingProgress = localStorage.getItem('progress')
+  if (existingProgress) {
+    return localStorage.setItem(
+      'progress',
+      JSON.stringify({
+        ...JSON.parse(existingProgress),
+        [date]: {
+          progress,
+          board,
+        },
+      }),
+    )
+  }
+  return localStorage.setItem(
+    'progress',
+    JSON.stringify({
+      [date]: { progress, board },
+    }),
+  )
+}
+
+export const getUTCDate = () => new Date().toISOString().split('T')[0]

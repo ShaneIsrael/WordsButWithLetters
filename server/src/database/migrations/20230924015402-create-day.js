@@ -10,7 +10,6 @@ module.exports = {
       },
       date: {
         type: Sequelize.DATEONLY,
-        defaultValue: Sequelize.NOW,
         allowNull: false,
         unique: true,
       },
