@@ -59,10 +59,14 @@ const Puzzle = (props) => {
   }, [])
 
   const handleBegin = async () => {
-    const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
-    setBoardData(puzzleData.Puzzle.board)
-    setPuzzleProgress(puzzleData.date, puzzleData.Puzzle.board, PLAY_DATA)
-    setShowPuzzle(true)
+    // only allow fetching the puzzle and setting the initial
+    // local storage IF local storage does not have an entry for today
+    if (!getPuzzleProgress(getUTCDate())) {
+      const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
+      setBoardData(puzzleData.Puzzle.board)
+      setPuzzleProgress(puzzleData.date, puzzleData.Puzzle.board, PLAY_DATA)
+      setShowPuzzle(true)
+    }
   }
 
   const handleKeyPress = (key) => {
