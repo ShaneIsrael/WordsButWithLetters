@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Divider, Sheet, Typography } from '@mui/joy'
 import { useTheme } from '@emotion/react'
 
-const ScoreBoard = ({ finalScore, bonusWord }) => {
+const ScoreBoard = ({ finalScore, bonusWord, completeMessage }) => {
   const theme = useTheme()
 
   return (
@@ -22,6 +22,12 @@ const ScoreBoard = ({ finalScore, bonusWord }) => {
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
       }}
     >
+      {completeMessage && (
+        <>
+          <Typography level="h1">{completeMessage}</Typography>
+          <Divider />
+        </>
+      )}
       <Typography level="h1">Final Score</Typography>
       <Typography level="h2">{finalScore}</Typography>
       <Divider />

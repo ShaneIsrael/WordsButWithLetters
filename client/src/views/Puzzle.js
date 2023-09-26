@@ -176,6 +176,7 @@ const Puzzle = (props) => {
                 <ScoreBoard
                   finalScore={playData.wordScores.reduce((partialSum, a) => partialSum + a, 0)}
                   bonusWord={playData.bonusWordFound}
+                  completeMessage={playData.completeMessage}
                 />
               )}
               <Box sx={{ ml: '4px' }}>

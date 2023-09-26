@@ -42,9 +42,11 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
   progress.banishedLetters = progress.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())])
   progress.wordScores.push(calculateWordScore(thisWord, board.scoreModifiers))
 
-  const puzzleComplete = progress.activeRow === board.boardRows - 1
+  const [puzzleComplete, completeMessage] = service.validatePuzzleComplete(progress, board)
+
   if (puzzleComplete) {
     progress.puzzleComplete = true
+    progress.completeMessage = completeMessage
     // check for bonus word
     for (let i = 0; i < 3; i += 1) {
       const wordToCheck = progress.banishedLetters.slice(i, 5 + i).join('')
@@ -59,6 +61,13 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
 
   progress.activeRow += 1
   return [true, progress]
+}
+
+service.validatePuzzleComplete = (progress, board) => {
+  if (progress.activeRow === board.boardRows - 1) return [true, null]
+  if (progress.banishedLetters.every((bl) => ['A', 'E', 'I', 'O', 'U'].includes(bl)))
+    return [true, 'No Available Vowels']
+  return [false, null]
 }
 
 module.exports = service
