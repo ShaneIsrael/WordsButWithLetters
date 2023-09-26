@@ -12,7 +12,7 @@ import Clock from '../components/clock/Clock'
 import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
 import { getPuzzleProgress, getUTCDate, setPuzzleProgress } from '../common/utils'
-import ScoreBoard from '../components/board/ScoreBoard'
+import ScoreOverview from '../components/overview/ScoreOverview'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -177,11 +177,7 @@ const Puzzle = (props) => {
                 />
               )}
               {playData.puzzleComplete && (
-                <ScoreBoard
-                  finalScore={playData.wordScores.reduce((partialSum, a) => partialSum + a, 0)}
-                  bonusWord={playData.bonusWordFound}
-                  completeMessage={playData.completeMessage}
-                />
+                <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />
               )}
               <Box sx={{ ml: '4px' }}>
                 <Clock

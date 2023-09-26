@@ -107,7 +107,7 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
       >
         {new Array(maxLetters).fill().map((_, index) =>
           bonusWordFound.includes(letters[index]) ? (
-            <HighlightLetterHolder color="completed" key={`bonus_word_letter_${letters[index] || index}`}>
+            <HighlightLetterHolder color="red" key={`bonus_word_letter_${letters[index] || index}`}>
               {letters[index]}
             </HighlightLetterHolder>
           ) : (

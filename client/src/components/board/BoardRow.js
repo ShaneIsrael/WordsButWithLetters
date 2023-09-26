@@ -25,12 +25,6 @@ const HIGHLIGHT_COLORS = {
     borderActiveDark: 'yellow',
   },
   completed: {
-    // backgroundLight: '#13FF2B88',
-    // backgroundDark: '#13FF2B38',
-    // borderLight: '',
-    // borderDark: '',
-    // borderActiveLight: 'green',
-    // borderActiveDark: 'green',
     backgroundLight: '#0660EEB0',
     backgroundDark: '#014CC273',
     borderLight: '',
