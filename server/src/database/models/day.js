@@ -21,7 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DATEONLY,
         allowNull: false,
         unique: true,
-        defaultValue: getTodaysDate(),
       },
     },
     {

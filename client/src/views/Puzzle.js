@@ -11,6 +11,8 @@ import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 import Clock from '../components/clock/Clock'
 import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
+import { getPuzzleProgress, getUTCDate, setPuzzleProgress } from '../common/utils'
+import ScoreBoard from '../components/board/ScoreBoard'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -23,6 +25,16 @@ function initBoardRows() {
   return rows
 }
 
+const PLAY_DATA = {
+  activeRow: 0,
+  wordMatrix: initBoardRows(),
+  banishedLetters: [],
+  bonusWordFound: '',
+  wordScores: [],
+  puzzleComplete: false,
+  finalTime: null,
+}
+
 const Puzzle = (props) => {
   const theme = useTheme()
 
@@ -30,21 +42,26 @@ const Puzzle = (props) => {
     banishedIndexes: [[], [], [], [], []],
     scoreModifiers: [[], [], []],
   })
-  const [playData, setPlayData] = React.useState({
-    activeRow: 0,
-    wordMatrix: initBoardRows(),
-    banishedLetters: [],
-    bonusWordFound: '',
-    wordScores: [],
-    puzzleComplete: false,
-    finalTime: null,
-  })
+  const [playData, setPlayData] = React.useState(PLAY_DATA)
   const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [failedAttempt, setFailedAttempt] = React.useState(false)
+
+  React.useEffect(() => {
+    async function init() {
+      const puzzleProgress = getPuzzleProgress(getUTCDate())
+      if (puzzleProgress) {
+        setBoardData(puzzleProgress.board)
+        setPlayData(puzzleProgress.progress)
+        setShowPuzzle(true)
+      }
+    }
+    init()
+  }, [])
 
   const handleBegin = async () => {
     const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
     setBoardData(puzzleData.Puzzle.board)
+    setPuzzleProgress(puzzleData.date, puzzleData.Puzzle.board, PLAY_DATA)
     setShowPuzzle(true)
   }
 
@@ -56,7 +73,7 @@ const Puzzle = (props) => {
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
         let trow = row
         if (rowIndex === playData.activeRow) {
-          for (let i = 0; i < trow.length; i++) {
+          for (let i = 0; i < boardData.boardRowLength; i++) {
             if (!trow[i]) {
               trow[i] = key
               break
@@ -78,7 +95,7 @@ const Puzzle = (props) => {
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
         let trow = row
         if (rowIndex === playData.activeRow) {
-          for (let i = trow.length; i >= 0; i--) {
+          for (let i = boardData.boardRowLength; i >= 0; i--) {
             if (trow[i] !== undefined) {
               trow[i] = undefined
               break
@@ -91,28 +108,21 @@ const Puzzle = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (playData.activeRow < MAX_BOARD_ROWS) {
-      // if the row is not completely filled, do not allow submission
-      if (playData.wordMatrix[playData.activeRow].filter((l) => !l).length > 0) return
-
-      const thisWord = playData.wordMatrix[playData.activeRow].join('').toLowerCase()
-      const isValid = (await PuzzleService.validateWord(thisWord)).data
-
-      if (!isValid?.valid) {
-        setFailedAttempt(true)
-
+    if (!playData.puzzleComplete) {
+      if (playData.wordMatrix[playData.activeRow].filter((l) => l).join('').length !== 5) {
         return
       }
-
-      const indexesToRemove = boardData.banishedIndexes[playData.activeRow].map((i) => i.index)
-      const lettersToRemove = _.uniq(thisWord.split('').filter((l, index) => indexesToRemove.includes(index)))
-
-      setPlayData((prev) => ({
-        ...prev,
-        banishedLetters: prev.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())]),
-        activeRow: prev.activeRow + 1,
-        puzzleComplete: prev.activeRow === 5,
-      }))
+      try {
+        const response = (await PuzzleService.submit(playData)).data
+        if (!response.accepted) {
+          setFailedAttempt(true)
+          return
+        }
+        setPuzzleProgress(response.date, response.board, response.progress)
+        setPlayData(response.progress)
+      } catch (err) {
+        console.error(err)
+      }
     }
   }
 
@@ -124,23 +134,6 @@ const Puzzle = (props) => {
     // has in fact expired. This check will also be done on every
     // row submission.
   }
-
-  React.useEffect(() => {
-    async function checkForBonus() {
-      for (let i = 0; i < 3; i += 1) {
-        const wordToCheck = playData.banishedLetters.slice(i, 5 + i).join('')
-        const isValid = (await PuzzleService.validateWord(wordToCheck)).data?.valid
-        console.log(wordToCheck, isValid)
-        if (isValid) {
-          setPlayData((prev) => ({ ...prev, bonusWordFound: wordToCheck }))
-          break
-        }
-      }
-    }
-    if (playData.banishedLetters.length === 8) {
-      checkForBonus()
-    }
-  }, [playData.banishedLetters, playData.activeRow, playData.bonusWordFound])
 
   return (
     <PageWrapper>
@@ -167,16 +160,24 @@ const Puzzle = (props) => {
           </Sheet>
           <Box className={clsx('card-face', 'card-back')}>
             <Grid container>
-              <GameBoard
-                hide={!showPuzzle}
-                rows={MAX_BOARD_ROWS}
-                activeRow={playData.activeRow}
-                rowLetters={playData.wordMatrix}
-                rowHighlights={boardData.banishedIndexes}
-                onStart={handleBegin}
-                failedAttempt={failedAttempt}
-                setFailedAttempt={setFailedAttempt}
-              />
+              {!playData.puzzleComplete && (
+                <GameBoard
+                  hide={!showPuzzle}
+                  rows={MAX_BOARD_ROWS}
+                  activeRow={playData.activeRow}
+                  rowLetters={playData.wordMatrix}
+                  rowHighlights={boardData.banishedIndexes}
+                  onStart={handleBegin}
+                  failedAttempt={failedAttempt}
+                  setFailedAttempt={setFailedAttempt}
+                />
+              )}
+              {playData.puzzleComplete && (
+                <ScoreBoard
+                  finalScore={playData.wordScores.reduce((partialSum, a) => partialSum + a, 0)}
+                  bonusWord={playData.bonusWordFound}
+                />
+              )}
               <Box sx={{ ml: '4px' }}>
                 <Clock
                   seconds={boardData.timeToComplete || 300}

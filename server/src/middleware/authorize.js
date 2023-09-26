@@ -14,6 +14,18 @@ const authorize = (req, res, next) => {
   }
 }
 
+const isAuthenticated = (sessionCookie) => {
+  if (!sessionCookie) return false
+
+  try {
+    jwt.verify(sessionCookie, process.env.SECRET_KEY)
+    return true
+  } catch (err) {
+    return false
+  }
+}
+
 module.exports = {
   authorize,
+  isAuthenticated,
 }

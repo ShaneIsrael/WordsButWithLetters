@@ -10,6 +10,9 @@ class PuzzleService {
   getTodaysPuzzle() {
     return Api().get('/puzzle/today')
   }
+  submit(puzzleProgress) {
+    return Api().post('/puzzle/submit', { puzzleProgress })
+  }
 }
 
 const service = new PuzzleService()
