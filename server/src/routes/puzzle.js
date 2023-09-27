@@ -1,4 +1,4 @@
-const { getTodaysPuzzle, getTodaysPuzzleNumber, submit } = require('../controllers/puzzleController')
+const { getTodaysPuzzle, getTodaysPuzzleNumber, submit } = require('../controllers/PuzzleController')
 
 module.exports = (app) => {
   app.get('/api/puzzle/today', getTodaysPuzzle)

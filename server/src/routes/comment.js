@@ -1,4 +1,4 @@
-const { submit, deleteComment, getComments, getCommentsByUser } = require('../controllers/commentController')
+const { submit, deleteComment, getComments, getCommentsByUser } = require('../controllers/CommentController')
 const { authorize } = require('../middleware/authorize')
 
 module.exports = (app) => {

@@ -1,4 +1,4 @@
-const { randomWord, validateWord } = require('../controllers/wordController')
+const { randomWord, validateWord } = require('../controllers/WordController')
 
 module.exports = (app) => {
   app.get('/api/word/random', randomWord)
