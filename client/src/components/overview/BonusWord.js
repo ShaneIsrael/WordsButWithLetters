@@ -50,7 +50,7 @@ const Diagonal = styled(Box)(({ theme, leftRight }) => ({
   position: 'absolute',
   left: '50%',
   top: '50%',
-  width: '150%',
+  width: '140%',
   transform: leftRight ? 'translate3d(-50%, -50%, 0) rotate(45deg)' : 'translate3d(-50%, -50%, 0) rotate(-45deg)',
   borderTop: `1px solid ${
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS['red'].borderDark : HIGHLIGHT_COLORS['red'].borderLight

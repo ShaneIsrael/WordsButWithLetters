@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Grid, Sheet, styled } from '@mui/joy'
+import { Box, Grid, Sheet, styled } from '@mui/joy'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -47,6 +47,26 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'completed' }) => ({
   fontWeight: 'bold',
 }))
 
+const NoLetterHolder = styled(Sheet)(({ theme }) => ({
+  ...theme.typography['body-sm'],
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: `1px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
+  color: theme.palette.mode === 'dark' ? '#fff' : 'black',
+  width: 34,
+  height: 34,
+}))
+
+const Diagonal = styled(Box)(({ theme, leftRight }) => ({
+  position: 'absolute',
+  left: '50%',
+  top: '50%',
+  width: '140%',
+  transform: leftRight ? 'translate3d(-50%, -50%, 0) rotate(45deg)' : 'translate3d(-50%, -50%, 0) rotate(-45deg)',
+  borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
+}))
+
 const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
   const flatModifiers = scoreModifiers.reduce((prev, curr) => prev.concat(curr))
   return (
@@ -56,7 +76,15 @@ const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
           <Grid key={`${word}_row_${index}`} container height={`calc(100%/6)`} gap={0.5}>
             {word.map((letter, index) => (
               <Grid xs key={`${letter}_${index}`}>
-                <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'}>{letter}</LetterHolder>
+                {letter && (
+                  <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'}>{letter}</LetterHolder>
+                )}
+                {!letter && (
+                  <NoLetterHolder>
+                    <Diagonal />
+                    <Diagonal leftRight />
+                  </NoLetterHolder>
+                )}
               </Grid>
             ))}
           </Grid>
