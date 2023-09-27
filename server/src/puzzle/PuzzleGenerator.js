@@ -46,7 +46,6 @@ class PuzzleGenerator {
           {
             index: generateUniqueNumbers(length, 1)[0],
             color: 'red',
-            animation: 'skew-shake-infinite',
           },
         ])
       } else {
@@ -54,7 +53,6 @@ class PuzzleGenerator {
           generateUniqueNumbers(length, 2).map((num) => ({
             index: num,
             color: 'red',
-            animation: 'skew-shake-infinite',
           })),
         )
       }

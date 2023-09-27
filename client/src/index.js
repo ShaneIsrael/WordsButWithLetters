@@ -8,6 +8,7 @@ import { CssVarsProvider, getInitColorSchemeScript, useColorScheme, extendTheme 
 import { Button, CssBaseline } from '@mui/joy'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
+import { Toaster } from 'sonner'
 
 const theme = extendTheme({
   fontFamily: {
@@ -51,6 +52,7 @@ function ModeToggle() {
 
 root.render(
   <CssVarsProvider defaultMode="dark" theme={theme}>
+    <Toaster position="bottom-center" richColors />
     <ModeToggle />
     <CssBaseline />
     <App />

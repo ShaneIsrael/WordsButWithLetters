@@ -14,6 +14,15 @@ controller.getTodaysPuzzle = async (req, res, next) => {
   }
 }
 
+controller.getTodaysPuzzleNumber = async (req, res, next) => {
+  try {
+    const todaysPuzzle = await fetchTodaysPuzzle()
+    return res.status(200).send({ number: todaysPuzzle.id })
+  } catch (err) {
+    next(err)
+  }
+}
+
 async function handleRankedSubmission(req, res, next) {
   try {
     return res.status(404).send('ranked submission currently under construction')

@@ -13,6 +13,7 @@ const GameBoard = ({
   rows,
   activeRow,
   rowLetters,
+  modifierLetters,
   rowHighlights,
   onStart,
   failedAttempt,
@@ -50,6 +51,7 @@ const GameBoard = ({
             active={activeRow === index}
             completed={index < activeRow}
             letters={rowLetters[index]}
+            modifierLetters={modifierLetters}
             highlightIndexes={rowHighlights[index]}
             puzzleComplete={puzzleComplete}
           />
@@ -90,6 +92,7 @@ GameBoard.propTypes = {
   activeRow: PropTypes.number,
   rowLetters: PropTypes.array,
   rowHighlights: PropTypes.array,
+  modifierLetters: PropTypes.array,
   onStart: PropTypes.func,
   puzzleComplete: PropTypes.bool,
   failedAttempt: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
@@ -101,6 +104,7 @@ GameBoard.defaultProps = {
   activeRow: 0,
   rowLetters: [],
   rowHighlights: [],
+  modifierLetters: [],
   onStart: () => {},
   puzzleComplete: false,
   failedAttempt: false,
