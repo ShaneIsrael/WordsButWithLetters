@@ -1,0 +1,71 @@
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Grid, Sheet, styled } from '@mui/joy'
+
+const HIGHLIGHT_COLORS = {
+  red: {
+    backgroundLight: '#FF000057',
+    backgroundDark: '#ff000026',
+    borderLight: '#ff000026',
+    borderDark: '#FF000057',
+    borderActiveLight: 'red',
+    borderActiveDark: 'red',
+  },
+  green: {},
+  yellow: {
+    backgroundLight: '#FFBA17A3',
+    backgroundDark: '#EACB4F59',
+    borderLight: 'yellow',
+    borderDark: 'yellow',
+    borderActiveLight: 'yellow',
+    borderActiveDark: 'yellow',
+  },
+  completed: {
+    backgroundLight: '#0660EEB0',
+    backgroundDark: '#014CC273',
+    borderLight: '#0034ff',
+    borderDark: '#00c3ff',
+    borderActiveLight: '#0034ff',
+    borderActiveDark: '#00c3ff',
+  },
+}
+
+const LetterHolder = styled(Sheet)(({ theme, color = 'completed' }) => ({
+  ...theme.typography['body-sm'],
+  backgroundColor:
+    theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].backgroundDark : HIGHLIGHT_COLORS[color].backgroundLight,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  border: `1px solid ${
+    theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderDark : HIGHLIGHT_COLORS[color].borderLight
+  }`,
+  color: theme.palette.mode === 'dark' ? '#fff' : 'black',
+  width: 34,
+  height: 34,
+  fontSize: 18,
+  fontWeight: 'bold',
+}))
+
+const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
+  const flatModifiers = scoreModifiers.reduce((prev, curr) => prev.concat(curr))
+  return (
+    <Sheet variant="outlined" sx={{ p: 1 }}>
+      <Grid container gap={0.5} width={186}>
+        {wordMatrix.map((word, index) => (
+          <Grid key={`${word}_row_${index}`} container height={`calc(100%/6)`} gap={0.5}>
+            {word.map((letter, index) => (
+              <Grid xs key={`${letter}_${index}`}>
+                <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'}>{letter}</LetterHolder>
+              </Grid>
+            ))}
+          </Grid>
+        ))}
+      </Grid>
+    </Sheet>
+  )
+}
+
+MiniBoard.propTypes = {}
+
+export default MiniBoard
