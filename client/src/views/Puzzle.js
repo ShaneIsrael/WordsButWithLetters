@@ -17,6 +17,7 @@ import ShareButton from '../components/overview/ShareButton'
 import Appbar from '../components/appbar/Appbar'
 import wrongSfx from '../sounds/wrong.wav'
 import useSound from 'use-sound'
+import InstructionModal from '../components/modals/InstructionModal'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -52,6 +53,7 @@ const Puzzle = (props) => {
   const [puzzleComplete, setPuzzleComplete] = React.useState(false)
   const [failedAttempt, setFailedAttempt] = React.useState(0)
   const [submitting, setSubmitting] = React.useState(false)
+  const [startModalOpen, setStartModalOpen] = React.useState(true)
 
   React.useEffect(() => {
     async function init() {
@@ -166,8 +168,9 @@ const Puzzle = (props) => {
   }
 
   return (
-    <>
+    <Box sx={{ overflow: 'hidden' }}>
       <Appbar />
+      <InstructionModal open={startModalOpen} onClose={() => setStartModalOpen(false)} />
       <PageWrapper>
         <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
           <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
@@ -245,7 +248,7 @@ const Puzzle = (props) => {
           <TitleKeyboard />
         )}
       </PageWrapper>
-    </>
+    </Box>
   )
 }
 
