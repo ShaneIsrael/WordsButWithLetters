@@ -6,6 +6,8 @@ on:
       - "server/**"
       - "client/**"
       - "nginx/**"
+  workflow_dispatch:
+
 jobs:
   push_latest_to_registry:
     name: Build & Push
