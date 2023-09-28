@@ -15,6 +15,8 @@ import { getPuzzleProgress, getUTCDate, setPuzzleProgress, sleep } from '../comm
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
 import Appbar from '../components/appbar/Appbar'
+import wrongSfx from '../sounds/wrong.wav'
+import useSound from 'use-sound'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -39,6 +41,7 @@ const PLAY_DATA = {
 
 const Puzzle = (props) => {
   const theme = useTheme()
+  const [playInvalid] = useSound(wrongSfx)
 
   const [boardData, setBoardData] = React.useState({
     banishedIndexes: [[], [], [], [], []],
@@ -47,7 +50,7 @@ const Puzzle = (props) => {
   const [playData, setPlayData] = React.useState(PLAY_DATA)
   const [showPuzzle, setShowPuzzle] = React.useState(false)
   const [puzzleComplete, setPuzzleComplete] = React.useState(false)
-  const [failedAttempt, setFailedAttempt] = React.useState(false)
+  const [failedAttempt, setFailedAttempt] = React.useState(0)
   const [submitting, setSubmitting] = React.useState(false)
 
   React.useEffect(() => {
@@ -130,8 +133,10 @@ const Puzzle = (props) => {
               return sleep(1800).then(() => setPuzzleComplete(response.progress.puzzleComplete)) // Give final row animation time to complete.
             }
             return setSubmitting(false)
+          } else {
+            playInvalid()
+            setFailedAttempt((prev) => prev + 1)
           }
-          setFailedAttempt(true)
           return setSubmitting(false)
         } catch (err) {
           console.error(err)
@@ -148,6 +153,16 @@ const Puzzle = (props) => {
     // the timestamps and finalize the score if the time allotted
     // has in fact expired. This check will also be done on every
     // row submission.
+  }
+
+  const [invalidKeyAnimationOn, setInvalidKeyAnimationOn] = React.useState(false)
+
+  const handleInvalidKey = () => {
+    playInvalid()
+    setInvalidKeyAnimationOn(true)
+    setTimeout(() => {
+      setInvalidKeyAnimationOn(false)
+    }, 50)
   }
 
   return (
@@ -187,7 +202,6 @@ const Puzzle = (props) => {
                     rowHighlights={boardData.banishedIndexes}
                     onStart={handleBegin}
                     failedAttempt={failedAttempt}
-                    setFailedAttempt={setFailedAttempt}
                   />
                 )}
                 {puzzleComplete && <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />}
@@ -220,10 +234,12 @@ const Puzzle = (props) => {
           <VKeyboard
             onKeyPressed={handleKeyPress}
             onDelete={handleDelete}
+            onEnter={handleSubmit}
+            onInvalidKey={handleInvalidKey}
             disabledKeys={playData.banishedLetters}
             highlightKeys={playData.wordMatrix[playData.activeRow]}
-            onEnter={handleSubmit}
             keyboardEnabled={showPuzzle && !puzzleComplete}
+            invalidAnimationOn={invalidKeyAnimationOn}
           />
         ) : (
           <TitleKeyboard />

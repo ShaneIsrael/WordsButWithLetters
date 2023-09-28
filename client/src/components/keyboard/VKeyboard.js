@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import { Box, Button, Grid, Sheet, styled } from '@mui/joy'
 import BackspaceIcon from '@mui/icons-material/Backspace'
 import { useTheme } from '@emotion/react'
-import wrongSfx from '../../sounds/wrong.wav'
-import useSound from 'use-sound'
 import clsx from 'clsx'
 
 const KeyButton = styled(Button)(({ theme, highlight }) => ({
@@ -31,12 +29,19 @@ const layout = [
   ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE'],
 ]
 
-const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKeys, keyboardEnabled }) => {
+const VKeyboard = ({
+  onKeyPressed,
+  onDelete,
+  onEnter,
+  onInvalidKey,
+  disabledKeys,
+  highlightKeys,
+  keyboardEnabled,
+  invalidAnimationOn,
+}) => {
   const theme = useTheme()
 
   const [disabled, setDisabled] = React.useState(!keyboardEnabled)
-  const [invalidAnimationOn, setInvalidAnimationOn] = React.useState(false)
-  const [playInvalid] = useSound(wrongSfx)
 
   React.useEffect(() => {
     setDisabled(!keyboardEnabled)
@@ -44,22 +49,18 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
 
   React.useEffect(() => {
     function handleKeyDown(e) {
-      if (/^[a-zA-Z]$/.test(e.key)) {
-        if (disabledKeys.indexOf(e.key.toUpperCase()) >= 0) {
-          playInvalid()
-          setInvalidAnimationOn(true)
-          setTimeout(() => {
-            setInvalidAnimationOn(false)
-          }, 500)
-        } else {
-          return onKeyPressed(e.key.toUpperCase())
-        }
-      }
       if (e.key === 'Delete' || e.key === 'Backspace') {
         return onDelete()
-      }
-      if (e.key === 'Enter') {
+      } else if (e.key === 'Enter') {
         return onEnter()
+      } else {
+        if (/^[a-zA-Z]$/.test(e.key)) {
+          if (disabledKeys.indexOf(e.key.toUpperCase()) >= 0) {
+            onInvalidKey()
+          } else {
+            return onKeyPressed(e.key.toUpperCase())
+          }
+        }
       }
     }
 
@@ -70,7 +71,7 @@ const VKeyboard = ({ onKeyPressed, onDelete, onEnter, disabledKeys, highlightKey
     return function cleanup() {
       document.removeEventListener('keydown', handleKeyDown)
     }
-  }, [onKeyPressed, onDelete, onEnter, disabled])
+  }, [onKeyPressed, onDelete, onEnter, onInvalidKey, disabled, disabledKeys])
 
   const getPrimaryButton = (key, functionKey, onClick, disabled, sx) => {
     const keyDisabled = (!functionKey && disabledKeys.indexOf(key) >= 0) || disabled

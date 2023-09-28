@@ -5,42 +5,20 @@ import { Button, Grid, Sheet, Typography } from '@mui/joy'
 import { useTheme } from '@emotion/react'
 import useSound from 'use-sound'
 import BoardRow from './BoardRow'
-import wrongSfx from '../../sounds/wrong.wav'
 import _ from 'lodash'
 
-const GameBoard = ({
-  hide,
-  rows,
-  activeRow,
-  rowLetters,
-  modifierLetters,
-  rowHighlights,
-  onStart,
-  failedAttempt,
-  setFailedAttempt,
-}) => {
+const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHighlights, onStart, failedAttempt }) => {
   const theme = useTheme()
 
   const [invalidAnimationOn, setInvalidAnimationOn] = React.useState(false)
 
-  const [playInvalid] = useSound(wrongSfx)
-
   React.useEffect(() => {
-    if (
-      (_.isNumber(failedAttempt) && failedAttempt > 0 && failedAttempt < rowLetters[0].length) ||
-      (_.isBoolean(failedAttempt) && failedAttempt)
-    ) {
-      playInvalid()
-    }
-    if (failedAttempt > 0 || (_.isBoolean(failedAttempt) && failedAttempt)) {
-      setInvalidAnimationOn(true)
-      const timeout = setTimeout(() => {
-        setInvalidAnimationOn(false)
-        setFailedAttempt(false)
-      }, 500)
-      return () => clearTimeout(timeout)
-    }
-  }, [failedAttempt, rowLetters, playInvalid, setFailedAttempt])
+    setInvalidAnimationOn(true)
+    const timeout = setTimeout(() => {
+      setInvalidAnimationOn(false)
+    }, 50)
+    return () => clearTimeout(timeout)
+  }, [failedAttempt])
 
   function getBoard() {
     if (!hide)
@@ -93,7 +71,6 @@ GameBoard.propTypes = {
   modifierLetters: PropTypes.array,
   onStart: PropTypes.func,
   failedAttempt: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-  setFailedAttempt: PropTypes.func,
 }
 
 GameBoard.defaultProps = {
@@ -103,7 +80,6 @@ GameBoard.defaultProps = {
   rowHighlights: [],
   modifierLetters: [],
   onStart: () => {},
-  failedAttempt: false,
   setFailedAttempt: () => {},
 }
 
