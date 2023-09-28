@@ -76,7 +76,7 @@ const HighlightLetterHolder = styled(Sheet)(({ theme, active, color, highlightbo
   fontWeight: 'bold',
 }))
 
-const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexes, puzzleComplete }) => {
+const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexes }) => {
   const [playPop] = useSound(popSound)
 
   React.useEffect(() => {
@@ -87,7 +87,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
       }
     }
     completed && play()
-  }, [completed])
+  }, [completed, letters.length, playPop])
 
   if (letters) {
     return (
@@ -96,20 +96,15 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
           const highlight = highlightIndexes.filter((e) => e.index === index)[0]
           let animationDelay = 'unset'
           if (completed) animationDelay = `${300 * index}ms`
-          if (puzzleComplete) animationDelay = `${100 * index}ms`
 
           if (highlight && !completed)
             return (
               <HighlightLetterHolder
                 key={(letter ? letter : 'blank_') + index}
-                className={clsx(
-                  highlight.animation,
-                  { [`hop${index}`]: completed && !puzzleComplete },
-                  { [`puzzleComplete${index}`]: puzzleComplete },
-                )}
+                className={clsx(highlight.animation, { [`hop${index}`]: completed })}
                 active={letter}
                 color={highlight.color}
-                highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : false}
+                highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
                 sx={{ animationDelay }}
               >
                 {letter}
@@ -120,7 +115,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
               <HighlightLetterHolder
                 key={'completed_' + letter + index}
                 // className={highlight.animation}
-                className={clsx({ [`hop${index}`]: !puzzleComplete }, { [`puzzleComplete${index}`]: puzzleComplete })}
+                className={clsx(`hop${index}`)}
                 active={letter}
                 color={modifierLetters.includes(letter) ? 'yellow' : 'completed'}
                 sx={{ animationDelay }}
@@ -133,7 +128,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
               key={(letter ? letter : 'blank_') + index}
               className={letter ? 'tilt-shake' : ''}
               active={letter}
-              highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : false}
+              highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
               sx={{ animationDelay }}
             >
               {letter}
@@ -163,14 +158,12 @@ BoardRow.propTypes = {
   modifierLetters: PropTypes.array,
   highlightIndexes: PropTypes.array,
   completed: PropTypes.bool,
-  puzzleComplete: PropTypes.bool,
 }
 
 BoardRow.defaultProps = {
   highlightIndexes: [],
   modifierLetters: [],
   completed: false,
-  puzzleComplete: false,
 }
 
 export default BoardRow

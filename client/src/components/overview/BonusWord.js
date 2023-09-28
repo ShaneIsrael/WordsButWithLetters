@@ -46,12 +46,12 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
   fontWeight: 'bold',
 }))
 
-const Diagonal = styled(Box)(({ theme, leftRight }) => ({
+const Diagonal = styled(Box)(({ theme, leftright }) => ({
   position: 'absolute',
   left: '50%',
   top: '50%',
   width: '140%',
-  transform: leftRight ? 'translate3d(-50%, -50%, 0) rotate(45deg)' : 'translate3d(-50%, -50%, 0) rotate(-45deg)',
+  transform: leftright ? 'translate3d(-50%, -50%, 0) rotate(45deg)' : 'translate3d(-50%, -50%, 0) rotate(-45deg)',
   borderTop: `1px solid ${
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS['red'].borderDark : HIGHLIGHT_COLORS['red'].borderLight
   }`,
@@ -65,23 +65,23 @@ const BonusWord = ({ bonusWord, scoreModifiers }) => {
         <Grid container gap={0.5}>
           <LetterHolder>
             <Diagonal />
-            <Diagonal leftRight />
+            <Diagonal leftright="true" />
           </LetterHolder>
           <LetterHolder>
             <Diagonal />
-            <Diagonal leftRight />
+            <Diagonal leftright="true" />
           </LetterHolder>
           <LetterHolder>
             <Diagonal />
-            <Diagonal leftRight />
+            <Diagonal leftright="true" />
           </LetterHolder>
           <LetterHolder>
             <Diagonal />
-            <Diagonal leftRight />
+            <Diagonal leftright="true" />
           </LetterHolder>
           <LetterHolder>
             <Diagonal />
-            <Diagonal leftRight />
+            <Diagonal leftright="true" />
           </LetterHolder>
         </Grid>
       </Sheet>
