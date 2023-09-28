@@ -9,7 +9,7 @@ async function GenerateDayAndPuzzle() {
     const day = await Day.create({
       date: getTodaysDate(),
     })
-    const puzzle = new PuzzleGenerator(6, 5, [3, 3, 2], 300)
+    const puzzle = new PuzzleGenerator(6, 5, [3, 3, 2], [2, 4, 8], 300)
     await Puzzle.create({
       dayId: day.id,
       board: puzzle.getPuzzle(),
@@ -29,7 +29,6 @@ function start() {
       await GenerateDayAndPuzzle().catch((err) => logger.error(err))
     })
 
-    console.log(new Date().toLocaleString('fr-CA', { timeZone: 'America/Los_Angeles' }).split(', ')[0])
     // Initialize a puzzle for today if one doesn't already exist
     Day.findOne({
       where: {

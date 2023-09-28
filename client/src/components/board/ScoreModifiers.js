@@ -64,7 +64,7 @@ const ScoreModifiers = ({ modifiers, hide }) => {
           </Grid>
           <Grid xs>
             <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
-              x3
+              x4
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[1].map((letter) => (
@@ -75,7 +75,7 @@ const ScoreModifiers = ({ modifiers, hide }) => {
 
           <Grid xs>
             <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
-              x4
+              x8
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[2].map((letter) => (
