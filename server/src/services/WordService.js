@@ -11,7 +11,7 @@ function loadWordsFromFile(filePath) {
     return []
   }
 }
-const WORDS = loadWordsFromFile('../sgb-words.txt')
+const WORDS = loadWordsFromFile('../words.txt')
 
 service.getWords = () => WORDS
 service.validateWord = (word) => WORDS.includes(word.toLowerCase())
