@@ -1,7 +1,5 @@
 const { isAuthenticated } = require('../middleware/authorize')
-const puzzle = require('../routes/puzzle')
 const { fetchTodaysPuzzle, validateSubmissionProgress } = require('../services/PuzzleService')
-const { getTodaysDate } = require('../utils')
 
 const controller = {}
 
