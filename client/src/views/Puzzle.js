@@ -13,6 +13,7 @@ import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
 import { getPuzzleProgress, getUTCDate, setPuzzleProgress } from '../common/utils'
 import ScoreOverview from '../components/overview/ScoreOverview'
+import ShareButton from '../components/overview/ShareButton'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -170,6 +171,7 @@ const Puzzle = (props) => {
                   rows={MAX_BOARD_ROWS}
                   activeRow={playData.activeRow}
                   rowLetters={playData.wordMatrix}
+                  modifierLetters={boardData.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
                   rowHighlights={boardData.banishedIndexes}
                   onStart={handleBegin}
                   failedAttempt={failedAttempt}
@@ -191,11 +193,15 @@ const Puzzle = (props) => {
               </Box>
             </Grid>
             <div style={{ marginBottom: 4 }} />
-            <BonusWordComponent
-              letters={playData.banishedLetters}
-              maxLetters={8}
-              bonusWordFound={playData.bonusWordFound}
-            />
+            {!playData.puzzleComplete ? (
+              <BonusWordComponent
+                letters={playData.banishedLetters}
+                maxLetters={8}
+                bonusWordFound={playData.bonusWordFound}
+              />
+            ) : (
+              <ShareButton progress={playData} scoreModifiers={boardData.scoreModifiers} />
+            )}
           </Box>
         </Box>
       </Box>
@@ -207,7 +213,7 @@ const Puzzle = (props) => {
           disabledKeys={playData.banishedLetters}
           highlightKeys={playData.wordMatrix[playData.activeRow]}
           onEnter={handleSubmit}
-          keyboardEnabled={showPuzzle}
+          keyboardEnabled={showPuzzle && !playData.puzzleComplete}
         />
       ) : (
         <TitleKeyboard />

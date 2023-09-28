@@ -1,4 +1,4 @@
-const { register, login, logout } = require('../controllers/authController')
+const { register, login, logout } = require('../controllers/AuthController')
 const { authorize } = require('../middleware/authorize')
 
 module.exports = (app) => {

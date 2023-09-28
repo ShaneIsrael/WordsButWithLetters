@@ -10,6 +10,9 @@ class PuzzleService {
   getTodaysPuzzle() {
     return Api().get('/puzzle/today')
   }
+  getTodaysPuzzleNumber() {
+    return Api().get('/puzzle/today/number')
+  }
   submit(puzzleProgress) {
     return Api().post('/puzzle/submit', { puzzleProgress })
   }
