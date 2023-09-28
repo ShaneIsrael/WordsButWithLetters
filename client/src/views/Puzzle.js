@@ -11,7 +11,7 @@ import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 import Clock from '../components/clock/Clock'
 import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
-import { getPuzzleProgress, getUTCDate, setPuzzleProgress } from '../common/utils'
+import { getPuzzleProgress, getUTCDate, setPuzzleProgress, sleep } from '../common/utils'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
 
@@ -122,6 +122,9 @@ const Puzzle = (props) => {
         if (!response.accepted) {
           setFailedAttempt(true)
           return
+        }
+        if (response.progress.puzzleComplete) {
+          await sleep(1800) // Give final row animation time to complete.
         }
         setPuzzleProgress(response.date, response.board, response.progress)
         setPlayData(response.progress)

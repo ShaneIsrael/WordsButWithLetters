@@ -25,22 +25,27 @@ service.fetchTodaysPuzzle = async () => {
  */
 service.validateSubmissionProgress = async (puzzleProgress, board) => {
   let progress = puzzleProgress
-
+  const currentWordArray = progress.wordMatrix[progress.activeRow]
   // if the row is not completely filled, do not allow submission
-  if (progress.wordMatrix[progress.activeRow].filter((l) => !l).length > 0) return [false, progress]
+  if (currentWordArray.filter((l) => !l).length > 0) return [false, progress]
 
-  const thisWord = progress.wordMatrix[progress.activeRow]
+  if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWordArray.includes(bl))) {
+    return [false, progress]
+  }
+  const thisWord = currentWordArray
     .filter((l) => l)
     .join('')
     .toLowerCase()
+
   const isValid = thisWord.length === 5 && validateWord(thisWord)
   if (!isValid) {
     return [false, progress]
   }
+
   const indexesToRemove = board.banishedIndexes[progress.activeRow].map((i) => i.index)
   const lettersToRemove = thisWord.split('').filter((l, index) => indexesToRemove.includes(index))
   progress.banishedLetters = progress.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())])
-  progress.wordScores.push(calculateWordScore(thisWord, board.scoreModifiers))
+  progress.wordScores.push(calculateWordScore(thisWord, board.scoreModifiers, board.scoreMultipliers))
 
   const [puzzleComplete, completeMessage] = service.validatePuzzleComplete(progress, board)
 
@@ -53,7 +58,7 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
       const bonusFound = validateWord(wordToCheck)
       if (bonusFound) {
         progress.bonusWordFound = wordToCheck
-        progress.wordScores.push(calculateWordScore(wordToCheck, board.scoreModifiers, 50))
+        progress.wordScores.push(calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, 50))
         break
       }
     }
@@ -65,7 +70,10 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
 
 service.validatePuzzleComplete = (progress, board) => {
   if (progress.activeRow === board.boardRows - 1) return [true, null]
-  if (progress.banishedLetters.every((bl) => ['A', 'E', 'I', 'O', 'U'].includes(bl)))
+  if (
+    progress.banishedLetters.length > 0 &&
+    ['A', 'E', 'I', 'O', 'U'].every((v) => progress.banishedLetters.includes(v))
+  )
     return [true, 'No Available Vowels']
   return [false, null]
 }
