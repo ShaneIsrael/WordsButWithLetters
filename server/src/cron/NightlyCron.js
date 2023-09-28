@@ -23,12 +23,13 @@ async function GenerateDayAndPuzzle() {
 
 function start() {
   try {
-    logger.info('Nightly cron initialized, will run at 12:00 AM UTC')
-    Cron('0 0 0 * * *', { timezone: 'Etc/UTC' }, async () => {
+    logger.info('Nightly cron initialized, will run at 12:00 AM PST')
+    Cron('0 0 0 * * *', { timezone: 'America/Los_Angeles' }, async () => {
       logger.info('Running Nightly cron..')
       await GenerateDayAndPuzzle().catch((err) => logger.error(err))
     })
 
+    console.log(new Date().toLocaleString('fr-CA', { timeZone: 'America/Los_Angeles' }).split(', ')[0])
     // Initialize a puzzle for today if one doesn't already exist
     Day.findOne({
       where: {
