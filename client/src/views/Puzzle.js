@@ -14,6 +14,7 @@ import { useTheme } from '@emotion/react'
 import { getPuzzleProgress, getUTCDate, setPuzzleProgress } from '../common/utils'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
+import Appbar from '../components/appbar/Appbar'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -141,84 +142,87 @@ const Puzzle = (props) => {
   }
 
   return (
-    <PageWrapper>
-      <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
-        <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
-          <Sheet
-            className={clsx('card-face')}
-            sx={{
-              height: 'calc(100% - 2px)',
-              width: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              borderTopLeftRadius: 8,
-              borderTopRightRadius: 8,
-              background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
-            }}
-          >
-            <Button onClick={handleBegin} size="lg">
-              <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                Begin Todays Puzzle
-              </Typography>
-            </Button>
-          </Sheet>
-          <Box className={clsx('card-face', 'card-back')}>
-            <Grid container>
-              {!playData.puzzleComplete && (
-                <GameBoard
-                  hide={!showPuzzle}
-                  rows={MAX_BOARD_ROWS}
-                  activeRow={playData.activeRow}
-                  rowLetters={playData.wordMatrix}
-                  modifierLetters={boardData.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
-                  rowHighlights={boardData.banishedIndexes}
-                  onStart={handleBegin}
-                  failedAttempt={failedAttempt}
-                  setFailedAttempt={setFailedAttempt}
+    <>
+      <Appbar />
+      <PageWrapper>
+        <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
+          <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
+            <Sheet
+              className={clsx('card-face')}
+              sx={{
+                height: 'calc(100% - 2px)',
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderTopLeftRadius: 8,
+                borderTopRightRadius: 8,
+                background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+              }}
+            >
+              <Button onClick={handleBegin} size="lg">
+                <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                  Begin Todays Puzzle
+                </Typography>
+              </Button>
+            </Sheet>
+            <Box className={clsx('card-face', 'card-back')}>
+              <Grid container>
+                {!playData.puzzleComplete && (
+                  <GameBoard
+                    hide={!showPuzzle}
+                    rows={MAX_BOARD_ROWS}
+                    activeRow={playData.activeRow}
+                    rowLetters={playData.wordMatrix}
+                    modifierLetters={boardData.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
+                    rowHighlights={boardData.banishedIndexes}
+                    onStart={handleBegin}
+                    failedAttempt={failedAttempt}
+                    setFailedAttempt={setFailedAttempt}
+                  />
+                )}
+                {playData.puzzleComplete && (
+                  <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />
+                )}
+                <Box sx={{ ml: '4px' }}>
+                  <Clock
+                    seconds={boardData.timeToComplete || 300}
+                    start={showPuzzle}
+                    handleExpire={handleTimeExpire}
+                    finalTime={playData.finalTime}
+                    noLimit
+                  />
+                  <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
+                </Box>
+              </Grid>
+              <div style={{ marginBottom: 4 }} />
+              {!playData.puzzleComplete ? (
+                <BonusWordComponent
+                  letters={playData.banishedLetters}
+                  maxLetters={8}
+                  bonusWordFound={playData.bonusWordFound}
                 />
+              ) : (
+                <ShareButton progress={playData} scoreModifiers={boardData.scoreModifiers} />
               )}
-              {playData.puzzleComplete && (
-                <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />
-              )}
-              <Box sx={{ ml: '4px' }}>
-                <Clock
-                  seconds={boardData.timeToComplete || 300}
-                  start={showPuzzle}
-                  handleExpire={handleTimeExpire}
-                  finalTime={playData.finalTime}
-                  noLimit
-                />
-                <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
-              </Box>
-            </Grid>
-            <div style={{ marginBottom: 4 }} />
-            {!playData.puzzleComplete ? (
-              <BonusWordComponent
-                letters={playData.banishedLetters}
-                maxLetters={8}
-                bonusWordFound={playData.bonusWordFound}
-              />
-            ) : (
-              <ShareButton progress={playData} scoreModifiers={boardData.scoreModifiers} />
-            )}
+            </Box>
           </Box>
         </Box>
-      </Box>
 
-      {showPuzzle ? (
-        <VKeyboard
-          onKeyPressed={handleKeyPress}
-          onDelete={handleDelete}
-          disabledKeys={playData.banishedLetters}
-          highlightKeys={playData.wordMatrix[playData.activeRow]}
-          onEnter={handleSubmit}
-          keyboardEnabled={showPuzzle && !playData.puzzleComplete}
-        />
-      ) : (
-        <TitleKeyboard />
-      )}
-    </PageWrapper>
+        {showPuzzle ? (
+          <VKeyboard
+            onKeyPressed={handleKeyPress}
+            onDelete={handleDelete}
+            disabledKeys={playData.banishedLetters}
+            highlightKeys={playData.wordMatrix[playData.activeRow]}
+            onEnter={handleSubmit}
+            keyboardEnabled={showPuzzle && !playData.puzzleComplete}
+          />
+        ) : (
+          <TitleKeyboard />
+        )}
+      </PageWrapper>
+    </>
   )
 }
 
