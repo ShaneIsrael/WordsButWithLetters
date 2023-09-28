@@ -61,4 +61,4 @@ export const setPuzzleProgress = (date, board, progress) => {
   )
 }
 
-export const getUTCDate = () => new Date().toISOString().split('T')[0]
+export const getUTCDate = () => new Date().toLocaleString('fr-CA', { timeZone: 'America/Los_Angeles' }).split(' ')[0]
