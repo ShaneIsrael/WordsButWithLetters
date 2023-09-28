@@ -29,6 +29,7 @@ function start() {
       await GenerateDayAndPuzzle().catch((err) => logger.error(err))
     })
 
+    console.log(new Date().toLocaleString('fr-CA', { timeZone: 'America/Los_Angeles' }).split(', ')[0])
     // Initialize a puzzle for today if one doesn't already exist
     Day.findOne({
       where: {
