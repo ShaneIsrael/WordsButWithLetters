@@ -46,7 +46,9 @@ const Puzzle = (props) => {
   })
   const [playData, setPlayData] = React.useState(PLAY_DATA)
   const [showPuzzle, setShowPuzzle] = React.useState(false)
+  const [puzzleComplete, setPuzzleComplete] = React.useState(false)
   const [failedAttempt, setFailedAttempt] = React.useState(false)
+  const [submitting, setSubmitting] = React.useState(false)
 
   React.useEffect(() => {
     async function init() {
@@ -54,6 +56,7 @@ const Puzzle = (props) => {
       if (puzzleProgress) {
         setBoardData(puzzleProgress.board)
         setPlayData(puzzleProgress.progress)
+        setPuzzleComplete(puzzleProgress.progress.puzzleComplete)
         setShowPuzzle(true)
       }
     }
@@ -67,6 +70,7 @@ const Puzzle = (props) => {
       const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
       setBoardData(puzzleData.Puzzle.board)
       setPuzzleProgress(puzzleData.date, puzzleData.Puzzle.board, PLAY_DATA)
+      setPuzzleComplete(false)
       setShowPuzzle(true)
     }
   }
@@ -114,23 +118,25 @@ const Puzzle = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (!playData.puzzleComplete) {
-      if (playData.wordMatrix[playData.activeRow].filter((l) => l).join('').length !== 5) {
-        return
-      }
-      try {
-        const response = (await PuzzleService.submit(playData)).data
-        if (!response.accepted) {
+    if (!puzzleComplete) {
+      if (playData.wordMatrix[playData.activeRow].filter((l) => l).join('').length === 5) {
+        setSubmitting(true)
+        try {
+          const response = (await PuzzleService.submit(playData)).data
+          if (response.accepted) {
+            setPuzzleProgress(response.date, response.board, response.progress)
+            setPlayData(response.progress)
+            if (response.progress.puzzleComplete) {
+              return sleep(1800).then(() => setPuzzleComplete(response.progress.puzzleComplete)) // Give final row animation time to complete.
+            }
+            return setSubmitting(false)
+          }
           setFailedAttempt(true)
-          return
+          return setSubmitting(false)
+        } catch (err) {
+          console.error(err)
+          return setSubmitting(false)
         }
-        if (response.progress.puzzleComplete) {
-          await sleep(1800) // Give final row animation time to complete.
-        }
-        setPuzzleProgress(response.date, response.board, response.progress)
-        setPlayData(response.progress)
-      } catch (err) {
-        console.error(err)
       }
     }
   }
@@ -171,7 +177,7 @@ const Puzzle = (props) => {
             </Sheet>
             <Box className={clsx('card-face', 'card-back')}>
               <Grid container>
-                {!playData.puzzleComplete && (
+                {!puzzleComplete && (
                   <GameBoard
                     hide={!showPuzzle}
                     rows={MAX_BOARD_ROWS}
@@ -184,9 +190,7 @@ const Puzzle = (props) => {
                     setFailedAttempt={setFailedAttempt}
                   />
                 )}
-                {playData.puzzleComplete && (
-                  <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />
-                )}
+                {puzzleComplete && <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />}
                 <Box sx={{ ml: '4px' }}>
                   <Clock
                     seconds={boardData.timeToComplete || 300}
@@ -199,7 +203,7 @@ const Puzzle = (props) => {
                 </Box>
               </Grid>
               <div style={{ marginBottom: 4 }} />
-              {!playData.puzzleComplete ? (
+              {!puzzleComplete ? (
                 <BonusWordComponent
                   letters={playData.banishedLetters}
                   maxLetters={8}
@@ -219,7 +223,7 @@ const Puzzle = (props) => {
             disabledKeys={playData.banishedLetters}
             highlightKeys={playData.wordMatrix[playData.activeRow]}
             onEnter={handleSubmit}
-            keyboardEnabled={showPuzzle && !playData.puzzleComplete}
+            keyboardEnabled={showPuzzle && !puzzleComplete}
           />
         ) : (
           <TitleKeyboard />

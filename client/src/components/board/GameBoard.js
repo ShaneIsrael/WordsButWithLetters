@@ -18,7 +18,6 @@ const GameBoard = ({
   onStart,
   failedAttempt,
   setFailedAttempt,
-  puzzleComplete,
 }) => {
   const theme = useTheme()
 
@@ -53,7 +52,6 @@ const GameBoard = ({
             letters={rowLetters[index]}
             modifierLetters={modifierLetters}
             highlightIndexes={rowHighlights[index]}
-            puzzleComplete={puzzleComplete}
           />
         </div>
       ))
@@ -94,7 +92,6 @@ GameBoard.propTypes = {
   rowHighlights: PropTypes.array,
   modifierLetters: PropTypes.array,
   onStart: PropTypes.func,
-  puzzleComplete: PropTypes.bool,
   failedAttempt: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
   setFailedAttempt: PropTypes.func,
 }
@@ -106,7 +103,6 @@ GameBoard.defaultProps = {
   rowHighlights: [],
   modifierLetters: [],
   onStart: () => {},
-  puzzleComplete: false,
   failedAttempt: false,
   setFailedAttempt: () => {},
 }

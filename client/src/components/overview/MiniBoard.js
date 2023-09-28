@@ -58,12 +58,12 @@ const NoLetterHolder = styled(Sheet)(({ theme }) => ({
   height: 34,
 }))
 
-const Diagonal = styled(Box)(({ theme, leftRight }) => ({
+const Diagonal = styled(Box)(({ theme, leftright }) => ({
   position: 'absolute',
   left: '50%',
   top: '50%',
   width: '140%',
-  transform: leftRight ? 'translate3d(-50%, -50%, 0) rotate(45deg)' : 'translate3d(-50%, -50%, 0) rotate(-45deg)',
+  transform: leftright ? 'translate3d(-50%, -50%, 0) rotate(45deg)' : 'translate3d(-50%, -50%, 0) rotate(-45deg)',
   borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
 }))
 
@@ -82,7 +82,7 @@ const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
                 {!letter && (
                   <NoLetterHolder>
                     <Diagonal />
-                    <Diagonal leftRight />
+                    <Diagonal leftright="true" />
                   </NoLetterHolder>
                 )}
               </Grid>
