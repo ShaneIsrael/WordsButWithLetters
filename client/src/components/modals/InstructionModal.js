@@ -1,5 +1,7 @@
+import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box, Grid, Modal, ModalClose, Sheet, Typography } from '@mui/joy'
+import { Box, Checkbox, Divider, Grid, Modal, ModalClose, Sheet, Typography } from '@mui/joy'
+import Cookies from 'js-cookie'
 import React from 'react'
 
 const HIGHLIGHT_COLORS = {
@@ -28,6 +30,14 @@ const HIGHLIGHT_COLORS = {
     borderActiveLight: 'yellow',
     borderActiveDark: 'yellow',
   },
+  'yellow-highlight': {
+    backgroundLight: '',
+    backgroundDark: '',
+    borderLight: 'yellow',
+    borderDark: 'yellow',
+    borderActiveLight: 'yellow',
+    borderActiveDark: 'yellow',
+  },
   completed: {
     backgroundLight: '#0660EEB0',
     backgroundDark: '#014CC273',
@@ -45,7 +55,7 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  border: `1px solid ${
+  border: `2px solid ${
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderActiveDark : HIGHLIGHT_COLORS[color].borderActiveLight
   }`,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
@@ -56,8 +66,18 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
 }))
 
 function InstructionModal({ open, onClose }) {
+  const theme = useTheme()
+  const [instructionsDisabled, setInstructionsDisabled] = React.useState(false)
+  const handleClose = () => {
+    Cookies.set('instructionsDisabled', instructionsDisabled, {
+      sameSite: 'Strict',
+    })
+    onClose()
+  }
+
+  if (!!Cookies.get('instructionsDisabled')) return null
   return (
-    <Modal open={open} onClose={onClose} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <Modal open={open} onClose={handleClose} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Sheet
         variant="outlined"
         sx={{
@@ -70,41 +90,95 @@ function InstructionModal({ open, onClose }) {
       >
         <ModalClose variant="plain" sx={{ m: 1 }} />
         <Grid container sx={{ gap: 1 }}>
-          <Typography>Instructions</Typography>
+          <Typography level="h1">How to Play</Typography>
+          <Typography
+            width="100%"
+            fontSize={18}
+            fontWeight={700}
+            lineHeight={'14px'}
+            sx={{ borderBottom: `3px solid ${theme.palette.neutral[600]}`, pb: 2 }}
+          >
+            Build score by creating 5 letter words.
+          </Typography>
           <Box sx={{ display: 'grid', p: '8px 16px', gap: 1 }}>
             <Typography sx={{ display: 'list-item' }}>
-              Fill in each row with a 5 letter word. Every red square will be added to your bonus word, but watch out!
-              The red squares will also be elimiated from further use.
+              Multiply your word score by using{' '}
+              <Typography fontWeight={900} sx={{ color: 'yellow' }}>
+                golden letters
+              </Typography>
+              .
             </Typography>
-            <Typography sx={{ display: 'list-item' }}>
-              The Score Modifiers section will display which letters provide a bonus when used.
-            </Typography>
-            <Typography sx={{ display: 'list-item' }}>
-              After finishing all rows, your bonus word section will be checked to see if there are any valid words and
-              a final score will be calculated.
-            </Typography>
-          </Box>
-          <Box sx={{ display: 'grid', p: '8px 16px', gap: 1 }}>
-            <Typography>Examples:</Typography>
-            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-              <LetterHolder color="standard"></LetterHolder>
-              <LetterHolder color="red"></LetterHolder>
-              <LetterHolder color="standard"></LetterHolder>
-              <LetterHolder color="standard"></LetterHolder>
-              <LetterHolder color="red"></LetterHolder>
+            <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
+              <LetterHolder color="standard">S</LetterHolder>
+              <LetterHolder color="yellow-highlight">C</LetterHolder>
+              <LetterHolder color="standard">O</LetterHolder>
+              <LetterHolder color="yellow-highlight">R</LetterHolder>
+              <LetterHolder color="standard">E</LetterHolder>
             </Box>
-            <Typography>
-              The second and last letters for this word will be added to the bonus word and then disabled from being
-              used for any word after.
+            <Typography sx={{ display: 'list-item' }}>
+              {/* Fill in each row with a 5 letter word. Every red square will be added to your bonus word, but watch out!
+              The red squares will also be elimiated from further use. */}
+              Letters placed within{' '}
+              <Typography fontWeight={900} sx={{ color: 'red' }}>
+                red tiles
+              </Typography>{' '}
+              are moved to the bonus word section and will become unusable.
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mt: 2 }}>
+            <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
+              <LetterHolder color="standard">M</LetterHolder>
+              <LetterHolder color="red">O</LetterHolder>
+              <LetterHolder color="standard">N</LetterHolder>
+              <LetterHolder color="standard">E</LetterHolder>
+              <LetterHolder color="red">Y</LetterHolder>
+            </Box>
+            <Typography sx={{ display: 'list-item' }}>
+              If your word is accepted, the tiles will animate and become colored in.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
               <LetterHolder color="completed">P</LetterHolder>
               <LetterHolder color="yellow">L</LetterHolder>
               <LetterHolder color="yellow">A</LetterHolder>
               <LetterHolder color="completed">C</LetterHolder>
               <LetterHolder color="completed">E</LetterHolder>
             </Box>
-            <Typography>L and A in this example will apply a multiplier to the score for this word.</Typography>
+            <Typography sx={{ display: 'list-item' }}>
+              Once your puzzle is complete, the bonus word section might look something like this.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+              <LetterHolder color="standard">U</LetterHolder>
+              <LetterHolder color="standard">X</LetterHolder>
+              <LetterHolder color="standard">R</LetterHolder>
+              <LetterHolder color="standard">H</LetterHolder>
+              <LetterHolder color="standard">Y</LetterHolder>
+              <LetterHolder color="standard">M</LetterHolder>
+              <LetterHolder color="standard">E</LetterHolder>
+              <LetterHolder color="standard">P</LetterHolder>
+            </Box>
+            <Typography sx={{ display: 'list-item' }}>
+              You would be awarded{' '}
+              <Typography fontWeight={900} sx={{ color: 'red' }}>
+                Rhyme
+              </Typography>{' '}
+              as your bonus word.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+              <LetterHolder color="standard">U</LetterHolder>
+              <LetterHolder color="standard">X</LetterHolder>
+              <LetterHolder color="red">R</LetterHolder>
+              <LetterHolder color="red">H</LetterHolder>
+              <LetterHolder color="red">Y</LetterHolder>
+              <LetterHolder color="red">M</LetterHolder>
+              <LetterHolder color="red">E</LetterHolder>
+              <LetterHolder color="standard">P</LetterHolder>
+            </Box>
+          </Box>
+          <Box display="flex" width="100%" justifyContent="center" mt={1}>
+            <Checkbox
+              color="primary"
+              size="md"
+              label="Never show again."
+              onChange={(e) => setInstructionsDisabled(e.target.checked)}
+            />
           </Box>
         </Grid>
       </Sheet>
