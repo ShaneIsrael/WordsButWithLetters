@@ -1,6 +1,7 @@
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Checkbox, Divider, Grid, Modal, ModalClose, Sheet, Typography } from '@mui/joy'
+import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import React from 'react'
 
@@ -68,6 +69,7 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
 function InstructionModal({ open, onClose }) {
   const theme = useTheme()
   const [instructionsDisabled, setInstructionsDisabled] = React.useState(false)
+  const [animate, setAnimate] = React.useState(false)
   const handleClose = () => {
     Cookies.set('instructionsDisabled', instructionsDisabled, {
       sameSite: 'Strict',
@@ -75,7 +77,7 @@ function InstructionModal({ open, onClose }) {
     onClose()
   }
 
-  if (!!Cookies.get('instructionsDisabled')) return null
+  if (Cookies.get('instructionsDisabled') === 'true') return null
   return (
     <Modal open={open} onClose={handleClose} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <Sheet
@@ -87,6 +89,8 @@ function InstructionModal({ open, onClose }) {
           boxShadow: 'lg',
           display: 'flex',
         }}
+        onMouseEnter={() => setAnimate(true)}
+        onMouseLeave={() => setAnimate(false)}
       >
         <ModalClose variant="plain" sx={{ m: 1 }} />
         <Grid container sx={{ gap: 1 }}>
@@ -116,8 +120,6 @@ function InstructionModal({ open, onClose }) {
               <LetterHolder color="standard">E</LetterHolder>
             </Box>
             <Typography sx={{ display: 'list-item' }}>
-              {/* Fill in each row with a 5 letter word. Every red square will be added to your bonus word, but watch out!
-              The red squares will also be elimiated from further use. */}
               Letters placed within{' '}
               <Typography fontWeight={900} sx={{ color: 'red' }}>
                 red tiles
@@ -135,11 +137,45 @@ function InstructionModal({ open, onClose }) {
               If your word is accepted, the tiles will animate and become colored in.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
-              <LetterHolder color="completed">P</LetterHolder>
-              <LetterHolder color="yellow">L</LetterHolder>
-              <LetterHolder color="yellow">A</LetterHolder>
-              <LetterHolder color="completed">C</LetterHolder>
-              <LetterHolder color="completed">E</LetterHolder>
+              <LetterHolder color="completed" className={clsx({ hop0: animate })}>
+                P
+              </LetterHolder>
+              <LetterHolder
+                color="yellow"
+                className={clsx({ hop1: animate })}
+                sx={{
+                  animationDelay: '300ms',
+                }}
+              >
+                L
+              </LetterHolder>
+              <LetterHolder
+                color="yellow"
+                className={clsx({ hop2: animate })}
+                sx={{
+                  animationDelay: '600ms',
+                }}
+              >
+                A
+              </LetterHolder>
+              <LetterHolder
+                color="completed"
+                className={clsx({ hop3: animate })}
+                sx={{
+                  animationDelay: '900ms',
+                }}
+              >
+                C
+              </LetterHolder>
+              <LetterHolder
+                color="completed"
+                className={clsx({ hop4: animate })}
+                sx={{
+                  animationDelay: '1200ms',
+                }}
+              >
+                E
+              </LetterHolder>
             </Box>
             <Typography sx={{ display: 'list-item' }}>
               Once your puzzle is complete, the bonus word section might look something like this.
