@@ -210,7 +210,7 @@ function InstructionModal({ open, onClose }) {
             <Checkbox
               color="primary"
               size="md"
-              label="Don't show again."
+              label="Don't show again"
               onChange={(e) => setInstructionsDisabled(e.target.checked)}
             />
           </Box>
