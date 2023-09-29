@@ -133,9 +133,7 @@ function InstructionModal({ open, onClose }) {
               <LetterHolder color="standard">E</LetterHolder>
               <LetterHolder color="red">Y</LetterHolder>
             </Box>
-            <Typography sx={{ display: 'list-item' }}>
-              If your word is accepted, the tiles will animate and become colored in.
-            </Typography>
+            <Typography sx={{ display: 'list-item' }}>If your word is valid, the tiles will change.</Typography>
             <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
               <LetterHolder color="completed" className={clsx({ hop0: animate })}>
                 P
@@ -212,7 +210,7 @@ function InstructionModal({ open, onClose }) {
             <Checkbox
               color="primary"
               size="md"
-              label="Never show again."
+              label="Don't show again."
               onChange={(e) => setInstructionsDisabled(e.target.checked)}
             />
           </Box>
