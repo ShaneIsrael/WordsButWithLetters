@@ -31,7 +31,7 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHigh
         await sleep(300)
       }
     }
-    play()
+    activeRow !== 0 && play()
   }, [activeRow, playPop])
 
   function getBoard() {
