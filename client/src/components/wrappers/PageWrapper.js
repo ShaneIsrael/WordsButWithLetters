@@ -17,6 +17,7 @@ const PageWrapper = ({ children }) => {
         ['@media (max-width:600px), (max-height:800px)']: { scale: '0.7' },
         ['@media (max-width:400px), (max-height:700px)']: { scale: '0.6' },
         ['@media (max-width:300px), (max-height:600px)']: { scale: '0.5' },
+        ['@media (min-height:500px)']: { mt: '-40px' },
       }}
     >
       <Box sx={{ height: 'auto' }}>{children}</Box>

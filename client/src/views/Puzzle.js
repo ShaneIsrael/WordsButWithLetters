@@ -111,7 +111,7 @@ const Puzzle = (props) => {
         let trow = row
         if (rowIndex === playData.activeRow) {
           for (let i = boardData.boardRowLength; i >= 0; i--) {
-            if (trow[i] !== undefined) {
+            if (trow[i]) {
               trow[i] = undefined
               break
             }
