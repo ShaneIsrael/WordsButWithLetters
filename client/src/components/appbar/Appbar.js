@@ -10,13 +10,13 @@ function Appbar() {
       sx={{
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         width: '100%',
-        height: 50,
+        height: 60,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
       }}
     >
-      <Typography sx={{ fontSize: 28, fontWeight: 1000, fontFamily: 'Bubblegum Sans' }}>
+      <Typography sx={{ fontSize: 32, fontWeight: 1000, fontFamily: 'Bubblegum Sans' }}>
         Words But With Letters
       </Typography>
     </Sheet>

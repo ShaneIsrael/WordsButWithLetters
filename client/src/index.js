@@ -34,14 +34,17 @@ function ModeToggle() {
   const [mounted, setMounted] = React.useState(false)
 
   React.useEffect(() => {
-    setMode('dark')
+    const currentMode = localStorage.getItem('theme')
+    setMode(currentMode || 'dark')
   }, [])
 
   return (
     <Button
       variant="plain"
       onClick={() => {
-        setMode(mode === 'light' ? 'dark' : 'light')
+        const newValue = mode === 'light' ? 'dark' : 'light'
+        setMode(newValue)
+        localStorage.setItem('theme', newValue)
       }}
       sx={{ position: 'fixed', bottom: 10, right: 10 }}
     >

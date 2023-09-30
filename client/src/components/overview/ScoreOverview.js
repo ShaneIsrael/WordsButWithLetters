@@ -1,6 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { Divider, Grid, Sheet, Typography } from '@mui/joy'
+import { Grid, Sheet, Typography } from '@mui/joy'
 import { useTheme } from '@emotion/react'
 import MiniBoard from './MiniBoard'
 import ScoreColumn from './ScoreColumn'
@@ -17,7 +16,7 @@ const ScoreOverview = ({ progress, scoreModifiers }) => {
         flexDirection: 'column',
         padding: 2,
         borderTopLeftRadius: 8,
-        width: 390,
+        width: '100%',
         height: 434,
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
       }}
@@ -28,15 +27,15 @@ const ScoreOverview = ({ progress, scoreModifiers }) => {
             Results!
           </Typography>
         </Grid>
-        <Grid>
-          <Grid container width="100%">
+        <Grid container>
+          <Grid>
             <MiniBoard wordMatrix={progress.wordMatrix} scoreModifiers={scoreModifiers} />
-            <ScoreColumn wordScores={progress.wordScores} />
-          </Grid>
-          <Grid container width="100%">
             <BonusWord bonusWord={progress.bonusWordFound} scoreModifiers={scoreModifiers} />
-            <BonusWordScore
-              bonusWordScore={progress.bonusWordFound ? progress.wordScores[progress.wordScores.length - 1] : null}
+          </Grid>
+          <Grid>
+            <ScoreColumn
+              wordScores={progress.wordScores}
+              bonusScore={progress.bonusWordFound ? progress.wordScores[progress.wordScores.length - 1] : null}
             />
           </Grid>
         </Grid>
