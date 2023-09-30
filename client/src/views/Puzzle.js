@@ -18,6 +18,7 @@ import Appbar from '../components/appbar/Appbar'
 import wrongSfx from '../sounds/wrong.wav'
 import useSound from 'use-sound'
 import InstructionModal from '../components/modals/InstructionModal'
+import { toast } from 'sonner'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -42,7 +43,10 @@ const PLAY_DATA = {
 
 const Puzzle = (props) => {
   const theme = useTheme()
-  const [playInvalid] = useSound(wrongSfx)
+  const [playInvalid] = useSound(wrongSfx,  {
+    volume: 0.2,
+    interrupt: true,
+  })
 
   const [boardData, setBoardData] = React.useState({
     banishedIndexes: [[], [], [], [], []],
@@ -136,6 +140,7 @@ const Puzzle = (props) => {
             }
             return setSubmitting(false)
           } else {
+            toast.error(response.message)
             playInvalid()
             setFailedAttempt((prev) => prev + 1)
           }

@@ -25,21 +25,22 @@ service.fetchTodaysPuzzle = async () => {
  */
 service.validateSubmissionProgress = async (puzzleProgress, board) => {
   let progress = puzzleProgress
-  const currentWordArray = progress.wordMatrix[progress.activeRow]
+  const usedWords = progress.wordMatrix.map((word) => word.join(''))
+  const currentWord = usedWords[progress.activeRow]
+
   // if the row is not completely filled, do not allow submission
-  if (currentWordArray.filter((l) => !l).length > 0) return [false, progress]
+  if (currentWord.length !== 5) return [false, progress, 'Must be a 5 letter word']
 
-  if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWordArray.includes(bl))) {
-    return [false, progress]
+  if (usedWords.reverse().slice(0, usedWords.length - 1).includes(currentWord)) return [false, progress, 'Word already used']
+
+  if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWord.includes(bl))) {
+    return [false, progress, 'Invalid letters']
   }
-  const thisWord = currentWordArray
-    .filter((l) => l)
-    .join('')
-    .toLowerCase()
+  const thisWord = currentWord.toLowerCase()
 
-  const isValid = thisWord.length === 5 && validateWord(thisWord)
+  const isValid = validateWord(thisWord)
   if (!isValid) {
-    return [false, progress]
+    return [false, progress, 'Word not in dictionary']
   }
 
   const indexesToRemove = board.banishedIndexes.filter((bi) => bi[0] === progress.activeRow).map((i) => i[1])

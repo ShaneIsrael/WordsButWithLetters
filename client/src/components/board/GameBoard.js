@@ -22,17 +22,20 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHigh
     return () => clearTimeout(timeout)
   }, [failedAttempt])
 
-  const [playPop] = useSound(popSound)
+  const [playSound] = useSound(popSound, {
+    volume: 0.2,
+    interrupt: true,
+  })
 
   React.useEffect(() => {
     async function play() {
       for (let i = 0; i < 5; i += 1) {
-        playPop()
+        playSound()
         await sleep(300)
       }
     }
     activeRow !== 0 && play()
-  }, [activeRow, playPop])
+  }, [activeRow, playSound])
 
   function getBoard() {
     if (!hide)

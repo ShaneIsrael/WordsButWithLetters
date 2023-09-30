@@ -52,7 +52,7 @@ function ModeToggle() {
 
 root.render(
   <CssVarsProvider defaultMode="dark" theme={theme}>
-    <Toaster position="bottom-center" richColors />
+    <Toaster position="top-center" offset='64px' richColors />
     <ModeToggle />
     <CssBaseline />
     <App />
