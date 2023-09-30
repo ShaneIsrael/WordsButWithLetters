@@ -201,32 +201,34 @@ const Puzzle = (props) => {
             <Box className={clsx('card-face', 'card-back')}>
               <Grid container>
                 {!puzzleComplete && (
-                  <GameBoard
-                    hide={!showPuzzle}
-                    rows={MAX_BOARD_ROWS}
-                    activeRow={playData.activeRow}
-                    rowLetters={playData.wordMatrix}
-                    modifierLetters={boardData.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
-                    rowHighlights={boardData.banishedIndexes}
-                    onStart={handleBegin}
-                    failedAttempt={failedAttempt}
-                  />
+                  <>
+                    <GameBoard
+                      hide={!showPuzzle}
+                      rows={MAX_BOARD_ROWS}
+                      activeRow={playData.activeRow}
+                      rowLetters={playData.wordMatrix}
+                      modifierLetters={boardData.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
+                      rowHighlights={boardData.banishedIndexes}
+                      onStart={handleBegin}
+                      failedAttempt={failedAttempt}
+                    />
+                    <Box sx={{ ml: '4px' }}>
+                      <Clock
+                        seconds={boardData.timeToComplete || 300}
+                        start={showPuzzle}
+                        handleExpire={handleTimeExpire}
+                        finalTime={playData.finalTime}
+                        noLimit
+                      />
+                      <ScoreModifiers
+                        modifiers={boardData.scoreModifiers}
+                        disabledKeys={playData.banishedLetters}
+                        hide={!showPuzzle}
+                      />
+                    </Box>
+                  </>
                 )}
                 {puzzleComplete && <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />}
-                <Box sx={{ ml: '4px' }}>
-                  <Clock
-                    seconds={boardData.timeToComplete || 300}
-                    start={showPuzzle}
-                    handleExpire={handleTimeExpire}
-                    finalTime={playData.finalTime}
-                    noLimit
-                  />
-                  <ScoreModifiers
-                    modifiers={boardData.scoreModifiers}
-                    disabledKeys={playData.banishedLetters}
-                    hide={!showPuzzle}
-                  />
-                </Box>
               </Grid>
               <div style={{ marginBottom: 4 }} />
               {!puzzleComplete ? (

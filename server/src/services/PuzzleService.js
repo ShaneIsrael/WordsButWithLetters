@@ -59,7 +59,7 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
       const bonusFound = validateWord(wordToCheck)
       if (bonusFound) {
         progress.bonusWordFound = wordToCheck
-        progress.wordScores.push(calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, 50))
+        progress.wordScores.push(calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, 100))
         break
       }
     }
