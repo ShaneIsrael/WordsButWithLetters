@@ -58,9 +58,12 @@ const Puzzle = (props) => {
   const [failedAttempt, setFailedAttempt] = React.useState(0)
   const [submitting, setSubmitting] = React.useState(false)
   const [startModalOpen, setStartModalOpen] = React.useState(true)
+  const [puzzleNumber, setPuzzleNumber] = React.useState()
 
   React.useEffect(() => {
     async function init() {
+      const pNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
+      setPuzzleNumber(pNumber)
       const puzzleProgress = getPuzzleProgress(getUTCDate())
       if (puzzleProgress) {
         setBoardData(puzzleProgress.board)
@@ -177,6 +180,7 @@ const Puzzle = (props) => {
       <Appbar />
       {!puzzleComplete && <InstructionModal open={startModalOpen} onClose={() => setStartModalOpen(false)} />}
       <PageWrapper>
+        <Typography className="disco" level='h1' textAlign="center" sx={{ width: '100%', fontWeight: 900}}>Puzzle #{puzzleNumber}</Typography>
         <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
           <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
             <Sheet
@@ -199,6 +203,7 @@ const Puzzle = (props) => {
               </Button>
             </Sheet>
             <Box className={clsx('card-face', 'card-back')}>
+              
               <Grid container>
                 {!puzzleComplete && (
                   <>
@@ -238,7 +243,7 @@ const Puzzle = (props) => {
                   bonusWordFound={playData.bonusWordFound}
                 />
               ) : (
-                <ShareButton progress={playData} scoreModifiers={boardData.scoreModifiers} />
+                <ShareButton progress={playData} scoreModifiers={boardData.scoreModifiers} puzzleNumber={puzzleNumber} />
               )}
             </Box>
           </Box>

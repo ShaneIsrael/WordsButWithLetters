@@ -89,7 +89,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
             return (
               <HighlightLetterHolder
                 key={(letter ? letter : 'blank_') + index}
-                className={clsx(highlight.animation, { [`hop${index}`]: completed })}
+                className={clsx(highlight.animation, 'redPulse', { [`hop${index}`]: completed })}
                 active={letter}
                 color={'red'}
                 highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
@@ -103,7 +103,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
               <HighlightLetterHolder
                 key={'completed_' + letter + index}
                 // className={highlight.animation}
-                className={clsx(`hop${index}`)}
+                className={clsx(`hop${index}`, {'discoTile': modifierLetters.includes(letter)})}
                 active={letter}
                 color={modifierLetters.includes(letter) ? 'yellow' : 'completed'}
                 sx={{ animationDelay }}
@@ -114,7 +114,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
           return (
             <LetterHolder
               key={(letter ? letter : 'blank_') + index}
-              className={letter ? 'tilt-shake' : ''}
+              className={clsx({'tilt-shake': letter, 'discoBorder': modifierLetters.includes(letter)})}
               active={letter}
               highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
               sx={{ animationDelay }}

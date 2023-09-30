@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, Grid, Sheet, styled } from '@mui/joy'
+import clsx from 'clsx'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -77,7 +78,7 @@ const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
             {word.map((letter, index) => (
               <Grid xs key={`${letter}_${index}`}>
                 {letter && (
-                  <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'}>{letter}</LetterHolder>
+                  <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'} className={clsx({'discoTileMini': flatModifiers.includes(letter)})}>{letter}</LetterHolder>
                 )}
                 {!letter && (
                   <NoLetterHolder>
