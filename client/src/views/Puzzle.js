@@ -216,14 +216,18 @@ const Puzzle = (props) => {
                     finalTime={playData.finalTime}
                     noLimit
                   />
-                  <ScoreModifiers modifiers={boardData.scoreModifiers} hide={!showPuzzle} />
+                  <ScoreModifiers
+                    modifiers={boardData.scoreModifiers}
+                    disabledKeys={playData.banishedLetters}
+                    hide={!showPuzzle}
+                  />
                 </Box>
               </Grid>
               <div style={{ marginBottom: 4 }} />
               {!puzzleComplete ? (
                 <BonusWordComponent
                   letters={playData.banishedLetters}
-                  maxLetters={8}
+                  maxLetters={boardData.banishedIndexes.length}
                   bonusWordFound={playData.bonusWordFound}
                 />
               ) : (

@@ -10,7 +10,7 @@ class PuzzleGenerator {
     this.boardRows = rows
     this.boardRowLength = rowLength
     this.timeToComplete = secondsToComplete
-    this.banishedIndexes = PuzzleGenerator.#initBanishedIndexes(rows, rowLength)
+    this.banishedIndexes = PuzzleGenerator.#initBonusIndexes(rows, rowLength, 9)
     this.scoreModifiers = PuzzleGenerator.#initScoreModifiers(
       scoreModifierSizes[0],
       scoreModifierSizes[1],
@@ -25,41 +25,55 @@ class PuzzleGenerator {
     }
   }
 
-  static #initBanishedIndexes(rowCount, length) {
-    function generateUniqueNumbers(n, numberOfUnques) {
-      // Generate unique random numbers
-      let numbers = []
-      while (numbers.length < numberOfUnques) {
-        let randomNum = Math.floor(Math.random() * n)
-        if (!numbers.includes(randomNum)) {
-          numbers.push(randomNum)
-        }
-      }
+  static #initBonusIndexes(rowCount, length, numberOfIndexes) {
+    function selectRandomLocations(array) {
+      // Flatten the 2D array into a single array of all locations
+      const allLocations = array.flatMap((row, rowIndex) => row.map((_, colIndex) => [rowIndex, colIndex]))
 
-      return numbers
+      // Shuffle the locations array
+      const shuffledLocations = allLocations.sort(() => Math.random() - 0.5)
+
+      // Select the first 9 unique locations
+      const randomLocations = shuffledLocations.slice(0, numberOfIndexes)
+
+      return randomLocations
     }
 
-    let rows = []
-    for (let i = 0; i < rowCount - 1; i++) {
-      // odd rows only highlight 1 letter, even highlight 2
-      if (i % 2 !== 0) {
-        rows.push([
-          {
-            index: generateUniqueNumbers(length, 1)[0],
-            color: 'red',
-          },
-        ])
-      } else {
-        rows.push(
-          generateUniqueNumbers(length, 2).map((num) => ({
-            index: num,
-            color: 'red',
-          })),
-        )
-      }
-    }
-    rows.push([])
-    return rows
+    return selectRandomLocations(Array.from({ length: rowCount }).map(() => Array.from({ length: length }).fill()))
+    // function generateUniqueNumbers(n, numberOfUnques) {
+    //   // Generate unique random numbers
+    //   let numbers = []
+    //   while (numbers.length < numberOfUnques) {
+    //     let randomNum = Math.floor(Math.random() * n)
+    //     if (!numbers.includes(randomNum)) {
+    //       numbers.push(randomNum)
+    //     }
+    //   }
+
+    //   return numbers
+    // }
+
+    // let rows = []
+    // for (let i = 0; i < rowCount - 1; i++) {
+    //   // odd rows only highlight 1 letter, even highlight 2
+    //   if (i % 2 !== 0) {
+    //     rows.push([
+    //       {
+    //         index: generateUniqueNumbers(length, 1)[0],
+    //         color: 'red',
+    //       },
+    //     ])
+    //   } else {
+    //     rows.push(
+    //       generateUniqueNumbers(length, 2).map((num) => ({
+    //         index: num,
+    //         color: 'red',
+    //       })),
+    //     )
+    //   }
+    // }
+    // rows.push([])
+    // return rows
   }
   static #initScoreModifiers(size1, size2, size3) {
     // Create an array with all alphabets (a-z)

@@ -6,6 +6,8 @@ import { useTheme } from '@emotion/react'
 import useSound from 'use-sound'
 import BoardRow from './BoardRow'
 import _ from 'lodash'
+import popSound from '../../sounds/pop.wav'
+import { sleep } from '../../common/utils'
 
 const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHighlights, onStart, failedAttempt }) => {
   const theme = useTheme()
@@ -20,6 +22,18 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHigh
     return () => clearTimeout(timeout)
   }, [failedAttempt])
 
+  const [playPop] = useSound(popSound)
+
+  React.useEffect(() => {
+    async function play() {
+      for (let i = 0; i < 5; i += 1) {
+        playPop()
+        await sleep(300)
+      }
+    }
+    activeRow !== 0 && play()
+  }, [activeRow, playPop])
+
   function getBoard() {
     if (!hide)
       return new Array(rows).fill().map((_, index) => (
@@ -29,7 +43,7 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHigh
             completed={index < activeRow}
             letters={rowLetters[index]}
             modifierLetters={modifierLetters}
-            highlightIndexes={rowHighlights[index]}
+            highlightIndexes={rowHighlights.filter((rh) => rh[0] === index)}
           />
         </div>
       ))

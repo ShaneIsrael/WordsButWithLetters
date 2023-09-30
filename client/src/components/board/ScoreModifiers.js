@@ -4,26 +4,41 @@ import { Grid, Sheet, Typography } from '@mui/joy'
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 
-const LetterHolder = styled(Sheet)(({ theme }) => ({
+const COLORS = {
+  active: {
+    backgroundDark: '#5C4300',
+    backgroundLight: 'gold',
+    borderDark: '#FFC934',
+    borderLight: '#FFC934',
+    fontColorLight: 'black',
+    fontColorDark: '#ffffff',
+  },
+  inactive: {
+    backgroundDark: '#251F0E',
+    backgroundLight: '#896500',
+    borderDark: '#7A5D0B',
+    borderLight: '#C7960F',
+    fontColorLight: '#1F1F1F',
+    fontColorDark: '#6968686E',
+  },
+}
+
+const LetterHolder = styled(Sheet)(({ theme, color }) => ({
   ...theme.typography['body-sm'],
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
   borderRadius: 2,
-  // border: active
-  //   ? `3px solid ${theme.palette.mode === 'dark' ? '#fff' : 'black'}`
-  //   : `3px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
-  // borderColor: highlightborder || false,
-  border: `2px solid #FFC934`,
-  background: theme.palette.mode === 'dark' ? '#5C4300' : 'gold',
-  color: theme.palette.mode === 'dark' ? '#fff' : 'black',
+  border: `2px solid ${theme.palette.mode === 'dark' ? COLORS[color].borderDark : COLORS[color].borderLight}`,
+  background: theme.palette.mode === 'dark' ? COLORS[color].backgroundDark : COLORS[color].backgroundLight,
+  color: theme.palette.mode === 'dark' ? COLORS[color].fontColorDark : COLORS[color].fontColorLight,
   width: 30,
   height: 30,
   fontSize: '1.25em',
   fontWeight: 'bold',
 }))
 
-const ScoreModifiers = ({ modifiers, hide }) => {
+const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
   const theme = useTheme()
 
   return (
@@ -58,7 +73,9 @@ const ScoreModifiers = ({ modifiers, hide }) => {
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[0].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
+                <LetterHolder key={`modifier_${letter}`} color={disabledKeys.includes(letter) ? 'inactive' : 'active'}>
+                  {letter}
+                </LetterHolder>
               ))}
             </Grid>
           </Grid>
@@ -68,7 +85,9 @@ const ScoreModifiers = ({ modifiers, hide }) => {
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[1].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
+                <LetterHolder key={`modifier_${letter}`} color={disabledKeys.includes(letter) ? 'inactive' : 'active'}>
+                  {letter}
+                </LetterHolder>
               ))}
             </Grid>
           </Grid>
@@ -79,7 +98,9 @@ const ScoreModifiers = ({ modifiers, hide }) => {
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[2].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`}>{letter}</LetterHolder>
+                <LetterHolder key={`modifier_${letter}`} color={disabledKeys.includes(letter) ? 'inactive' : 'active'}>
+                  {letter}
+                </LetterHolder>
               ))}
             </Grid>
           </Grid>

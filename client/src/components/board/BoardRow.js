@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
-import useSound from 'use-sound'
-import popSound from '../../sounds/pop.wav'
+
 import { Grid, Sheet, styled } from '@mui/joy'
 import { sleep } from '../../common/utils'
 
@@ -77,23 +76,12 @@ const HighlightLetterHolder = styled(Sheet)(({ theme, active, color, highlightbo
 }))
 
 const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexes }) => {
-  const [playPop] = useSound(popSound)
-
-  React.useEffect(() => {
-    async function play() {
-      for (let i = 0; i < letters.length; i += 1) {
-        playPop()
-        await sleep(300)
-      }
-    }
-    completed && play()
-  }, [completed, letters.length, playPop])
-
   if (letters) {
     return (
       <Grid container gap={1}>
         {letters.map((letter, index) => {
-          const highlight = highlightIndexes.filter((e) => e.index === index)[0]
+          const highlight = highlightIndexes.find((e) => e[1] === index)
+
           let animationDelay = 'unset'
           if (completed) animationDelay = `${300 * index}ms`
 
@@ -103,7 +91,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
                 key={(letter ? letter : 'blank_') + index}
                 className={clsx(highlight.animation, { [`hop${index}`]: completed })}
                 active={letter}
-                color={highlight.color}
+                color={'red'}
                 highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
                 sx={{ animationDelay }}
               >
@@ -143,7 +131,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
       {letters.map((_, index) => {
         const highlight = highlightIndexes.filter((e) => e.index === index)[0]
         return highlight ? (
-          <HighlightLetterHolder key={'blank_' + index} className={highlight.animation} color={highlight.color} />
+          <HighlightLetterHolder key={'blank_' + index} className={highlight.animation} color={'red'} />
         ) : (
           <LetterHolder key={'blank_' + index} />
         )

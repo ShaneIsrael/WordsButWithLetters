@@ -42,7 +42,7 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
     return [false, progress]
   }
 
-  const indexesToRemove = board.banishedIndexes[progress.activeRow].map((i) => i.index)
+  const indexesToRemove = board.banishedIndexes.filter((bi) => bi[0] === progress.activeRow).map((i) => i[1])
   const lettersToRemove = thisWord.split('').filter((l, index) => indexesToRemove.includes(index))
   progress.banishedLetters = progress.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())])
   progress.wordScores.push(calculateWordScore(thisWord, board.scoreModifiers, board.scoreMultipliers))
