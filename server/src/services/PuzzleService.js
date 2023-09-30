@@ -31,7 +31,6 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
   // if the row is not completely filled, do not allow submission
   if (currentWord.length !== 5) return [false, progress, 'Must be a 5 letter word']
 
-  console.log((usedWords.filter(word => word).slice(0, -1)))
   if (usedWords.filter(word => word).slice(0, -1).includes(currentWord)) return [false, progress, 'Word already used']
 
   if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWord.includes(bl))) {
