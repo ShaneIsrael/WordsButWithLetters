@@ -7,6 +7,9 @@ class AuthService {
   register(email, password, displayName) {
     return Api().post('/auth/register', { email, password, displayName })
   }
+  verify(email, token) {
+    return Api().get(`/auth/verify/${email}/${token}`)
+  }
   logout() {
     return Api().post('/auth/logout')
   }

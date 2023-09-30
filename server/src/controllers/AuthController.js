@@ -3,6 +3,11 @@ const jwt = require('jsonwebtoken')
 const { User } = require('../database/models')
 const { isValidEmail } = require('../utils')
 const { Op } = require('sequelize')
+const { v4: uuidv4 } = require('uuid')
+const  { sendVerificationEmail } = require('../services/EmailService')
+
+const isProduction = process.env.NODE_ENV === 'production'
+
 const controller = {}
 
 const COOKIE_PARAMS = {
@@ -36,12 +41,16 @@ controller.register = async (req, res, next) => {
       return res.status(409).send('Display name already in use, please choose another.')
 
     const hash = await bcrypt.hash(password, 10)
+    const token = uuidv4()
 
-    const user = await User.create({ email: email.toLowerCase(), displayName, password: hash })
-
-    const accessToken = signUserJwt(user)
-
-    return res.cookie('session', accessToken, COOKIE_PARAMS).sendStatus(200)
+    sendVerificationEmail(email.toLowerCase(), token, displayName).then(async () => {
+      await User.create({ email: email.toLowerCase(), displayName, password: hash, token, verified: isProduction ? false : true})
+      return res.status(200).send('A verification email has been sent to that address. Please check your spam folder.')
+    }).catch(err => {
+      res.status(500).send('Unable to create account, please try again later.')
+      next(err)
+    })
+    
   } catch (err) {
     next(err)
   }
@@ -54,6 +63,10 @@ controller.login = async (req, res, next) => {
     if (!(email && password)) return res.status(400).send('Email & Password required.')
 
     const user = await User.findOne({ where: { email } })
+
+    if (!user.verified) {
+      return res.status(401).send('Awaiting email verification.')
+    }
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const accessToken = signUserJwt(user)
@@ -73,6 +86,32 @@ controller.login = async (req, res, next) => {
     return res.status(400).send('Invalid email or password.')
   } catch (err) {
     next(err)
+  }
+}
+
+controller.verifyEmail = async (req, res, next) => {
+  try {
+    const email = req.params.email
+    const token = req.params.token
+  
+    if (!email || !token) {
+      return res.status(400).send('Invalid verification link')
+    }
+    
+    const user = await User.findOne({ where: { email, token }})
+
+    if (!user) {
+      return res.status(400).send('Invalid verification link')
+    }
+
+    user.verified = true
+    user.token = null
+    user.save()
+
+    return res.status(200).send('verified!')
+
+  } catch (err) {
+    next (err)
   }
 }
 
