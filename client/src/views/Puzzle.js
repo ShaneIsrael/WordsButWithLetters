@@ -139,6 +139,7 @@ const Puzzle = (props) => {
             setPuzzleProgress(response.date, response.board, response.progress)
             setPlayData(response.progress)
             if (response.progress.puzzleComplete) {
+              toast.success(response.message || 'Puzzle Complete!')
               return sleep(1800).then(() => setPuzzleComplete(response.progress.puzzleComplete)) // Give final row animation time to complete.
             }
             return setSubmitting(false)
