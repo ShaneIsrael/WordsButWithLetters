@@ -70,12 +70,12 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
 }
 
 service.validatePuzzleComplete = (progress, board) => {
-  if (progress.activeRow === board.boardRows - 1) return [true, null]
+  if (progress.activeRow === board.boardRows - 1) return [true, 'Puzzle completed!']
   if (
     progress.banishedLetters.length > 0 &&
     ['A', 'E', 'I', 'O', 'U'].every((v) => progress.banishedLetters.includes(v))
   )
-    return [true, 'No Available Vowels']
+    return [true, 'All vowels are unusable. Puzzle completed!']
   return [false, null]
 }
 
