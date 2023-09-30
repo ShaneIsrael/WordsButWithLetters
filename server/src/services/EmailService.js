@@ -21,7 +21,7 @@ service.sendVerificationEmail = async (email, token, name) => {
                 from: process.env.SMTP_EMAIL,
                 to: email,
                 subject: 'Account Verification',
-                text: `Hi ${name},\nThanks for creating a Words But With Letters account. Please click on the link below to verify your account.\n\nhttps://wordsbutwithletters.com/#/verify/${email}/${token}`
+                text: `Hi ${name},\nThanks for creating a Words But With Letters account. Please click on the link below to verify your account.\n\n${process.env.DOMAIN}/#/verify/${email}/${token}`
             })
         } catch (err) {
             throw err
