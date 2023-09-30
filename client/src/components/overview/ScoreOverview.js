@@ -4,7 +4,6 @@ import { useTheme } from '@emotion/react'
 import MiniBoard from './MiniBoard'
 import ScoreColumn from './ScoreColumn'
 import BonusWord from './BonusWord'
-import BonusWordScore from './BonusWordScore'
 
 const ScoreOverview = ({ progress, scoreModifiers }) => {
   const theme = useTheme()
