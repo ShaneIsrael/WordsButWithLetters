@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Box, Grid, Sheet, styled } from '@mui/joy'
+import clsx from 'clsx'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -41,6 +42,9 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'completed' }) => ({
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderDark : HIGHLIGHT_COLORS[color].borderLight
   }`,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
+  boxShadow: `inset 0 0 6px ${
+    theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderActiveDark : HIGHLIGHT_COLORS[color].borderActiveLight
+  }`,
   width: 34,
   height: 34,
   fontSize: 18,

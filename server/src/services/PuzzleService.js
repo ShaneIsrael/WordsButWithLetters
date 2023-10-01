@@ -31,7 +31,7 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
   // if the row is not completely filled, do not allow submission
   if (currentWord.length !== 5) return [false, progress, 'Must be a 5 letter word']
 
-  if (usedWords.reverse().slice(0, usedWords.length - 1).includes(currentWord)) return [false, progress, 'Word already used']
+  if (usedWords.filter(word => word).slice(0, -1).includes(currentWord)) return [false, progress, 'Word already used']
 
   if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWord.includes(bl))) {
     return [false, progress, 'Invalid letters']
@@ -70,12 +70,12 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
 }
 
 service.validatePuzzleComplete = (progress, board) => {
-  if (progress.activeRow === board.boardRows - 1) return [true, null]
+  if (progress.activeRow === board.boardRows - 1) return [true, 'Puzzle completed!']
   if (
     progress.banishedLetters.length > 0 &&
     ['A', 'E', 'I', 'O', 'U'].every((v) => progress.banishedLetters.includes(v))
   )
-    return [true, 'No Available Vowels']
+    return [true, 'All vowels are unusable. Puzzle completed!']
   return [false, null]
 }
 

@@ -31,14 +31,12 @@ function convertNumberToEmoji(number) {
   return tempNumber
 }
 
-const ShareButton = ({ progress, scoreModifiers }) => {
+const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
   const theme = useTheme()
   const [shareText, setShareText] = React.useState('')
 
   React.useEffect(() => {
     async function init() {
-      const puzzleNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
-
       const flatModifiers = scoreModifiers.reduce((prev, curr) => prev.concat(curr))
       let finalScore = progress.wordScores.filter((score) => score).reduce((prev, curr) => prev + curr, 0)
 
@@ -72,7 +70,7 @@ const ShareButton = ({ progress, scoreModifiers }) => {
       setShareText(shareText)
     }
     init()
-  }, [progress, scoreModifiers])
+  }, [progress, scoreModifiers, puzzleNumber])
 
   return (
     <Sheet
