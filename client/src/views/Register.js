@@ -6,6 +6,8 @@ import CloseIcon from '@mui/icons-material/Close'
 import validator from 'email-validator'
 import AuthService from '../services/AuthService'
 import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import { sleep } from '../common/utils'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -50,7 +52,11 @@ const Register = () => {
 
   const handleRegister = async () => {
     try {
-      await AuthService.register(email, password, displayName)
+      const resp = (await AuthService.register(email, password, displayName)).data
+      toast.success(resp, {
+        duration: 5000
+      })
+      await sleep(7500)
       navigate('/login')
     } catch (err) {
       if (err.response?.data) {
