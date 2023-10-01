@@ -1,6 +1,11 @@
 const logger = require('../../utils/logger')
 
-require('dotenv').config()
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+}
+
+console.log(process.env)
+
 module.exports = {
   development: {
     username: process.env.DEV_DB_USERNAME,
