@@ -29,6 +29,7 @@ RUN npm install -g sequelize-cli
 
 # Move source
 COPY server/src .
+COPY server/.sequelizerc .
 
 EXPOSE 80
 ENV NODE_ENV=production
