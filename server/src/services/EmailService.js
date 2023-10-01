@@ -29,7 +29,6 @@ const service = {}
 
 service.sendVerificationEmail = async (email, token, name) => {
   if (isProduction) {
-    console.log(__dirname)
     readHTMLFile(__dirname + '/../templates/EmailVerification.html', async (err, html) => {
       if (err) {
         console.log('error reading file', err)

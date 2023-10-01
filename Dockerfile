@@ -25,6 +25,7 @@ WORKDIR /app
 # Install app dependencies
 COPY server/package*.json ./
 RUN npm ci --omit=dev
+RUN npm install -g sequelize-cli
 
 # Move source
 COPY server/ .
