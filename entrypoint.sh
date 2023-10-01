@@ -4,4 +4,4 @@ nginx -g 'daemon on;'
 
 cd /app
 
-npm run migrate && node /app/src/server.js
+node /app/src/server.js
