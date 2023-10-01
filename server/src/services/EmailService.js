@@ -42,8 +42,8 @@ service.sendVerificationEmail = async (email, token, name) => {
       const htmlToSend = template(replacements);
       try {
         await transporter.sendMail({
-          from: process.env.SMTP_EMAIL,
-          to: email,
+          from: `Words But With Letters <${process.env.SMTP_EMAIL}>`,
+          to: `${name} <${email}>`,
           subject: 'Account Verification',
           html: htmlToSend
         })
