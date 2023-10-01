@@ -7,7 +7,12 @@ const env = process.env.NODE_ENV || 'production'
 const config = require(__dirname + '/../config/database')[env]
 const db = {}
 
-const sequelize = new Sequelize(config.database, config.username, config.password, config.options)
+const sequelize = new Sequelize(config.database, config.username, config.password, {
+  dialect: config.dialect,
+  host: config.host,
+  port: config.host,
+  ...config.options
+})
 
 fs.readdirSync(__dirname)
   .filter((file) => {
