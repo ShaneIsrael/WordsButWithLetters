@@ -6,10 +6,10 @@ module.exports = {
     username: process.env.DEV_DB_USERNAME,
     password: process.env.DEV_DB_PASSWORD,
     database: process.env.DEV_DB_NAME,
+    dialect: 'postgres',
     options: {
       host: process.env.DEV_DB_HOSTNAME,
       port: 5432,
-      dialect: 'postgres',
       timezone: 'utc',
       logging: (msg) => logger.debug(msg),
       pool: {
@@ -31,10 +31,10 @@ module.exports = {
     username: process.env.PROD_DB_USERNAME,
     password: process.env.PROD_DB_PASSWORD,
     database: process.env.PROD_DB_NAME,
+    dialect: 'postgres',
     options: {
       host: process.env.PROD_DB_HOSTNAME,
       port: process.env.PROD_DB_PORT || 5432,
-      dialect: 'postgres',
       timezone: 'utc',
       logging: false,
       dialectOptions: {

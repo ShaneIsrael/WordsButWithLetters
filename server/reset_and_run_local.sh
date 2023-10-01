@@ -14,4 +14,4 @@ echo "database is up, wait 25 seconds for it to complete standing up before migr
 sleep 25;
 
 npm i
-npm run local
+npm run migrate && npm run local
