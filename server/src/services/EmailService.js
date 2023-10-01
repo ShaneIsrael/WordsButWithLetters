@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer')
 const fs = require('fs')
-const handlebars = require('handlebars')
+const handlebars = require('handlebars');
+const logger = require('../utils/logger');
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -45,8 +46,10 @@ service.sendVerificationEmail = async (email, token, name) => {
           to: email,
           subject: 'Account Verification',
           html: htmlToSend
-      })
+        })
+        logger.info(`sent verification email to: ${email}`)
       } catch (err) {
+        logger.error(`failed to send verification email to: ${email}`)
         throw err
       }
     })

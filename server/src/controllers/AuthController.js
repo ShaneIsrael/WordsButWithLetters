@@ -5,6 +5,7 @@ const { isValidEmail } = require('../utils')
 const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 const  { sendVerificationEmail } = require('../services/EmailService')
+const logger = require('../utils/logger')
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -43,6 +44,8 @@ controller.register = async (req, res, next) => {
     const hash = await bcrypt.hash(password, 10)
     const token = uuidv4()
 
+    logger.info(`registering user with email: ${email.toLowerCase()}`)
+    
     sendVerificationEmail(email.toLowerCase(), token, displayName).then(async () => {
       await User.create({ email: email.toLowerCase(), displayName, password: hash, token, verified: isProduction ? false : true})
       return res.status(200).send('A verification email has been sent to that address. Please check your spam folder.')
@@ -71,6 +74,8 @@ controller.login = async (req, res, next) => {
     if (user && (await bcrypt.compare(password, user.password))) {
       const accessToken = signUserJwt(user)
       res.cookie('session', accessToken, COOKIE_PARAMS)
+
+      logger.info(`logging in user with email: ${user.email}`)
       return res
         .cookie(
           'user',
@@ -93,7 +98,9 @@ controller.verifyEmail = async (req, res, next) => {
   try {
     const email = req.params.email
     const token = req.params.token
-  
+
+    logger.info(`verifying email for: ${email.toLowerCase()}`)
+    
     if (!email || !token) {
       return res.status(400).send('Invalid verification link')
     }
@@ -107,6 +114,7 @@ controller.verifyEmail = async (req, res, next) => {
     user.verified = true
     user.token = null
     user.save()
+
 
     return res.status(200).send('verified!')
 
