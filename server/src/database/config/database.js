@@ -35,14 +35,15 @@ module.exports = {
     host: process.env.PROD_DB_HOSTNAME,
     port: process.env.PROD_DB_PORT || 5432,
     dialect: 'postgres',
+    ssl: true,
+    dialectOptions: {
+      ssl: {
+        ca: process.env.PROD_DB_CA_CERT,
+      },
+    },
     options: {
       timezone: 'utc',
       logging: false,
-      dialectOptions: {
-        ssl: {
-          ca: process.env.PROD_DB_CA_CERT,
-        },
-      },
       pool: {
         max: 20,
         min: 0,
