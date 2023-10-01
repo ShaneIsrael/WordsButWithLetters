@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, Button, FormControl, FormLabel, IconButton, Input, Link, Sheet, Typography } from '@mui/joy'
+import { useNavigate } from 'react-router-dom'
+import { Alert, Box, Button, FormControl, FormLabel, IconButton, Input, Link, Sheet, Typography } from '@mui/joy'
 import ErrorIcon from '@mui/icons-material/Error'
 import CloseIcon from '@mui/icons-material/Close'
 
 import AuthService from '../services/AuthService'
-import { useNavigate } from 'react-router-dom'
+import logo from '../assets/logo.png'
 
 const Login = (props) => {
   const [email, setEmail] = React.useState('')
@@ -33,26 +34,36 @@ const Login = (props) => {
     }
   }
   return (
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      my: 4,
+      
+    }}>
+    <img src={logo} width={350} />
     <Sheet
       sx={{
+        display: 'flex',
+        flexDirection: 'column',
         width: 350,
-        mx: 'auto',
+        // mx: 'auto',
         my: 4,
         py: 3,
         px: 2,
-        display: 'flex',
-        flexDirection: 'column',
+
         gap: 2,
         borderRadius: 'sm',
         boxShadow: 'md',
       }}
       variant="outlined"
     >
+      
       <div>
         <Typography level="h4" component="h1">
           <b>Welcome!</b>
         </Typography>
-        <Typography level="body2">Login to continue.</Typography>
       </div>
       <FormControl>
         <FormLabel>Email</FormLabel>
@@ -98,6 +109,7 @@ const Login = (props) => {
         Don&apos;t have an account?
       </Typography>
     </Sheet>
+    </Box>
   )
 }
 

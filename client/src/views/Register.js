@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, IconButton, Button, FormControl, FormLabel, Input, Link, Sheet, Typography } from '@mui/joy'
+import { Alert, IconButton, Button, FormControl, FormLabel, Input, Link, Sheet, Typography, Box } from '@mui/joy'
 import ErrorIcon from '@mui/icons-material/Error'
 import CloseIcon from '@mui/icons-material/Close'
 import validator from 'email-validator'
@@ -8,6 +8,7 @@ import AuthService from '../services/AuthService'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { sleep } from '../common/utils'
+import logo from '../assets/logo.png'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -66,21 +67,32 @@ const Register = () => {
   }
 
   return (
+    <Box sx={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      my: 4,
+      
+    }}>
+    <img src={logo} width={350} />
     <Sheet
       sx={{
+        display: 'flex',
+        flexDirection: 'column',
         width: 350,
-        mx: 'auto',
+        // mx: 'auto',
         my: 4,
         py: 3,
         px: 2,
-        display: 'flex',
-        flexDirection: 'column',
+
         gap: 2,
         borderRadius: 'sm',
         boxShadow: 'md',
       }}
       variant="outlined"
     >
+      
       <div>
         <Typography level="h4" component="h1">
           <b>Register</b>
@@ -164,6 +176,7 @@ const Register = () => {
         Already have an account?
       </Typography>
     </Sheet>
+    </Box>
   )
 }
 
