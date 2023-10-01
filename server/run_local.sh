@@ -10,4 +10,5 @@ done;
 sleep 10;
 
 npm i
-npm run local
+
+npm run migrate && npm run local
