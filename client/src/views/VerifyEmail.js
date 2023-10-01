@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid, Sheet, Typography } from '@mui/joy'
-import { Navigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import _ from 'lodash'
 import AuthService from '../services/AuthService'
 import { sleep } from '../common/utils'
@@ -8,6 +8,7 @@ import { sleep } from '../common/utils'
 const VerifyEmail = (props) => {
   const { email, token } = useParams()
   const [verifiedMessage, setVerifiedMessage] = React.useState()
+  const navigate = useNavigate()
 
   React.useEffect(() => {
     async function verify() {
@@ -16,7 +17,7 @@ const VerifyEmail = (props) => {
             await AuthService.verify(email, token)
             setVerifiedMessage('Your account has been verified, redirecting...')
             sleep(2500).then(() => {
-                Navigate('/login')
+                navigate('/login')
             })
         } catch (err) {
             setVerifiedMessage('Unable to verify, please check your verification link and try again.')

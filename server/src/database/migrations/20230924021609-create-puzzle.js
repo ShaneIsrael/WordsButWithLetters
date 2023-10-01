@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       dayId: {
-        type: Sequelize.UUIDV4
+        type: Sequelize.INTEGER
       },
       board: {
         type: Sequelize.JSON

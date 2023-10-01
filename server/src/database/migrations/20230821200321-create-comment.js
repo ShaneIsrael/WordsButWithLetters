@@ -5,7 +5,7 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
       },
       body: {
         type: Sequelize.TEXT,
@@ -17,10 +17,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       threadId: {
-        type: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
       },
       parentId: {
-        type: Sequelize.UUIDV4,
+        type: Sequelize.UUID,
       },
       userId: {
         type: Sequelize.INTEGER,
