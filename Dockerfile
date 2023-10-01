@@ -28,7 +28,6 @@ RUN npm ci --omit=dev
 RUN npm install -g sequelize-cli
 
 # Move source
-COPY server/node_modules .
 COPY server/src .
 
 EXPOSE 80
