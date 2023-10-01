@@ -56,7 +56,7 @@ controller.submit = async (req, res, next) => {
     // subimssions. Else we would need to do annoying frontend logic to dictate what
     // route needs to be called.
     if (isAuthenticated(req.cookies?.session)) {
-      return handleRankedSubmission(req, res, next)
+      // return handleRankedSubmission(req, res, next)
     }
     return handleCasualSubmission(req, res, next)
   } catch (err) {
