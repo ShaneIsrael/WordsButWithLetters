@@ -68,6 +68,15 @@ const HighlightLetterHolder = styled(Sheet)(({ theme, active, color, highlightbo
         theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderDark : HIGHLIGHT_COLORS[color].borderLight
       }`,
   borderColor: highlightborder || false,
+  boxShadow: `inset 0 0px 10px ${
+    active
+      ? theme.palette.mode === 'dark'
+        ? HIGHLIGHT_COLORS[color].borderActiveDark
+        : HIGHLIGHT_COLORS[color].borderActiveLight
+      : theme.palette.mode === 'dark'
+      ? HIGHLIGHT_COLORS[color].borderDark
+      : HIGHLIGHT_COLORS[color].borderLight
+  }`,
   color: '#fff',
   width: 60,
   height: 60,
@@ -102,8 +111,9 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
             return (
               <HighlightLetterHolder
                 key={'completed_' + letter + index}
-                // className={highlight.animation}
-                className={clsx(`hop${index}`, {'discoTile': modifierLetters.includes(letter)})}
+                className={clsx({
+                  [`hop${index}`]: true,
+                })}
                 active={letter}
                 color={modifierLetters.includes(letter) ? 'yellow' : 'completed'}
                 sx={{ animationDelay }}
@@ -114,7 +124,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
           return (
             <LetterHolder
               key={(letter ? letter : 'blank_') + index}
-              className={clsx({'tilt-shake': letter, 'discoBorder': modifierLetters.includes(letter)})}
+              // className={clsx({'tilt-shake': letter, 'goldPulse': modifierLetters.includes(letter)})}
               active={letter}
               highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
               sx={{ animationDelay }}

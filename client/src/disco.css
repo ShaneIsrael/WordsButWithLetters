@@ -1,45 +1,38 @@
 .disco {
-    color: yellow;
-    text-shadow: 0 0 7px yellow, 0 0 15px yellow;
-    animation: glow 5s linear infinite;
+  color: yellow;
+  text-shadow: 0 0 7px yellow, 0 0 5px yellow;
+  animation: glow 10s linear infinite;
 }
 
 .discoTile {
-    border-color: yellow;
-    box-shadow: 0 0px 2px yellow, -4px 4px 6px yellow;
-    animation: glow 5s linear infinite;
-}
-
-.discoTileMini {
-    border-color: yellow;
-    box-shadow: 0 0px 1px yellow, -2px 1px 6px yellow;
-    animation: glow 5s linear infinite;
+  border-color: yellow;
+  box-shadow: 0 0px 2px yellow, -4px 4px 6px yellow;
+  animation: glow 5s linear infinite;
 }
 
 .redPulse {
-    border-color: red;
-    box-shadow: 0 0px 0px #f3172d, 0px 0px 0px #f3172d;
-    animation: pulse 1s linear infinite;
+  border-color: red;
+  box-shadow: inset 0 0px 10px #f3172d;
+  animation: pulse 1.5s linear infinite;
 }
 
 @keyframes glow {
-    0% {
-      filter: hue-rotate(0deg);
-    }
-    100% {
-      filter: hue-rotate(360deg);
-    }
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
 }
 
 @keyframes pulse {
-    0% {
-      filter: hue-rotate(0deg);
-    }
-    50% {
-        filter: hue-rotate(30deg)
-    }
-    100% {
-      filter: hue-rotate(0deg);
-    }
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  50% {
+    filter: hue-rotate(30deg);
+  }
+  100% {
+    filter: hue-rotate(0deg);
+  }
 }
-

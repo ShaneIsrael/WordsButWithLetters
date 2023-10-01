@@ -42,6 +42,9 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'completed' }) => ({
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderDark : HIGHLIGHT_COLORS[color].borderLight
   }`,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
+  boxShadow: `inset 0 0 6px ${
+    theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderActiveDark : HIGHLIGHT_COLORS[color].borderActiveLight
+  }`,
   width: 34,
   height: 34,
   fontSize: 18,
@@ -78,7 +81,7 @@ const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
             {word.map((letter, index) => (
               <Grid xs key={`${letter}_${index}`}>
                 {letter && (
-                  <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'} className={clsx({'discoTileMini': flatModifiers.includes(letter)})}>{letter}</LetterHolder>
+                  <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'}>{letter}</LetterHolder>
                 )}
                 {!letter && (
                   <NoLetterHolder>
