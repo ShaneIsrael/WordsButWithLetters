@@ -1,9 +1,11 @@
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box, Checkbox, Grid, Modal, ModalClose, Sheet, Typography } from '@mui/joy'
+import { Box, Checkbox, Grid, IconButton, Modal, Sheet, Typography } from '@mui/joy'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import React, { useEffect } from 'react'
+
+import ClearIcon from '@mui/icons-material/Clear'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -80,7 +82,18 @@ function InstructionModal({ open, onClose }) {
     <Modal
       open={open}
       onClose={() => onClose(instructionsDisabled)}
-      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        '@media (max-width:1000px) (max-height:1000px)': { scale: '1' },
+        '@media (max-width:800px), (max-height:900px)': { scale: '0.9' },
+        '@media (max-width:700px), (max-height:800px)': { scale: '0.8' },
+        '@media (max-width:600px), (max-height:700px)': { scale: '0.7' },
+        '@media (min-height:500px)': { mt: '-40px' },
+        backdropFilter: 'blur(3px)',
+      }}
+      hideBackdrop
     >
       <Sheet
         variant="outlined"
@@ -94,7 +107,20 @@ function InstructionModal({ open, onClose }) {
         onMouseEnter={() => setAnimate(true)}
         onMouseLeave={() => setAnimate(false)}
       >
-        <ModalClose variant="plain" sx={{ m: 1 }} />
+        <IconButton
+          variant="plain"
+          onClick={() => onClose(instructionsDisabled)}
+          sx={{
+            height: 20,
+            width: 20,
+            right: 10,
+            top: 10,
+            position: 'absolute',
+            color: theme.palette.mode === 'dark' ? 'white' : 'black',
+          }}
+        >
+          <ClearIcon />
+        </IconButton>
         <Grid container sx={{ gap: 1 }}>
           <Typography level="h1">How to Play</Typography>
           <Typography
@@ -102,23 +128,23 @@ function InstructionModal({ open, onClose }) {
             fontSize={18}
             fontWeight={700}
             lineHeight={'14px'}
-            sx={{ borderBottom: `3px solid ${theme.palette.neutral[600]}`, pb: 2 }}
+            sx={{ borderBottom: `3px solid ${theme.palette.neutral[600]}`, pb: 2, lineHeight: '1.5' }}
           >
-            Build score by creating 5 letter words.
+            Get the highest score you can by creating 5 letter words while using the score modifier letters.
           </Typography>
           <Box sx={{ display: 'grid', p: '8px 16px', gap: 1 }}>
             <Typography sx={{ display: 'list-item' }}>
               Multiply your word score by using{' '}
-              <Typography fontWeight={900} sx={{ color: 'yellow' }}>
-                golden letters
+              <Typography fontWeight={900} sx={{ color: theme.palette.mode === 'dark' ? 'yellow' : 'goldenrod' }}>
+                score modifiers
               </Typography>
               .
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
               <LetterHolder color="standard">S</LetterHolder>
-              <LetterHolder color="yellow-highlight">C</LetterHolder>
+              <LetterHolder color="yellow">C</LetterHolder>
               <LetterHolder color="standard">O</LetterHolder>
-              <LetterHolder color="yellow-highlight">R</LetterHolder>
+              <LetterHolder color="yellow">R</LetterHolder>
               <LetterHolder color="standard">E</LetterHolder>
             </Box>
             <Typography sx={{ display: 'list-item' }}>
@@ -178,24 +204,8 @@ function InstructionModal({ open, onClose }) {
               </LetterHolder>
             </Box>
             <Typography sx={{ display: 'list-item' }}>
-              Once your puzzle is complete, the bonus word section might look something like this.
-            </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-              <LetterHolder color="standard">U</LetterHolder>
-              <LetterHolder color="standard">X</LetterHolder>
-              <LetterHolder color="standard">R</LetterHolder>
-              <LetterHolder color="standard">H</LetterHolder>
-              <LetterHolder color="standard">Y</LetterHolder>
-              <LetterHolder color="standard">M</LetterHolder>
-              <LetterHolder color="standard">E</LetterHolder>
-              <LetterHolder color="standard">P</LetterHolder>
-            </Box>
-            <Typography sx={{ display: 'list-item' }}>
-              You would be awarded{' '}
-              <Typography fontWeight={900} sx={{ color: 'red' }}>
-                Rhyme
-              </Typography>{' '}
-              as your bonus word.
+              Once your puzzle is complete, the first five letter word found in the bonus section will be added to your
+              score.
             </Typography>
             <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
               <LetterHolder color="standard">U</LetterHolder>

@@ -15,7 +15,7 @@ const WORDS = loadWordsFromFile('../words.txt')
 
 service.getWords = () => WORDS
 service.validateWord = (word) => WORDS.includes(word.toLowerCase())
-service.calculateWordScore = (word, modifiers, multipliers = [2, 3, 4], baseScore = 5) => {
+service.calculateWordScore = (word, modifiers, multipliers = [2, 3, 4], baseScore = 10) => {
   let totalMods = new Array(modifiers.length).fill(0) //[x2, x3, x4, ...xN] totals
 
   for (let i = 0; i < modifiers.length; i += 1) {
