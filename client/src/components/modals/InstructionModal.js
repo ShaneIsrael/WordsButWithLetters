@@ -130,7 +130,7 @@ function InstructionModal({ open, onClose }) {
             lineHeight={'14px'}
             sx={{ borderBottom: `3px solid ${theme.palette.neutral[600]}`, pb: 2, lineHeight: '1.5' }}
           >
-            Get the highest score you can by entering 5 letter words and using the score modifiers.
+            Get the highest score you can by creating 5 letter words while using the score modifier letters.
           </Typography>
           <Box sx={{ display: 'grid', p: '8px 16px', gap: 1 }}>
             <Typography sx={{ display: 'list-item' }}>
