@@ -2,7 +2,8 @@ import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 import { Box, Checkbox, Grid, Modal, ModalClose, Sheet, Typography } from '@mui/joy'
 import clsx from 'clsx'
-import React from 'react'
+import Cookies from 'js-cookie'
+import React, { useEffect } from 'react'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -69,6 +70,11 @@ function InstructionModal({ open, onClose }) {
   const theme = useTheme()
   const [animate, setAnimate] = React.useState(false)
   const [instructionsDisabled, setInstructionsDisabled] = React.useState(false)
+
+  useEffect(() => {
+    const disabled = Cookies.get('instructionsDisabled')
+    if (disabled && disabled === 'true') setInstructionsDisabled(true)
+  }, [])
 
   return (
     <Modal
@@ -207,6 +213,7 @@ function InstructionModal({ open, onClose }) {
               color="primary"
               size="md"
               label="Don't show again"
+              checked={instructionsDisabled}
               onChange={(e) => setInstructionsDisabled(e.target.checked)}
             />
           </Box>
