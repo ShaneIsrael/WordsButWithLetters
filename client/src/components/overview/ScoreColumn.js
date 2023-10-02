@@ -24,7 +24,7 @@ const ScoreColumn = ({ wordScores, bonusScore }) => {
               xs
               alignItems="center"
               width="100%"
-              sx={{ height: 36, width: 50, mb: '2px', pl: 1 }}
+              sx={{ height: 36, width: 'auto', mb: '2px', pl: 1, pr: 1 }}
             >
               <Typography level="h2" fontSize={24} textAlign="center">
                 {score ? score.toLocaleString('en-US') : 0}
@@ -40,9 +40,10 @@ const ScoreColumn = ({ wordScores, bonusScore }) => {
           widh="100%"
           sx={{
             height: 42,
-            width: 50,
+            width: 'auto',
             pt: 1,
             pl: 1,
+            pr: 1,
             borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#25252D' : '#D8D8DF'}`,
           }}
         >
