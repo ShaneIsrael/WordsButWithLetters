@@ -22,7 +22,11 @@ function Appbar({ setModalOpen }) {
       <Typography sx={{ fontSize: 32, fontWeight: 1000, fontFamily: 'Bubblegum Sans' }}>
         Words But With Letters
       </Typography>
-      <IconButton variant="outlined" sx={{ borderRadius: 24 }} onClick={() => setModalOpen(true)}>
+      <IconButton
+        variant="outlined"
+        sx={{ borderRadius: 24, background: theme.palette.mode === 'dark' ? false : 'white' }}
+        onClick={() => setModalOpen(true)}
+      >
         <QuestionMarkIcon />
       </IconButton>
     </Sheet>
