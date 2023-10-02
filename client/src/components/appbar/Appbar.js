@@ -1,8 +1,9 @@
 import { useTheme } from '@emotion/react'
-import { Box, Sheet, Typography } from '@mui/joy'
+import { Box, IconButton, Sheet, Typography } from '@mui/joy'
 import React from 'react'
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
 
-function Appbar() {
+function Appbar({ setModalOpen }) {
   const theme = useTheme()
 
   return (
@@ -12,13 +13,18 @@ function Appbar() {
         width: '100%',
         height: 60,
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        padding: '0 16px',
       }}
     >
+      <Box />
       <Typography sx={{ fontSize: 32, fontWeight: 1000, fontFamily: 'Bubblegum Sans' }}>
         Words But With Letters
       </Typography>
+      <IconButton variant="outlined" sx={{ borderRadius: 24 }} onClick={() => setModalOpen(true)}>
+        <QuestionMarkIcon />
+      </IconButton>
     </Sheet>
   )
 }

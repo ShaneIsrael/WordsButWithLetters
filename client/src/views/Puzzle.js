@@ -19,6 +19,7 @@ import wrongSfx from '../sounds/wrong.wav'
 import useSound from 'use-sound'
 import InstructionModal from '../components/modals/InstructionModal'
 import { toast } from 'sonner'
+import Cookies from 'js-cookie'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -43,7 +44,7 @@ const PLAY_DATA = {
 
 const Puzzle = (props) => {
   const theme = useTheme()
-  const [playInvalid] = useSound(wrongSfx,  {
+  const [playInvalid] = useSound(wrongSfx, {
     volume: 0.2,
     interrupt: true,
   })
@@ -57,18 +58,32 @@ const Puzzle = (props) => {
   const [puzzleComplete, setPuzzleComplete] = React.useState(false)
   const [failedAttempt, setFailedAttempt] = React.useState(0)
   const [submitting, setSubmitting] = React.useState(false)
-  const [startModalOpen, setStartModalOpen] = React.useState(true)
+  const [startModalOpen, setStartModalOpen] = React.useState(false)
   const [puzzleNumber, setPuzzleNumber] = React.useState()
+
+  const handleModalClose = (disable) => {
+    Cookies.set('instructionsDisabled', disable, {
+      sameSite: 'Strict',
+    })
+    setStartModalOpen(false)
+  }
 
   React.useEffect(() => {
     async function init() {
       const pNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
       setPuzzleNumber(pNumber)
       const puzzleProgress = getPuzzleProgress(getUTCDate())
+      const completed = puzzleProgress?.progress.puzzleComplete
+      const instructionsDisabled = Cookies.get('instructionsDisabled')
+
+      if ((!instructionsDisabled || instructionsDisabled === 'false') && !completed) {
+        setStartModalOpen(true)
+      }
+
       if (puzzleProgress) {
         setBoardData(puzzleProgress.board)
         setPlayData(puzzleProgress.progress)
-        setPuzzleComplete(puzzleProgress.progress.puzzleComplete)
+        setPuzzleComplete(completed)
         setShowPuzzle(true)
       }
     }
@@ -178,10 +193,9 @@ const Puzzle = (props) => {
 
   return (
     <Box sx={{ overflow: 'hidden' }}>
-      <Appbar />
-      {!puzzleComplete && <InstructionModal open={startModalOpen} onClose={() => setStartModalOpen(false)} />}
+      <Appbar setModalOpen={setStartModalOpen} />
+      <InstructionModal open={startModalOpen} onClose={handleModalClose} />
       <PageWrapper>
-        <Typography className="disco" level='h1' textAlign="center" sx={{ width: '100%', fontWeight: 900}}>Puzzle #{puzzleNumber}</Typography>
         <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
           <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
             <Sheet
@@ -191,20 +205,30 @@ const Puzzle = (props) => {
                 width: '100%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
                 borderTopLeftRadius: 8,
                 borderTopRightRadius: 8,
                 background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
               }}
             >
-              <Button onClick={handleBegin} size="lg">
-                <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                  Begin Todays Puzzle
-                </Typography>
-              </Button>
+              <Typography
+                level="h3"
+                textAlign="center"
+                sx={{ width: '100%', fontWeight: 500, fontFamily: 'Bubblegum Sans', padding: 1 }}
+              >
+                Puzzle #{puzzleNumber}
+              </Typography>
+              <Box>
+                <Button onClick={handleBegin} size="lg">
+                  <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                    Begin Todays Puzzle
+                  </Typography>
+                </Button>
+              </Box>
+              <Box />
             </Sheet>
             <Box className={clsx('card-face', 'card-back')}>
-              
               <Grid container>
                 {!puzzleComplete && (
                   <>
@@ -244,7 +268,11 @@ const Puzzle = (props) => {
                   bonusWordFound={playData.bonusWordFound}
                 />
               ) : (
-                <ShareButton progress={playData} scoreModifiers={boardData.scoreModifiers} puzzleNumber={puzzleNumber} />
+                <ShareButton
+                  progress={playData}
+                  scoreModifiers={boardData.scoreModifiers}
+                  puzzleNumber={puzzleNumber}
+                />
               )}
             </Box>
           </Box>

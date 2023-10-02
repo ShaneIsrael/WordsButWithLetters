@@ -1,9 +1,9 @@
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box, Checkbox, Divider, Grid, Modal, ModalClose, Sheet, Typography } from '@mui/joy'
+import { Box, Checkbox, Grid, Modal, ModalClose, Sheet, Typography } from '@mui/joy'
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -68,18 +68,20 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
 
 function InstructionModal({ open, onClose }) {
   const theme = useTheme()
-  const [instructionsDisabled, setInstructionsDisabled] = React.useState(false)
   const [animate, setAnimate] = React.useState(false)
-  const handleClose = () => {
-    Cookies.set('instructionsDisabled', instructionsDisabled, {
-      sameSite: 'Strict',
-    })
-    onClose()
-  }
+  const [instructionsDisabled, setInstructionsDisabled] = React.useState(false)
 
-  if (Cookies.get('instructionsDisabled') === 'true') return null
+  useEffect(() => {
+    const disabled = Cookies.get('instructionsDisabled')
+    if (disabled && disabled === 'true') setInstructionsDisabled(true)
+  }, [])
+
   return (
-    <Modal open={open} onClose={handleClose} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <Modal
+      open={open}
+      onClose={() => onClose(instructionsDisabled)}
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
       <Sheet
         variant="outlined"
         sx={{
@@ -211,6 +213,7 @@ function InstructionModal({ open, onClose }) {
               color="primary"
               size="md"
               label="Don't show again"
+              checked={instructionsDisabled}
               onChange={(e) => setInstructionsDisabled(e.target.checked)}
             />
           </Box>
