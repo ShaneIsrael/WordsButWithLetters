@@ -24,6 +24,7 @@ function Appbar({ setModalOpen }) {
       </Typography>
       <IconButton
         variant="outlined"
+        id="tutorialButton"
         sx={{ borderRadius: 24, background: theme.palette.mode === 'dark' ? false : 'white' }}
         onClick={() => setModalOpen(true)}
       >

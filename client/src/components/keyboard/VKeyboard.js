@@ -49,6 +49,10 @@ const VKeyboard = ({
 
   React.useEffect(() => {
     function handleKeyDown(e) {
+      if (e.target.id === 'tutorialButton') {
+        e.target.blur()
+      }
+
       if (e.key === 'Delete' || e.key === 'Backspace') {
         return onDelete()
       } else if (e.key === 'Enter') {

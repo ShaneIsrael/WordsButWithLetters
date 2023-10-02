@@ -31,7 +31,13 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
   // if the row is not completely filled, do not allow submission
   if (currentWord.length !== 5) return [false, progress, 'Must be a 5 letter word']
 
-  if (usedWords.filter(word => word).slice(0, -1).includes(currentWord)) return [false, progress, 'Word already used']
+  if (
+    usedWords
+      .filter((word) => word)
+      .slice(0, -1)
+      .includes(currentWord)
+  )
+    return [false, progress, 'Word already used']
 
   if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWord.includes(bl))) {
     return [false, progress, 'Invalid letters']
@@ -59,7 +65,7 @@ service.validateSubmissionProgress = async (puzzleProgress, board) => {
       const bonusFound = validateWord(wordToCheck)
       if (bonusFound) {
         progress.bonusWordFound = wordToCheck
-        progress.wordScores.push(calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, 100))
+        progress.wordScores.push(calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, 60))
         break
       }
     }
