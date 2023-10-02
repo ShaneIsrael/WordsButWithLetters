@@ -73,16 +73,17 @@ const Puzzle = (props) => {
       const pNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
       setPuzzleNumber(pNumber)
       const puzzleProgress = getPuzzleProgress(getUTCDate())
+      const completed = puzzleProgress?.progress.puzzleComplete
       const instructionsDisabled = Cookies.get('instructionsDisabled')
 
-      if (!instructionsDisabled || instructionsDisabled === 'false') {
+      if ((!instructionsDisabled || instructionsDisabled === 'false') && !completed) {
         setStartModalOpen(true)
       }
 
       if (puzzleProgress) {
         setBoardData(puzzleProgress.board)
         setPlayData(puzzleProgress.progress)
-        setPuzzleComplete(puzzleProgress.progress.puzzleComplete)
+        setPuzzleComplete(completed)
         setShowPuzzle(true)
       }
     }
@@ -193,7 +194,7 @@ const Puzzle = (props) => {
   return (
     <Box sx={{ overflow: 'hidden' }}>
       <Appbar setModalOpen={setStartModalOpen} />
-      {!puzzleComplete && <InstructionModal open={startModalOpen} onClose={handleModalClose} />}
+      <InstructionModal open={startModalOpen} onClose={handleModalClose} />
       <PageWrapper>
         <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
           <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
