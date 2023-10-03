@@ -30,7 +30,6 @@ service.validateSubmissionProgress = async (puzzleProgress, puzzle, puzzleDate) 
   const usedWords = progress.wordMatrix.map((word) => word.join(''))
   const currentWord = usedWords[progress.activeRow]
 
-  console.log(progress.date, puzzleDate)
   if (progress.date !== puzzleDate) {
     progress.puzzleComplete = true
     return [true, progress, 'Puzzle no longer valid. A new puzzle exists.']
