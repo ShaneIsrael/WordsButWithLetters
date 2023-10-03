@@ -60,7 +60,9 @@ service.validateSubmissionProgress = async (puzzleProgress, puzzle, puzzleDate) 
   const indexesToRemove = board.banishedIndexes.filter((bi) => bi[0] === progress.activeRow).map((i) => i[1])
   const lettersToRemove = thisWord.split('').filter((l, index) => indexesToRemove.includes(index))
   progress.banishedLetters = progress.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())])
-  progress.wordScores.push(calculateWordScore(thisWord, board.scoreModifiers, board.scoreMultipliers))
+  progress.wordScores.push(
+    calculateWordScore(thisWord, board.scoreModifiers, board.scoreMultipliers, board.baseWordValue),
+  )
 
   const [puzzleComplete, completeMessage] = service.validatePuzzleComplete(progress, board)
 
@@ -73,7 +75,9 @@ service.validateSubmissionProgress = async (puzzleProgress, puzzle, puzzleDate) 
       const bonusFound = validateWord(wordToCheck)
       if (bonusFound) {
         progress.bonusWordFound = wordToCheck
-        progress.wordScores.push(calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, 100))
+        progress.wordScores.push(
+          calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, board.baseBonusWordValue),
+        )
         break
       }
     }
