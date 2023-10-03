@@ -37,7 +37,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
 
   React.useEffect(() => {
     async function init() {
-      const flatModifiers = scoreModifiers.reduce((prev, curr) => prev.concat(curr))
+      const flatModifiers = scoreModifiers?.reduce((prev, curr) => prev.concat(curr))
       let finalScore = progress.wordScores.filter((score) => score).reduce((prev, curr) => prev + curr, 0)
 
       let shareText = `WBWL -- #${puzzleNumber}\n\n`
@@ -46,7 +46,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
         word.forEach((l) => {
           if (!l) {
             shareText += '⬛'
-          } else if (flatModifiers.includes(l)) {
+          } else if (flatModifiers?.includes(l)) {
             shareText += '🟨'
           } else {
             shareText += '🟦'

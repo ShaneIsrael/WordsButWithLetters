@@ -9,7 +9,7 @@ async function GenerateDayAndPuzzle() {
     const day = await Day.create({
       date: getTodaysDate(),
     })
-    const puzzle = new PuzzleGenerator(6, 5, [3, 3, 2], [2, 4, 8], 300)
+    const puzzle = new PuzzleGenerator(6, 5, 10, 60, [3, 3, 2], [2, 4, 8], 300)
     await Puzzle.create({
       dayId: day.id,
       board: puzzle.getPuzzle(),

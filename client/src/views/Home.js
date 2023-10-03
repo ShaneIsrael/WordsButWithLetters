@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Sheet, Button } from '@mui/joy'
+import { Alert, Sheet, Button, Box } from '@mui/joy'
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser'
 import AuthService from '../services/AuthService'
 import CommentService from '../services/CommentService'
@@ -10,6 +10,8 @@ import _ from 'lodash'
 import { convertFlatCommentsToNested, getSessionUser } from '../common/utils'
 import CommentCard from '../components/comments/CommentCard'
 import PageWrapper from '../components/wrappers/PageWrapper'
+import { useAuth } from '../hooks/useAuth'
+import { useAuthed } from '../hooks/useAuthed'
 
 const THREAD_ID = '2a58f241-85d0-45e3-b908-abc343b5d213'
 
@@ -18,10 +20,13 @@ const Home = (props) => {
   const [comments, setComments] = React.useState([])
   const [nestedComments, setNestedComments] = React.useState([])
 
+  const { isAuthenticated } = useAuthed()
+
+  const { logout } = useAuth()
+
   const handleLogout = async () => {
     try {
-      await AuthService.logout()
-      navigate('login')
+      await logout()
     } catch (err) {
       console.error(err)
     }
@@ -42,7 +47,9 @@ const Home = (props) => {
   }
 
   React.useEffect(() => {
-    fetchComments()
+    if (isAuthenticated) {
+      fetchComments()
+    }
   }, [])
 
   const commentThreads = Object.keys(nestedComments).map((nck, index) => (
@@ -50,7 +57,14 @@ const Home = (props) => {
   ))
 
   return (
-    <PageWrapper>
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      justifyContent="center"
+      padding={'40px 20px'}
+      width="100%"
+    >
       <Sheet
         sx={{
           width: '100%',
@@ -86,7 +100,7 @@ const Home = (props) => {
           Logout
         </Button>
       </Sheet>
-    </PageWrapper>
+    </Box>
   )
 }
 

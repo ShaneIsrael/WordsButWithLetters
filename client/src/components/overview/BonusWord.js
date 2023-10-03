@@ -58,7 +58,7 @@ const Diagonal = styled(Box)(({ theme, leftright }) => ({
 }))
 
 const BonusWord = ({ bonusWord, scoreModifiers }) => {
-  const flatModifiers = scoreModifiers.reduce((prev, curr) => prev.concat(curr))
+  const flatModifiers = scoreModifiers?.reduce((prev, curr) => prev.concat(curr))
   if (!bonusWord) {
     return (
       <Sheet variant="outlined" sx={{ p: 1 }}>
@@ -91,7 +91,7 @@ const BonusWord = ({ bonusWord, scoreModifiers }) => {
     <Sheet variant="outlined" sx={{ p: 1 }}>
       <Grid container gap={0.5}>
         {bonusWord.split('').map((letter, index) => (
-          <LetterHolder key={`${letter}_${index}`} color={flatModifiers.includes(letter) ? 'yellow' : 'red'}>
+          <LetterHolder key={`${letter}_${index}`} color={flatModifiers?.includes(letter) ? 'yellow' : 'red'}>
             {letter}
           </LetterHolder>
         ))}
