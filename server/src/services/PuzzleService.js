@@ -70,7 +70,7 @@ service.validateSubmissionProgress = async (puzzleProgress, puzzle, puzzleDate) 
     progress.puzzleComplete = true
     progress.completeMessage = completeMessage
     // check for bonus word
-    for (let i = 0; i < 3; i += 1) {
+    for (let i = 0; i < 4; i += 1) {
       const wordToCheck = progress.banishedLetters.slice(i, 5 + i).join('')
       const bonusFound = validateWord(wordToCheck)
       if (bonusFound) {
