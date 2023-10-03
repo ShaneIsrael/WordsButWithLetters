@@ -11,7 +11,7 @@ import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 import Clock from '../components/clock/Clock'
 import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
-import { getPuzzleProgress, getUTCDate, setPuzzleProgress, sleep } from '../common/utils'
+import { getPuzzleProgress, getPTDate, setPuzzleProgress, sleep } from '../common/utils'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
 import Appbar from '../components/appbar/Appbar'
@@ -40,6 +40,7 @@ const PLAY_DATA = {
   wordScores: [],
   puzzleComplete: false,
   finalTime: null,
+  date: getPTDate(),
 }
 
 const Puzzle = (props) => {
@@ -49,9 +50,11 @@ const Puzzle = (props) => {
     interrupt: true,
   })
 
-  const [boardData, setBoardData] = React.useState({
-    banishedIndexes: [[], [], [], [], []],
-    scoreModifiers: [[], [], []],
+  const [puzzle, setPuzzle] = React.useState({
+    board: {
+      banishedIndexes: [],
+      scoreModifiers: [[], [], []],
+    },
   })
   const [playData, setPlayData] = React.useState(PLAY_DATA)
   const [showPuzzle, setShowPuzzle] = React.useState(false)
@@ -72,7 +75,7 @@ const Puzzle = (props) => {
     async function init() {
       const pNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
       setPuzzleNumber(pNumber)
-      const puzzleProgress = getPuzzleProgress(getUTCDate())
+      const puzzleProgress = getPuzzleProgress(getPTDate())
       const completed = puzzleProgress?.progress.puzzleComplete
       const instructionsDisabled = Cookies.get('instructionsDisabled')
 
@@ -81,7 +84,7 @@ const Puzzle = (props) => {
       }
 
       if (puzzleProgress) {
-        setBoardData(puzzleProgress.board)
+        setPuzzle(puzzleProgress.puzzle)
         setPlayData(puzzleProgress.progress)
         setPuzzleComplete(completed)
         setShowPuzzle(true)
@@ -93,10 +96,10 @@ const Puzzle = (props) => {
   const handleBegin = async () => {
     // only allow fetching the puzzle and setting the initial
     // local storage IF local storage does not have an entry for today
-    if (!getPuzzleProgress(getUTCDate())) {
+    if (!getPuzzleProgress(getPTDate())) {
       const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
-      setBoardData(puzzleData.Puzzle.board)
-      setPuzzleProgress(puzzleData.date, puzzleData.Puzzle.board, PLAY_DATA)
+      setPuzzle(puzzleData.Puzzle)
+      setPuzzleProgress(puzzleData.date, puzzleData.Puzzle, PLAY_DATA)
       setPuzzleComplete(false)
       setShowPuzzle(true)
     }
@@ -110,7 +113,7 @@ const Puzzle = (props) => {
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
         let trow = row
         if (rowIndex === playData.activeRow) {
-          for (let i = 0; i < boardData.boardRowLength; i++) {
+          for (let i = 0; i < puzzle.board.boardRowLength; i++) {
             if (!trow[i]) {
               trow[i] = key
               break
@@ -132,7 +135,7 @@ const Puzzle = (props) => {
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
         let trow = row
         if (rowIndex === playData.activeRow) {
-          for (let i = boardData.boardRowLength; i >= 0; i--) {
+          for (let i = puzzle.board.boardRowLength; i >= 0; i--) {
             if (trow[i]) {
               trow[i] = undefined
               break
@@ -151,7 +154,7 @@ const Puzzle = (props) => {
         try {
           const response = (await PuzzleService.submit(playData)).data
           if (response.accepted) {
-            setPuzzleProgress(response.date, response.board, response.progress)
+            setPuzzleProgress(response.date, response.puzzle, response.progress)
             setPlayData(response.progress)
             if (response.progress.puzzleComplete) {
               toast.success(response.message || 'Puzzle Complete!')
@@ -237,40 +240,40 @@ const Puzzle = (props) => {
                       rows={MAX_BOARD_ROWS}
                       activeRow={playData.activeRow}
                       rowLetters={playData.wordMatrix}
-                      modifierLetters={boardData.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
-                      rowHighlights={boardData.banishedIndexes}
+                      modifierLetters={puzzle.board.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
+                      rowHighlights={puzzle.board.banishedIndexes}
                       onStart={handleBegin}
                       failedAttempt={failedAttempt}
                     />
                     <Box sx={{ ml: '4px' }}>
                       <Clock
-                        seconds={boardData.timeToComplete || 300}
+                        seconds={puzzle.board.timeToComplete || 300}
                         start={showPuzzle}
                         handleExpire={handleTimeExpire}
                         finalTime={playData.finalTime}
                         noLimit
                       />
                       <ScoreModifiers
-                        modifiers={boardData.scoreModifiers}
+                        modifiers={puzzle.board.scoreModifiers}
                         disabledKeys={playData.banishedLetters}
                         hide={!showPuzzle}
                       />
                     </Box>
                   </>
                 )}
-                {puzzleComplete && <ScoreOverview progress={playData} scoreModifiers={boardData.scoreModifiers} />}
+                {puzzleComplete && <ScoreOverview progress={playData} scoreModifiers={puzzle?.board.scoreModifiers} />}
               </Grid>
               <div style={{ marginBottom: 4 }} />
               {!puzzleComplete ? (
                 <BonusWordComponent
                   letters={playData.banishedLetters}
-                  maxLetters={boardData.banishedIndexes.length}
+                  maxLetters={puzzle?.board.banishedIndexes.length}
                   bonusWordFound={playData.bonusWordFound}
                 />
               ) : (
                 <ShareButton
                   progress={playData}
-                  scoreModifiers={boardData.scoreModifiers}
+                  scoreModifiers={puzzle?.board.scoreModifiers}
                   puzzleNumber={puzzleNumber}
                 />
               )}

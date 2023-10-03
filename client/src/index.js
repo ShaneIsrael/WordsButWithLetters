@@ -31,13 +31,7 @@ getInitColorSchemeScript({ defaultMode: 'dark' })
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 function ModeToggle() {
-  const { mode, setMode } = useColorScheme()
-  const [mounted, setMounted] = React.useState(false)
-
-  React.useEffect(() => {
-    const currentMode = localStorage.getItem('theme')
-    setMode(currentMode || 'dark')
-  }, [])
+  const { mode, setMode } = useColorScheme(localStorage.getItem('theme') || 'dark')
 
   return (
     <Button
@@ -56,7 +50,7 @@ function ModeToggle() {
 
 root.render(
   <CssVarsProvider defaultMode="dark" theme={theme}>
-    <Toaster position="top-center" offset='64px' richColors />
+    <Toaster position="top-center" offset="64px" richColors />
     <ModeToggle />
     <CssBaseline />
     <App />

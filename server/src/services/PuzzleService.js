@@ -20,18 +20,32 @@ service.fetchTodaysPuzzle = async () => {
 /**
  * Checks if the current submission is valid and updates the players progress
  * @param {*} puzzleProgress
- * @param {*} board
+ * @param {*} puzzle
+ * @param {*} puzzleDate
  * @returns
  */
-service.validateSubmissionProgress = async (puzzleProgress, board) => {
+service.validateSubmissionProgress = async (puzzleProgress, puzzle, puzzleDate) => {
   let progress = puzzleProgress
+  const board = puzzle.board
   const usedWords = progress.wordMatrix.map((word) => word.join(''))
   const currentWord = usedWords[progress.activeRow]
+
+  console.log(progress.date, puzzleDate)
+  if (progress.date !== puzzleDate) {
+    progress.puzzleComplete = true
+    return [true, progress, 'Puzzle no longer valid. A new puzzle exists.']
+  }
 
   // if the row is not completely filled, do not allow submission
   if (currentWord.length !== 5) return [false, progress, 'Must be a 5 letter word']
 
-  if (usedWords.filter(word => word).slice(0, -1).includes(currentWord)) return [false, progress, 'Word already used']
+  if (
+    usedWords
+      .filter((word) => word)
+      .slice(0, -1)
+      .includes(currentWord)
+  )
+    return [false, progress, 'Word already used']
 
   if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWord.includes(bl))) {
     return [false, progress, 'Invalid letters']

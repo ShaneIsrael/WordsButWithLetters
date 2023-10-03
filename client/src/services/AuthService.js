@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie'
 import Api from './Api'
 
 class AuthService {
@@ -12,6 +13,9 @@ class AuthService {
   }
   logout() {
     return Api().post('/auth/logout')
+  }
+  hasSession() {
+    return Api().get('/auth/session')
   }
 }
 

@@ -37,7 +37,11 @@ async function handleCasualSubmission(req, res, next) {
       return res.status(400).send('Invalid submission, puzzle already complete.')
     }
     const todaysPuzzle = await fetchTodaysPuzzle()
-    const [accepted, progress, message] = await validateSubmissionProgress(puzzleProgress, todaysPuzzle.Puzzle.board)
+    const [accepted, progress, message] = await validateSubmissionProgress(
+      puzzleProgress,
+      todaysPuzzle.Puzzle,
+      todaysPuzzle.date,
+    )
     return res.status(200).send({
       accepted,
       message,

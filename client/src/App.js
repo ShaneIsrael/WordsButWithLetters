@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, HashRouter as Router, Routes } from 'react-router-dom'
+import { Navigate, Route, HashRouter as Router, Routes } from 'react-router-dom'
 
 import Login from './views/Login'
 import Register from './views/Register'
@@ -8,11 +8,31 @@ import User from './views/User'
 import Puzzle from './views/Puzzle'
 import VerifyEmail from './views/VerifyEmail'
 
+import { useAuthed } from './hooks/useAuthed'
+import Loading from './views/Loading'
+import RankedPuzzle from './views/RankedPuzzle'
+
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Puzzle />} />
+        <Route
+          path="/"
+          element={
+            <RequireAuth redirectTo="/casual">
+              <RankedPuzzle />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/home"
+          element={
+            <RequireAuth redirectTo="/login">
+              <Home />
+            </RequireAuth>
+          }
+        />
+        <Route path="/casual" element={<Puzzle />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify/:email/:token" element={<VerifyEmail />} />
@@ -21,6 +41,13 @@ function App() {
       </Routes>
     </Router>
   )
+}
+
+function RequireAuth({ children, redirectTo }) {
+  let { loading, isAuthenticated } = useAuthed()
+
+  console.log(loading, isAuthenticated)
+  return loading ? <Loading /> : isAuthenticated ? children : <Navigate to={redirectTo} />
 }
 
 export default App

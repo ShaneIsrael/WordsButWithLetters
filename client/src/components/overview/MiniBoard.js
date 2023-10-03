@@ -72,7 +72,7 @@ const Diagonal = styled(Box)(({ theme, leftright }) => ({
 }))
 
 const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
-  const flatModifiers = scoreModifiers.reduce((prev, curr) => prev.concat(curr))
+  const flatModifiers = scoreModifiers?.reduce((prev, curr) => prev.concat(curr))
   return (
     <Sheet variant="outlined" sx={{ p: 1 }}>
       <Grid container gap={0.5} width={186}>
@@ -81,7 +81,7 @@ const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
             {word.map((letter, index) => (
               <Grid xs key={`${letter}_${index}`}>
                 {letter && (
-                  <LetterHolder color={flatModifiers.includes(letter) ? 'yellow' : 'completed'}>{letter}</LetterHolder>
+                  <LetterHolder color={flatModifiers?.includes(letter) ? 'yellow' : 'completed'}>{letter}</LetterHolder>
                 )}
                 {!letter && (
                   <NoLetterHolder>

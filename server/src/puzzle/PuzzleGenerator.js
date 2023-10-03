@@ -1,14 +1,26 @@
 class PuzzleGenerator {
   /**
-   *
    * @param {number} rows The number of rows in the puzzle
    * @param {number} rowLength The word size
+   * @param {number} baseWordValue The base value of a word
+   * @param {number} baseBonusWordValue The base value of a bonus word
    * @param {Array} scoreModifierSizes The number of modifiers [x1, x2, x3] e.x input [3, 3, 2]
+   * @param {Array} scoreMultipliers The value each row of modifiers is worth [2, 4, 8] x1 = 2, x2 = 4, x3 = 8
    * @param {number} secondsToComplete The time the puzzle must be completed in
    */
-  constructor(rows, rowLength, scoreModifierSizes, scoreMultipliers, secondsToComplete = 300) {
+  constructor(
+    rows,
+    rowLength,
+    baseWordValue,
+    baseBonusWordValue,
+    scoreModifierSizes,
+    scoreMultipliers,
+    secondsToComplete = 300,
+  ) {
     this.boardRows = rows
     this.boardRowLength = rowLength
+    this.baseWordValue = baseWordValue
+    this.baseBonusWordvalue = baseBonusWordValue
     this.timeToComplete = secondsToComplete
     this.banishedIndexes = PuzzleGenerator.#initBonusIndexes(rows, rowLength, 9)
     this.scoreModifiers = PuzzleGenerator.#initScoreModifiers(
@@ -37,9 +49,9 @@ class PuzzleGenerator {
       const randomLocations = shuffledLocations.slice(0, numberOfIndexes)
 
       const counts = {}
-      randomLocations.forEach(loc => counts[loc[0]] ? counts[loc[0]] += 1 : counts[loc[0]] = 1)
+      randomLocations.forEach((loc) => (counts[loc[0]] ? (counts[loc[0]] += 1) : (counts[loc[0]] = 1)))
       // Regenerate if row contains all bonus indexes
-      if (Object.keys(counts).find(c => counts[c] === 5)) return selectRandomLocations(array)
+      if (Object.keys(counts).find((c) => counts[c] === 5)) return selectRandomLocations(array)
 
       return randomLocations
     }

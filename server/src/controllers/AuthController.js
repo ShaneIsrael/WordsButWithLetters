@@ -4,8 +4,9 @@ const { User } = require('../database/models')
 const { isValidEmail } = require('../utils')
 const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
-const  { sendVerificationEmail } = require('../services/EmailService')
+const { sendVerificationEmail } = require('../services/EmailService')
 const logger = require('../utils/logger')
+const { isAuthenticated } = require('../middleware/authorize')
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -45,15 +46,24 @@ controller.register = async (req, res, next) => {
     const token = uuidv4()
 
     logger.info(`registering user with email: ${email.toLowerCase()}`)
-    
-    sendVerificationEmail(email.toLowerCase(), token, displayName).then(async () => {
-      await User.create({ email: email.toLowerCase(), displayName, password: hash, token, verified: isProduction ? false : true})
-      return res.status(200).send('A verification email has been sent to that address. Please check your spam folder.')
-    }).catch(err => {
-      res.status(500).send('Unable to create account, please try again later.')
-      next(err)
-    })
-    
+
+    sendVerificationEmail(email.toLowerCase(), token, displayName)
+      .then(async () => {
+        await User.create({
+          email: email.toLowerCase(),
+          displayName,
+          password: hash,
+          token,
+          verified: isProduction ? false : true,
+        })
+        return res
+          .status(200)
+          .send('A verification email has been sent to that address. Please check your spam folder.')
+      })
+      .catch((err) => {
+        res.status(500).send('Unable to create account, please try again later.')
+        next(err)
+      })
   } catch (err) {
     next(err)
   }
@@ -67,25 +77,27 @@ controller.login = async (req, res, next) => {
 
     const user = await User.findOne({ where: { email } })
 
-    if (!user.verified) {
-      return res.status(401).send('Awaiting email verification.')
-    }
+    if (user) {
+      if (!user.verified) {
+        return res.status(401).send('Awaiting email verification.')
+      }
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const accessToken = signUserJwt(user)
-      res.cookie('session', accessToken, COOKIE_PARAMS)
+      if (await bcrypt.compare(password, user.password)) {
+        const accessToken = signUserJwt(user)
+        res.cookie('session', accessToken, COOKIE_PARAMS)
 
-      logger.info(`logging in user with email: ${user.email}`)
-      return res
-        .cookie(
-          'user',
-          JSON.stringify({
-            id: user.id,
-            displayName: user.displayName,
-            email: user.email,
-          }),
-        )
-        .sendStatus(200)
+        logger.info(`logging in user with email: ${user.email}`)
+        return res
+          .cookie(
+            'user',
+            JSON.stringify({
+              id: user.id,
+              displayName: user.displayName,
+              email: user.email,
+            }),
+          )
+          .sendStatus(200)
+      }
     }
 
     return res.status(400).send('Invalid email or password.')
@@ -100,12 +112,12 @@ controller.verifyEmail = async (req, res, next) => {
     const token = req.params.token
 
     logger.info(`verifying email for: ${email.toLowerCase()}`)
-    
+
     if (!email || !token) {
       return res.status(400).send('Invalid verification link')
     }
-    
-    const user = await User.findOne({ where: { email, token }})
+
+    const user = await User.findOne({ where: { email, token } })
 
     if (!user) {
       return res.status(400).send('Invalid verification link')
@@ -115,11 +127,9 @@ controller.verifyEmail = async (req, res, next) => {
     user.token = null
     user.save()
 
-
     return res.status(200).send('verified!')
-
   } catch (err) {
-    next (err)
+    next(err)
   }
 }
 
@@ -127,6 +137,15 @@ controller.logout = async (req, res, next) => {
   res.clearCookie('user')
   res.clearCookie('session')
   return res.status(200).json({ message: 'Successfully logged out!' })
+}
+
+controller.hasSession = async (req, res, next) => {
+  try {
+    const hasSession = isAuthenticated(req.cookies.session)
+    return res.status(200).send(hasSession)
+  } catch (err) {
+    next(err)
+  }
 }
 
 module.exports = controller
