@@ -98,7 +98,10 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
             return (
               <HighlightLetterHolder
                 key={(letter ? letter : 'blank_') + index}
-                className={clsx(highlight.animation, 'redPulse', { [`hop${index}`]: completed })}
+                className={clsx(highlight.animation, {
+                  redPulse: !modifierLetters.includes(letter),
+                  [`hop${index}`]: completed,
+                })}
                 active={letter}
                 color={'red'}
                 highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
