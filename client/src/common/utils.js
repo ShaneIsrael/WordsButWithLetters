@@ -39,7 +39,7 @@ export const getPuzzleProgress = (date) => {
   return JSON.parse(localStorage.getItem('progress'))[date]
 }
 
-export const setPuzzleProgress = (date, board, progress) => {
+export const setPuzzleProgress = (date, puzzle, progress) => {
   const existingProgress = localStorage.getItem('progress')
   if (existingProgress) {
     return localStorage.setItem(
@@ -48,7 +48,7 @@ export const setPuzzleProgress = (date, board, progress) => {
         ...JSON.parse(existingProgress),
         [date]: {
           progress,
-          board,
+          puzzle,
         },
       }),
     )
@@ -56,7 +56,7 @@ export const setPuzzleProgress = (date, board, progress) => {
   return localStorage.setItem(
     'progress',
     JSON.stringify({
-      [date]: { progress, board },
+      [date]: { progress, puzzle },
     }),
   )
 }
