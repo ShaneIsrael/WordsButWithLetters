@@ -20,7 +20,7 @@ class PuzzleGenerator {
     this.boardRows = rows
     this.boardRowLength = rowLength
     this.baseWordValue = baseWordValue
-    this.baseBonusWordvalue = baseBonusWordValue
+    this.baseBonusWordValue = baseBonusWordValue
     this.timeToComplete = secondsToComplete
     this.banishedIndexes = PuzzleGenerator.#initBonusIndexes(rows, rowLength, 9)
     this.scoreModifiers = PuzzleGenerator.#initScoreModifiers(

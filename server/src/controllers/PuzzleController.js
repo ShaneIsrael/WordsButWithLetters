@@ -46,7 +46,7 @@ async function handleCasualSubmission(req, res, next) {
       accepted,
       message,
       date: todaysPuzzle.date,
-      board: todaysPuzzle.Puzzle.board,
+      puzzle: todaysPuzzle.Puzzle,
       progress,
     })
   } catch (err) {
