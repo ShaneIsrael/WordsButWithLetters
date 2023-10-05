@@ -5,7 +5,15 @@ import './index.css'
 import './animation.css'
 import './disco.css'
 import App from './App'
-import { CssVarsProvider, getInitColorSchemeScript, useColorScheme, extendTheme } from '@mui/joy/styles'
+import { getInitColorSchemeScript, useColorScheme, extendTheme } from '@mui/joy/styles'
+import {
+  experimental_extendTheme as materialExtendTheme,
+  Experimental_CssVarsProvider as MaterialCssVarsProvider,
+  useColorScheme as useMaterialColorScheme,
+  THEME_ID as MATERIAL_THEME_ID,
+} from '@mui/material/styles'
+import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
+
 import { Button, CssBaseline } from '@mui/joy'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
@@ -26,12 +34,15 @@ const theme = extendTheme({
   },
 })
 
+const materialTheme = materialExtendTheme()
+
 getInitColorSchemeScript({ defaultMode: 'dark' })
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 function ModeToggle() {
   const { mode, setMode } = useColorScheme(localStorage.getItem('theme') || 'dark')
+  const { setMode: setMaterialMode } = useMaterialColorScheme()
 
   return (
     <Button
@@ -39,6 +50,7 @@ function ModeToggle() {
       onClick={() => {
         const newValue = mode === 'light' ? 'dark' : 'light'
         setMode(newValue)
+        setMaterialMode(newValue)
         localStorage.setItem('theme', newValue)
       }}
       sx={{ position: 'fixed', bottom: 10, right: 10 }}
@@ -49,10 +61,12 @@ function ModeToggle() {
 }
 
 root.render(
-  <CssVarsProvider defaultMode="dark" theme={theme}>
-    <Toaster position="top-center" offset="64px" richColors />
-    <ModeToggle />
-    <CssBaseline />
-    <App />
-  </CssVarsProvider>,
+  <MaterialCssVarsProvider defaultMode="dark" theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
+    <JoyCssVarsProvider defaultMode="dark" theme={theme}>
+      <Toaster position="top-center" offset="64px" richColors />
+      <ModeToggle />
+      <CssBaseline />
+      <App />
+    </JoyCssVarsProvider>
+  </MaterialCssVarsProvider>,
 )
