@@ -81,13 +81,8 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 0.25,
-        paddingLeft: 2,
-        paddingRight: 2,
-        paddingBottom: 2,
-        paddingTop: 1,
         width: 534,
-        height: 'auto',
+        height: 108,
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         // border: '1px solid ' + theme.palette.primary[600],
       }}
@@ -102,7 +97,7 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
           alignItems: 'center',
           justifyContent: 'center',
           gap: 0.5,
-          mt: 1,
+          mt: 0.5,
         }}
       >
         {new Array(maxLetters).fill().map((_, index) =>
