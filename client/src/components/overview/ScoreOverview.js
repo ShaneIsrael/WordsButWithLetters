@@ -16,7 +16,7 @@ const ScoreOverview = ({ progress, scoreModifiers }) => {
         padding: 2,
         borderTopLeftRadius: 8,
         width: '100%',
-        height: 434,
+        height: 438,
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
       }}
     >
