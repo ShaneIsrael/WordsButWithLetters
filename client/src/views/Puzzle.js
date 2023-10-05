@@ -20,6 +20,7 @@ import useSound from 'use-sound'
 import InstructionModal from '../components/modals/InstructionModal'
 import { toast } from 'sonner'
 import Cookies from 'js-cookie'
+import FeedbackModal from '../components/modals/FeedbackModal'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -197,6 +198,7 @@ const Puzzle = (props) => {
   return (
     <Box sx={{ overflow: 'hidden' }}>
       <Appbar setModalOpen={setStartModalOpen} />
+      <FeedbackModal open={true} onClose={() => {}} />
       <InstructionModal open={startModalOpen} onClose={handleModalClose} />
       <PageWrapper>
         <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
