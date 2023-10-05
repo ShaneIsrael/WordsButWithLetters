@@ -1,36 +1,113 @@
-import { useTheme } from '@emotion/react'
-import { Box, IconButton, Sheet, Typography } from '@mui/joy'
 import React from 'react'
+import { useTheme } from '@emotion/react'
+import { Grid, Typography, Menu, MenuItem, MenuButton, Dropdown, IconButton } from '@mui/joy'
+import { AppBar, Toolbar } from '@mui/material'
+
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
+import LeaderboardIcon from '@mui/icons-material/Leaderboard'
+import LoginIcon from '@mui/icons-material/Login'
+import LogoutIcon from '@mui/icons-material/Logout'
+import MoreVert from '@mui/icons-material/MoreVert'
+
+import { useAuthed } from '../../hooks/useAuthed'
+import { useAuth } from '../../hooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 function Appbar({ setModalOpen }) {
   const theme = useTheme()
+  const navigate = useNavigate()
+
+  let { isAuthenticated } = useAuthed()
+  let { logout } = useAuth()
+
+  const handleLogin = () => {
+    navigate('/login')
+  }
+  const handleLogout = () => {
+    logout()
+  }
 
   return (
-    <Sheet
+    <AppBar
+      position="static"
       sx={{
-        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
-        width: '100%',
-        height: 60,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '0 16px',
+        background: theme.palette.background.surface,
       }}
     >
-      <Box />
-      <Typography sx={{ fontSize: 32, fontWeight: 1000, fontFamily: 'Bubblegum Sans' }}>
-        Words But With Letters
-      </Typography>
-      <IconButton
-        variant="outlined"
-        id="tutorialButton"
-        sx={{ borderRadius: 24, background: theme.palette.mode === 'dark' ? false : 'white' }}
-        onClick={() => setModalOpen(true)}
-      >
-        <QuestionMarkIcon />
-      </IconButton>
-    </Sheet>
+      <Toolbar>
+        <Grid container xs={4}>
+          <Dropdown>
+            <MenuButton
+              sx={{
+                display: {
+                  xs: 'relative',
+                  md: 'none',
+                },
+              }}
+              slots={{ root: IconButton }}
+              slotProps={{ root: { variant: 'plain', color: 'neutral' } }}
+            >
+              <MoreVert />
+            </MenuButton>
+            <Menu placement="bottom-start">
+              <MenuItem onClick={isAuthenticated ? handleLogout : handleLogin}>
+                {isAuthenticated ? 'Logout' : 'Login'}
+              </MenuItem>
+              <MenuItem onClick={() => {}}>Leaderboards</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setModalOpen(true)
+                }}
+              >
+                Instructions
+              </MenuItem>
+            </Menu>
+          </Dropdown>
+        </Grid>
+        <Grid container xs={4} justifyContent="center">
+          <Typography
+            level="h2"
+            textAlign="center"
+            sx={{
+              fontSize: {
+                xs: 18,
+                md: 32,
+              },
+            }}
+          >
+            Words But With Letters
+          </Typography>
+        </Grid>
+        <Grid
+          container
+          xs={4}
+          justifyContent="flex-end"
+          sx={{
+            display: {
+              xs: 'none',
+              md: 'flex',
+            },
+          }}
+          gap={2}
+        >
+          <IconButton size="large" color="inherit" onClick={() => setModalOpen(true)}>
+            <QuestionMarkIcon />
+          </IconButton>
+          <IconButton size="large" color="inherit" onClick={() => {}}>
+            <LeaderboardIcon />
+          </IconButton>
+          {isAuthenticated ? (
+            <IconButton size="large" color="inherit" onClick={handleLogout}>
+              <LogoutIcon />
+            </IconButton>
+          ) : (
+            <IconButton size="large" color="inherit" onClick={handleLogin}>
+              <LoginIcon />
+            </IconButton>
+          )}
+        </Grid>
+      </Toolbar>
+    </AppBar>
   )
 }
 
