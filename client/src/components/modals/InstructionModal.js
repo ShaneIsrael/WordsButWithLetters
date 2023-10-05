@@ -101,7 +101,7 @@ function InstructionModal({ open, onClose }) {
           maxWidth: 500,
           borderRadius: 'md',
           p: 3,
-          // boxShadow: 'lg',
+          boxShadow: 'lg',
           display: 'flex',
         }}
         onMouseEnter={() => setAnimate(true)}
