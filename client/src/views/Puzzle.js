@@ -245,7 +245,7 @@ const Puzzle = (props) => {
                       onStart={handleBegin}
                       failedAttempt={failedAttempt}
                     />
-                    <Box sx={{ ml: '4px', height: 438 }}>
+                    <Box sx={{ ml: '4px' }}>
                       <Clock
                         seconds={puzzle.board.timeToComplete || 300}
                         start={showPuzzle}
