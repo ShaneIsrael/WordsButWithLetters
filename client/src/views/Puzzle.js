@@ -11,7 +11,7 @@ import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 import Clock from '../components/clock/Clock'
 import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
-import { getPuzzleProgress, getPTDate, setPuzzleProgress, sleep } from '../common/utils'
+import { loadPuzzleData, getPTDate, savePuzzleData, sleep } from '../common/utils'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
 import Appbar from '../components/appbar/Appbar'
@@ -75,19 +75,27 @@ const Puzzle = (props) => {
     async function init() {
       const pNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
       setPuzzleNumber(pNumber)
-      const puzzleProgress = getPuzzleProgress(getPTDate())
-      const completed = puzzleProgress?.progress.puzzleComplete
-      const instructionsDisabled = Cookies.get('instructionsDisabled')
+      const save = loadPuzzleData(getPTDate())
 
-      if ((!instructionsDisabled || instructionsDisabled === 'false') && !completed) {
-        setStartModalOpen(true)
+      let completed = false
+
+      if (save) {
+        let puzzle = save.puzzle
+        if (!puzzle) {
+          puzzle = (await PuzzleService.getTodaysPuzzle()).data?.Puzzle
+        }
+        setPuzzle(puzzle)
+        if (save.progress) {
+          completed = save.progress.puzzleComplete
+          setPlayData(save.progress)
+          setPuzzleComplete(completed)
+          setShowPuzzle(true)
+        }
       }
 
-      if (puzzleProgress) {
-        setPuzzle(puzzleProgress.puzzle)
-        setPlayData(puzzleProgress.progress)
-        setPuzzleComplete(completed)
-        setShowPuzzle(true)
+      const instructionsDisabled = Cookies.get('instructionsDisabled')
+      if ((!instructionsDisabled || instructionsDisabled === 'false') && !completed) {
+        setStartModalOpen(true)
       }
     }
     init()
@@ -96,10 +104,10 @@ const Puzzle = (props) => {
   const handleBegin = async () => {
     // only allow fetching the puzzle and setting the initial
     // local storage IF local storage does not have an entry for today
-    if (!getPuzzleProgress(getPTDate())) {
+    if (!loadPuzzleData(getPTDate())) {
       const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
       setPuzzle(puzzleData.Puzzle)
-      setPuzzleProgress(puzzleData.date, puzzleData.Puzzle, PLAY_DATA)
+      savePuzzleData(puzzleData.date, puzzleData.Puzzle, PLAY_DATA)
       setPuzzleComplete(false)
       setShowPuzzle(true)
     }
@@ -154,7 +162,7 @@ const Puzzle = (props) => {
         try {
           const response = (await PuzzleService.submit(playData)).data
           if (response.accepted) {
-            setPuzzleProgress(response.date, response.puzzle, response.progress)
+            savePuzzleData(response.date, response.puzzle, response.progress)
             setPlayData(response.progress)
             if (response.progress.puzzleComplete) {
               toast.success(response.message || 'Puzzle Complete!')

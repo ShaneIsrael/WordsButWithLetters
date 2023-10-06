@@ -33,13 +33,13 @@ export const getSessionUser = () => {
 
 export const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-export const getPuzzleProgress = (date) => {
+export const loadPuzzleData = (date) => {
   const progress = localStorage.getItem('progress')
   if (!progress) return null
   return JSON.parse(localStorage.getItem('progress'))[date]
 }
 
-export const setPuzzleProgress = (date, puzzle, progress) => {
+export const savePuzzleData = (date, puzzle, progress) => {
   const existingProgress = localStorage.getItem('progress')
   if (existingProgress) {
     return localStorage.setItem(
