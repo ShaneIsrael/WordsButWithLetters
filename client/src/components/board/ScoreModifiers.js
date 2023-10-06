@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, Grid, Sheet, Typography } from '@mui/joy'
+import { Grid, Sheet, Typography } from '@mui/joy'
 import { useTheme } from '@emotion/react'
 import styled from '@emotion/styled'
 
