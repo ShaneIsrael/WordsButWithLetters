@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       contextId: {
         type: DataTypes.STRING,
-        defaultValue: uid.rnd(),
+        defaultValue: () => uid.rnd(),
         allowNull: false,
         unique: true,
       },
