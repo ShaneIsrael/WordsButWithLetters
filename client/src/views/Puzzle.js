@@ -81,7 +81,7 @@ const Puzzle = (props) => {
 
       if (save) {
         let puzzle = save.puzzle
-        if (puzzle) {
+        if (!puzzle) {
           puzzle = (await PuzzleService.getTodaysPuzzle()).data?.Puzzle
         }
         setPuzzle(puzzle)
