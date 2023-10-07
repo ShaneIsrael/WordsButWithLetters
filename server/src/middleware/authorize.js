@@ -18,8 +18,8 @@ const isAuthenticated = (sessionCookie) => {
   if (!sessionCookie) return false
 
   try {
-    jwt.verify(sessionCookie, process.env.SECRET_KEY)
-    return true
+    const data = jwt.verify(sessionCookie, process.env.SECRET_KEY)
+    return data
   } catch (err) {
     return false
   }

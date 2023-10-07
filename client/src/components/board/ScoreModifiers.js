@@ -63,7 +63,7 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[0].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`} color={disabledKeys.includes(letter) ? 'inactive' : 'active'}>
+                <LetterHolder key={`modifier_${letter}`} color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}>
                   {letter}
                 </LetterHolder>
               ))}
@@ -75,7 +75,7 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[1].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`} color={disabledKeys.includes(letter) ? 'inactive' : 'active'}>
+                <LetterHolder key={`modifier_${letter}`} color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}>
                   {letter}
                 </LetterHolder>
               ))}
@@ -88,7 +88,7 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[2].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`} color={disabledKeys.includes(letter) ? 'inactive' : 'active'}>
+                <LetterHolder key={`modifier_${letter}`} color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}>
                   {letter}
                 </LetterHolder>
               ))}

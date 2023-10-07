@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasOne(models.Puzzle, {
         foreignKey: 'dayId',
       })
+      this.hasMany(models.PuzzleSubmission, {
+        foreignKey: 'dayId',
+      })
     }
   }
   Day.init(

@@ -75,27 +75,19 @@ const Puzzle = (props) => {
     async function init() {
       const pNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
       setPuzzleNumber(pNumber)
-      const save = loadPuzzleData(getPTDate())
-
-      let completed = false
-
-      if (save) {
-        let puzzle = save.puzzle
-        if (!puzzle) {
-          puzzle = (await PuzzleService.getTodaysPuzzle()).data?.Puzzle
-        }
-        setPuzzle(puzzle)
-        if (save.progress) {
-          completed = save.progress.puzzleComplete
-          setPlayData(save.progress)
-          setPuzzleComplete(completed)
-          setShowPuzzle(true)
-        }
-      }
-
+      const puzzleProgress = loadPuzzleData(getPTDate())
+      const completed = puzzleProgress?.progress.puzzleComplete
       const instructionsDisabled = Cookies.get('instructionsDisabled')
+
       if ((!instructionsDisabled || instructionsDisabled === 'false') && !completed) {
         setStartModalOpen(true)
+      }
+
+      if (puzzleProgress) {
+        setPuzzle(puzzleProgress.puzzle)
+        setPlayData(puzzleProgress.progress)
+        setPuzzleComplete(completed)
+        setShowPuzzle(true)
       }
     }
     init()
@@ -160,7 +152,7 @@ const Puzzle = (props) => {
       if (playData.wordMatrix[playData.activeRow].filter((l) => l).join('').length === 5) {
         setSubmitting(true)
         try {
-          const response = (await PuzzleService.submit(playData)).data
+          const response = (await PuzzleService.submitCasual(playData)).data
           if (response.accepted) {
             savePuzzleData(response.date, response.puzzle, response.progress)
             setPlayData(response.progress)

@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.Day, {
         foreignKey: 'dayId',
       })
+      this.hasMany(models.PuzzleSubmission, {
+        foreignKey: 'puzzleId',
+      })
     }
   }
   Puzzle.init(
@@ -35,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: () => uid.rnd(),
         allowNull: false,
         unique: true,
+      },
+      type: {
+        type: DataTypes.STRING,
+        defaultValue: 'casual',
+        allowNull: false,
       },
     },
     {
