@@ -46,7 +46,6 @@ function App() {
 function RequireAuth({ children, redirectTo }) {
   let { loading, isAuthenticated } = useAuthed()
 
-  console.log(loading, isAuthenticated)
   return loading ? <Loading /> : isAuthenticated ? children : <Navigate to={redirectTo} />
 }
 

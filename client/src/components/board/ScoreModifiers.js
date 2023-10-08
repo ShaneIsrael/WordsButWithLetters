@@ -42,31 +42,21 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
   const theme = useTheme()
 
   return (
-    <>
-      <Sheet
-        sx={{
-          width: 140,
-          paddingTop: 1,
-          background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <Typography level="h2" fontSize={24} fontWeight={800} textAlign="center" width={135}>
+    <Sheet
+      sx={{
+        width: 140,
+        height: 'calc(100% - 104px)',
+        paddingTop: 1,
+        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        display: 'flex',
+        justifyContent: 'center',
+      }}
+    >
+      <Grid direction="column" justifyContent="center" alignItems="stretch" sx={{ height: '100%' }}>
+        <Typography level="h2" fontSize={24} fontWeight={800} textAlign="center" width={120}>
           Score Modifiers
         </Typography>
-      </Sheet>
-
-      <Sheet
-        variant="plain"
-        sx={{
-          padding: '14px 8px 8px 8px',
-          width: 140,
-          height: 262,
-          background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
-        }}
-      >
-        <Grid container height="100%" direction="column">
+        <Grid container direction="column" justifyContent="space-between" sx={{ padding: '14px 8px 8px', gap: '18px' }}>
           <Grid xs>
             <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
               x2
@@ -105,8 +95,8 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
             </Grid>
           </Grid>
         </Grid>
-      </Sheet>
-    </>
+      </Grid>
+    </Sheet>
   )
 }
 
