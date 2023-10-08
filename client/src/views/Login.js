@@ -1,11 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
-import { Alert, Box, Button, FormControl, FormLabel, IconButton, Input, Link, Sheet, Typography } from '@mui/joy'
+import {
+  Alert,
+  Box,
+  Button,
+  FormControl,
+  FormLabel,
+  IconButton,
+  Input,
+  Link,
+  Sheet,
+  Typography,
+  useTheme,
+} from '@mui/joy'
 import ErrorIcon from '@mui/icons-material/Error'
 import CloseIcon from '@mui/icons-material/Close'
 
 import logo from '../assets/logo.png'
+import logoLight from '../assets/logo-light.png'
 import { useAuth } from '../hooks/useAuth'
 
 const Login = (props) => {
@@ -13,6 +26,7 @@ const Login = (props) => {
   const [password, setPassword] = React.useState('')
   const [message, setMessage] = React.useState('')
   const { login } = useAuth()
+  const theme = useTheme()
 
   const navigate = useNavigate()
 
@@ -46,7 +60,7 @@ const Login = (props) => {
         my: 4,
       }}
     >
-      <img src={logo} width={350} />
+      <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={350} />
       <Sheet
         sx={{
           display: 'flex',
