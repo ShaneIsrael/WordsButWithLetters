@@ -24,14 +24,26 @@ module.exports = (sequelize, DataTypes) => {
       dayId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Days',
+          key: 'id',
+        },
       },
       puzzleId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Puzzles',
+          key: 'id',
+        },
       },
       userId: {
         type: DataTypes.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       activeRow: {
         type: DataTypes.INTEGER,

@@ -11,14 +11,26 @@ module.exports = {
       dayId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Days',
+          key: 'id',
+        },
       },
       puzzleId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Puzzles',
+          key: 'id',
+        },
       },
       userId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       activeRow: {
         type: Sequelize.INTEGER,
