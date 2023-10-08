@@ -42,7 +42,6 @@ controller.register = async (req, res, next) => {
     if (userLookup && userLookup.displayName === displayName)
       return res.status(409).send('Display name already in use, please choose another.')
 
-    const hash = await bcrypt.hash(password, 10)
     const token = uuidv4()
 
     logger.info(`registering user with email: ${email.toLowerCase()}`)
@@ -52,7 +51,7 @@ controller.register = async (req, res, next) => {
         await User.create({
           email: email.toLowerCase(),
           displayName,
-          password: hash,
+          password,
           token,
           verified: isProduction ? false : true,
         })
