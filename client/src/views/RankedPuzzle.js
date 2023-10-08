@@ -79,7 +79,6 @@ const RankedPuzzle = (props) => {
 
       const puzzle = (await PuzzleService.getTodaysRankedPuzzle()).data
       const submission = (await PuzzleService.getPuzzleSubmission()).data
-      console.log(puzzle)
       setPuzzle(puzzle.Puzzles?.[0])
       setPuzzleSubmission(submission)
       setPuzzleComplete(submission.puzzleComplete)
