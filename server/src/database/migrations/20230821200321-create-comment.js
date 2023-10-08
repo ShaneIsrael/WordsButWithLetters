@@ -21,9 +21,17 @@ module.exports = {
       },
       parentId: {
         type: Sequelize.UUID,
+        references: {
+          model: 'Comments',
+          key: 'id',
+        },
       },
       userId: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
       createdAt: {
         allowNull: false,
