@@ -94,6 +94,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
             variant="soft"
             endDecorator={<ShareIcon />}
             onClick={() => {
+              umami.track('Share button')
               navigator.clipboard.writeText(shareText)
               toast.success('Copied to clipboard!')
             }}

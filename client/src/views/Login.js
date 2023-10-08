@@ -19,8 +19,10 @@ const Login = (props) => {
   const handleLogin = async () => {
     try {
       await login(email, password)
+      umami.track('Login succeeded')
       navigate('/')
     } catch (err) {
+      umami.track('Login failed')
       if (err.response?.data) {
         setMessage(err.response.data)
       }
