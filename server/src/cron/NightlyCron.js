@@ -1,9 +1,30 @@
 const { Cron } = require('croner')
 const logger = require('../utils/logger')
-const { Day, Puzzle } = require('../database/models')
+const { Day, Puzzle, Leaderboard } = require('../database/models')
 const PuzzleGenerator = require('../puzzle/PuzzleGenerator')
 const { getTodaysDate } = require('../utils')
 
+async function GenerateLeaderboards(puzzles, dayId) {
+  try {
+    const leaderboardPromises = []
+    puzzles.forEach(async (puzzle) => {
+      leaderboardPromises.push(
+        Leaderboard.findOrCreate({
+          where: {
+            context: puzzle.contextId,
+          },
+          defaults: {
+            dayId: dayId ? dayId : day.id,
+            context: puzzle.contextId,
+          },
+        }),
+      )
+    })
+    await Promise.all(leaderboardPromises)
+  } catch (err) {
+    throw err
+  }
+}
 async function GenerateDayAndPuzzle(dayId) {
   try {
     let day
@@ -14,16 +35,19 @@ async function GenerateDayAndPuzzle(dayId) {
     }
     const casualPuzzle = new PuzzleGenerator(6, 5, 10, 60, [3, 3, 2], [2, 4, 8], 300)
     const rankedPuzzle = new PuzzleGenerator(6, 5, 10, 60, [3, 3, 2], [2, 4, 8], 300)
-    await Puzzle.create({
+    const casualRow = await Puzzle.create({
       dayId: dayId ? dayId : day.id,
       board: casualPuzzle.getPuzzle(),
       type: 'casual',
     })
-    await Puzzle.create({
+    const rankedRow = await Puzzle.create({
       dayId: dayId ? dayId : day.id,
       board: rankedPuzzle.getPuzzle(),
       type: 'ranked',
     })
+
+    await GenerateLeaderboards([casualRow, rankedRow], day.id)
+
     logger.info('Day & Puzzle generated successfully.')
   } catch (err) {
     logger.error('An error occurred generating the nightly day & puzzle.')
@@ -44,12 +68,19 @@ function start() {
       where: {
         date: getTodaysDate(),
       },
-      include: [Puzzle],
+      include: [Puzzle, Leaderboard],
     }).then((day) => {
       if (!day) {
-        GenerateDayAndPuzzle()
+        return GenerateDayAndPuzzle()
       } else {
-        GenerateDayAndPuzzle(day.id)
+        // If we are missing both puzzles and leaderboards
+        if (day.Puzzles.length === 0 && day.Leaderboards.length === 0) {
+          return GenerateDayAndPuzzle(day.id)
+        }
+        // If we are missing leaderboards but have puzzles
+        if (day.Puzzles.length !== 0 && day.Leaderboards.length !== day.Puzzles.length) {
+          return GenerateLeaderboards(day.Puzzles, day.id)
+        }
       }
     })
   } catch (err) {
