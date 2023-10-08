@@ -101,12 +101,14 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
         }}
       >
         {new Array(maxLetters).fill().map((_, index) =>
-          bonusWordFound.includes(letters[index]) ? (
-            <HighlightLetterHolder color="red" key={`bonus_word_letter_${letters[index] || index}`}>
-              {letters[index]}
+          bonusWordFound?.includes(letters?.[index]) ? (
+            <HighlightLetterHolder color="red" key={`bonus_word_letter_${letters?.[index] || index}_${index}`}>
+              {letters?.[index]}
             </HighlightLetterHolder>
           ) : (
-            <LetterHolder key={`bonus_word_letter_${letters[index] || index}`}>{letters[index] || ''}</LetterHolder>
+            <LetterHolder key={`bonus_word_letter_${letters?.[index] || index}_${index}`}>
+              {letters?.[index] || ''}
+            </LetterHolder>
           ),
         )}
       </Box>

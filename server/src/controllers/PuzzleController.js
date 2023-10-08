@@ -1,12 +1,51 @@
 const { isAuthenticated } = require('../middleware/authorize')
-const { fetchTodaysPuzzle, validateSubmissionProgress } = require('../services/PuzzleService')
+const {
+  fetchTodayAndPuzzle,
+  fetchSubmission,
+  createSubmission,
+  validateRankedSubmission,
+  validateSubmissionProgress,
+} = require('../services/PuzzleService')
+const { getTodaysDate } = require('../utils')
 
 const controller = {}
 
 controller.getTodaysPuzzle = async (req, res, next) => {
   try {
-    const todaysPuzzle = await fetchTodaysPuzzle()
+    const todaysPuzzle = await fetchTodayAndPuzzle()
     return res.status(200).send(todaysPuzzle)
+  } catch (err) {
+    next(err)
+  }
+}
+
+controller.getTodaysRankedPuzzle = async (req, res, next) => {
+  try {
+    const todaysPuzzle = await fetchTodayAndPuzzle('ranked')
+    const submission = await fetchSubmission(req.user.id, todaysPuzzle.Puzzle.id, todaysPuzzle.id)
+    // only allow fetching of the ranked puzzle if the user has already
+    // created their submission, i.e click the "begin puzzle" button.
+    return res.status(200).send(submission ? todaysPuzzle : null)
+  } catch (err) {
+    next(err)
+  }
+}
+
+controller.getPuzzleSubmission = async (req, res, next) => {
+  try {
+    const today = await fetchTodayAndPuzzle('ranked')
+    const submission = await fetchSubmission(req.user.id, today.Puzzle.id, today.id)
+    return res.status(200).send(submission)
+  } catch (err) {
+    next(err)
+  }
+}
+
+controller.createPuzzleSubmission = async (req, res, next) => {
+  try {
+    const today = await fetchTodayAndPuzzle('ranked')
+    const [submission, created] = await createSubmission(req.user.id, today.Puzzle.id, today.id)
+    return res.status(200).send({ submission, created })
   } catch (err) {
     next(err)
   }
@@ -14,29 +53,21 @@ controller.getTodaysPuzzle = async (req, res, next) => {
 
 controller.getTodaysPuzzleNumber = async (req, res, next) => {
   try {
-    const todaysPuzzle = await fetchTodaysPuzzle()
+    const todaysPuzzle = await fetchTodayAndPuzzle()
     return res.status(200).send({ number: todaysPuzzle.id })
   } catch (err) {
     next(err)
   }
 }
 
-async function handleRankedSubmission(req, res, next) {
-  try {
-    return res.status(404).send('ranked submission currently under construction')
-  } catch (err) {
-    next(err)
-  }
-}
-
-async function handleCasualSubmission(req, res, next) {
+controller.submitCasual = async (req, res, next) => {
   const { puzzleProgress } = req.body
   if (!puzzleProgress) res.status(400).send('puzzleProgress is required.')
   try {
     if (puzzleProgress.puzzleCompleted) {
       return res.status(400).send('Invalid submission, puzzle already complete.')
     }
-    const todaysPuzzle = await fetchTodaysPuzzle()
+    const todaysPuzzle = await fetchTodayAndPuzzle()
     const [accepted, progress, message] = await validateSubmissionProgress(
       puzzleProgress,
       todaysPuzzle.Puzzle,
@@ -54,15 +85,23 @@ async function handleCasualSubmission(req, res, next) {
   }
 }
 
-controller.submit = async (req, res, next) => {
+controller.submitRanked = async (req, res, next) => {
+  const { word, date } = req.body
   try {
-    // So that we can use a single route for both authenticated and non-authenticated
-    // subimssions. Else we would need to do annoying frontend logic to dictate what
-    // route needs to be called.
-    if (isAuthenticated(req.cookies?.session)) {
-      // return handleRankedSubmission(req, res, next)
+    const todaysDate = getTodaysDate()
+    if (date !== todaysDate) {
+      return res.status(400).send('Submission not valid. A new puzzle exists.')
     }
-    return handleCasualSubmission(req, res, next)
+    const today = await fetchTodayAndPuzzle('ranked')
+    const submission = await fetchSubmission(req.user.id, today.Puzzle.id, today.id)
+    const [accepted, updatedSubmission, message] = await validateRankedSubmission(word, submission, today.Puzzle)
+    updatedSubmission.save()
+
+    return res.status(200).send({
+      accepted,
+      message,
+      submission: updatedSubmission,
+    })
   } catch (err) {
     next(err)
   }

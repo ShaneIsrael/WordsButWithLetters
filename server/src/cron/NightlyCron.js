@@ -4,15 +4,25 @@ const { Day, Puzzle } = require('../database/models')
 const PuzzleGenerator = require('../puzzle/PuzzleGenerator')
 const { getTodaysDate } = require('../utils')
 
-async function GenerateDayAndPuzzle() {
+async function GenerateDayAndPuzzle(dayId) {
   try {
-    const day = await Day.create({
-      date: getTodaysDate(),
-    })
-    const puzzle = new PuzzleGenerator(6, 5, 10, 60, [3, 3, 2], [2, 4, 8], 300)
+    let day
+    if (!dayId) {
+      day = await Day.create({
+        date: getTodaysDate(),
+      })
+    }
+    const casualPuzzle = new PuzzleGenerator(6, 5, 10, 60, [3, 3, 2], [2, 4, 8], 300)
+    const rankedPuzzle = new PuzzleGenerator(6, 5, 10, 60, [3, 3, 2], [2, 4, 8], 300)
     await Puzzle.create({
-      dayId: day.id,
-      board: puzzle.getPuzzle(),
+      dayId: dayId ? dayId : day.id,
+      board: casualPuzzle.getPuzzle(),
+      type: 'casual',
+    })
+    await Puzzle.create({
+      dayId: dayId ? dayId : day.id,
+      board: rankedPuzzle.getPuzzle(),
+      type: 'ranked',
     })
     logger.info('Day & Puzzle generated successfully.')
   } catch (err) {
@@ -38,6 +48,8 @@ function start() {
     }).then((day) => {
       if (!day) {
         GenerateDayAndPuzzle()
+      } else {
+        GenerateDayAndPuzzle(day.id)
       }
     })
   } catch (err) {
