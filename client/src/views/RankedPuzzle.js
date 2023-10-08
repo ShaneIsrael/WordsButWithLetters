@@ -171,6 +171,7 @@ const RankedPuzzle = (props) => {
           if (response.accepted) {
             setPuzzleSubmission(response.submission)
             if (response.submission.puzzleComplete) {
+              umami.track('Ranked puzzle complete')
               toast.success(response.message || 'Puzzle Complete!')
               return sleep(1800).then(() => setPuzzleComplete(response.submission.puzzleComplete)) // Give final row animation time to complete.
             }
@@ -236,7 +237,7 @@ const RankedPuzzle = (props) => {
                 Ranked Puzzle #{puzzleNumber}
               </Typography>
               <Box>
-                <Button onClick={handleBegin} size="lg">
+                <Button onClick={handleBegin} size="lg" data-umami-event="Begin Ranked Button">
                   <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
                     Begin Todays Ranked Puzzle
                   </Typography>
