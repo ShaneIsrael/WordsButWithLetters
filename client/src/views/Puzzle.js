@@ -98,8 +98,8 @@ const Puzzle = (props) => {
     // local storage IF local storage does not have an entry for today
     if (!loadPuzzleData(getPTDate())) {
       const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
-      setPuzzle(puzzleData.Puzzle)
-      savePuzzleData(puzzleData.date, puzzleData.Puzzle, PLAY_DATA)
+      setPuzzle(puzzleData.Puzzles[0])
+      savePuzzleData(puzzleData.date, puzzleData.Puzzles[0], PLAY_DATA)
       setPuzzleComplete(false)
       setShowPuzzle(true)
     }

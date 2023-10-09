@@ -32,6 +32,7 @@ controller.register = async (req, res, next) => {
       return res.status(400).send('Email, Password, and Display Name are required.')
 
     if (displayName.length < 5) return res.status(400).send('Display name must be at least 5 characters.')
+    if (displayName.length > 15) return res.status(400).send('Display name must be less than 15 characters')
 
     if (password.length < 5) return res.status(400).send('Password must be at least 5 characters.')
 

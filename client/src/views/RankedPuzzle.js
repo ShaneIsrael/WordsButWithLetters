@@ -79,7 +79,7 @@ const RankedPuzzle = (props) => {
 
       const puzzle = (await PuzzleService.getTodaysRankedPuzzle()).data
       const submission = (await PuzzleService.getPuzzleSubmission()).data
-      setPuzzle(puzzle?.Puzzle)
+      setPuzzle(puzzle.Puzzles?.[0])
       setPuzzleSubmission(submission)
       setPuzzleComplete(submission.puzzleComplete)
       setPuzzleNumber(pNumber)
@@ -96,7 +96,7 @@ const RankedPuzzle = (props) => {
     if (!puzzle) {
       const submission = (await PuzzleService.createPuzzleSubmission()).data
       const rankedPuzzle = (await PuzzleService.getTodaysRankedPuzzle()).data
-      setPuzzle(rankedPuzzle.Puzzle)
+      setPuzzle(rankedPuzzle.Puzzles[0])
       setPuzzleSubmission(submission)
     }
   }

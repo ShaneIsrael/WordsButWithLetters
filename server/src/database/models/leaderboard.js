@@ -1,29 +1,31 @@
 'use strict'
 const { Model } = require('sequelize')
-const { getTodaysDate } = require('../../utils')
 module.exports = (sequelize, DataTypes) => {
-  class Day extends Model {
+  class Leaderboard extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
-      this.hasMany(models.Puzzle, {
+      this.belongsTo(models.Day, {
         foreignKey: 'dayId',
       })
-      this.hasMany(models.PuzzleSubmission, {
-        foreignKey: 'dayId',
-      })
-      this.hasMany(models.Leaderboard, {
-        foreignKey: 'dayId',
+      this.hasMany(models.LeaderboardEntry, {
+        foreignKey: 'leaderboardId',
       })
     }
   }
-  Day.init(
+  Leaderboard.init(
     {
-      date: {
+      dayId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Days',
+          key: 'id',
+        },
+      },
+      context: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
@@ -31,8 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'Day',
+      modelName: 'Leaderboard',
     },
   )
-  return Day
+  return Leaderboard
 }
