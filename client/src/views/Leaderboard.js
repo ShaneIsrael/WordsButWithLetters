@@ -145,7 +145,7 @@ const Leaderboard = (props) => {
               <Button
                 variant="soft"
                 sx={{ fontFamily: 'Bubblegum Sans', fontSize: 22, width: 200 }}
-                onClick={() => (isAuthenticated ? navigate('/ranked') : navigate('/login'))}
+                onClick={() => (isAuthenticated ? navigate('/') : navigate('/login'))}
               >
                 {isAuthenticated ? 'Play Ranked' : 'Login'}
               </Button>

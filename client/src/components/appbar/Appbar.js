@@ -67,7 +67,7 @@ function Appbar({ setModalOpen, hideInstructions }) {
           </Dropdown>
         </Grid>
         <Grid container xs={4} justifyContent="center">
-          <Box onClick={() => navigate(isAuthenticated ? '/ranked' : '/casual')} sx={{ cursor: 'pointer' }}>
+          <Box onClick={() => navigate(isAuthenticated ? '/' : '/casual')} sx={{ cursor: 'pointer' }}>
             <Typography
               level="h2"
               textAlign="center"
