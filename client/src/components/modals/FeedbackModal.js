@@ -1,10 +1,24 @@
 import { Button, IconButton, Modal, Sheet, Textarea, Typography, useTheme } from '@mui/joy'
 import React from 'react'
 
+import FeedbackService from '../../services/FeedbackService'
+
 import ClearIcon from '@mui/icons-material/Clear'
+import { toast } from 'sonner'
 
 function FeedbackModal({ open, onClose }) {
   const theme = useTheme()
+  const [message, setMessage] = React.useState('')
+
+  const onSubmit = async () => {
+    try {
+      const resp = await FeedbackService.submitFeedback(message)
+      console.log(resp)
+    } catch (err) {
+      toast.error('Error submitting feedback')
+      console.error(err)
+    }
+  }
 
   return (
     <Modal
@@ -27,9 +41,9 @@ function FeedbackModal({ open, onClose }) {
         variant="outlined"
         sx={{
           width: 400,
-          height: 440,
+          height: 480,
           borderRadius: 'md',
-          p: '16px 16px 24px 16px',
+          p: '16px 16px 40px 16px',
           boxShadow: 'lg',
         }}
       >
@@ -47,18 +61,24 @@ function FeedbackModal({ open, onClose }) {
         >
           <ClearIcon />
         </IconButton>
-        <Typography sx={{ ml: '4px', fontSize: 22, fontWeight: 1000, fontFamily: 'Bubblegum Sans', mb: 1 }}>
+        <Typography sx={{ ml: '4px', fontSize: 22, fontWeight: 1000, fontFamily: 'Bubblegum Sans', mb: 2 }}>
           Feedback
         </Typography>
         <Textarea
-          placeholder="Please enter your feedback here."
+          placeholder="Please tell us what you think about our game."
           sx={{
             width: '100%',
             height: 'calc(100% - 81px)',
             '& .MuiTextarea-textarea': { overflow: 'auto !important' },
           }}
+          value={message}
+          onChange={(e) => {
+            setMessage(e.target.value)
+          }}
         />
-        <Button sx={{ height: 40, mt: 1, width: '100%' }}>Submit</Button>
+        <Button sx={{ height: 40, mt: 2, mb: 2, width: '100%' }} onClick={onSubmit}>
+          Submit
+        </Button>
       </Sheet>
     </Modal>
   )
