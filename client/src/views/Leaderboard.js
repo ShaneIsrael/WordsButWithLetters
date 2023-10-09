@@ -117,11 +117,7 @@ const Leaderboard = (props) => {
                       </Typography>
                     </td>
                     <td>
-                      <Typography
-                        color={user?.displayName === entry.User.displayName ? 'primary' : ''}
-                        level="h2"
-                        fontSize={18}
-                      >
+                      <Typography color={user?.displayName === entry.User.displayName ? 'primary' : ''} fontSize={18}>
                         {convertNumberToEmoji(entry.score)}
                       </Typography>
                     </td>
