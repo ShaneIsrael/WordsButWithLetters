@@ -5,7 +5,7 @@ import { Box, Button, Sheet, Table, Typography } from '@mui/joy'
 import Appbar from '../components/appbar/Appbar'
 import Cookies from 'js-cookie'
 import { format } from 'date-fns'
-import { getPTDate } from '../common/utils'
+import { convertNumberToEmoji, getPTDate } from '../common/utils'
 import { useAuthed } from '../hooks/useAuthed'
 import { useNavigate } from 'react-router-dom'
 
@@ -50,7 +50,7 @@ const Leaderboard = (props) => {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            width: 450,
+            width: 475,
             height: 530,
             overflow: 'auto',
             borderRadius: 'sm',
@@ -63,14 +63,19 @@ const Leaderboard = (props) => {
             <Table borderAxis="none" color="primary" size="lg" stickyFooter={false} stickyHeader variant="plain">
               <thead>
                 <tr>
-                  <th style={{ width: 100 }}>
+                  <th style={{ width: 80 }}>
                     <Typography level="h2" fontSize={28}>
                       Rank
                     </Typography>
                   </th>
-                  <th style={{ width: 200 }}>
+                  <th style={{ width: 110 }}>
                     <Typography level="h2" fontSize={28}>
                       Player
+                    </Typography>
+                  </th>
+                  <th style={{ width: 115 }}>
+                    <Typography level="h2" fontSize={28}>
+                      Word
                     </Typography>
                   </th>
                   <th>
@@ -87,16 +92,16 @@ const Leaderboard = (props) => {
                       <Typography
                         color={user?.displayName === entry.User.displayName ? 'primary' : ''}
                         level="h2"
-                        fontSize={24}
+                        fontSize={26}
                       >
-                        {index + 1}
+                        {index + 1} .
                       </Typography>
                     </td>
                     <td>
                       <Typography
                         color={user?.displayName === entry.User.displayName ? 'primary' : ''}
                         level="h2"
-                        fontSize={24}
+                        fontSize={22}
                       >
                         {entry.User.displayName}
                       </Typography>
@@ -104,10 +109,20 @@ const Leaderboard = (props) => {
                     <td>
                       <Typography
                         color={user?.displayName === entry.User.displayName ? 'primary' : ''}
-                        level="h2"
-                        fontSize={24}
+                        level={entry.User.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
+                        fontSize={entry.User.PuzzleSubmissions[0].bonusWord ? 18 : 16}
+                        letterSpacing={entry.User.PuzzleSubmissions[0].bonusWord ? '8px' : ''}
                       >
-                        {entry.score.toLocaleString('en-US')}
+                        {entry.User.PuzzleSubmissions[0].bonusWord?.toUpperCase() || '❌❌❌❌'}
+                      </Typography>
+                    </td>
+                    <td>
+                      <Typography
+                        color={user?.displayName === entry.User.displayName ? 'primary' : ''}
+                        level="h2"
+                        fontSize={18}
+                      >
+                        {convertNumberToEmoji(entry.score)}
                       </Typography>
                     </td>
                   </tr>

@@ -8,31 +8,6 @@ import { toast } from 'sonner'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuthed } from '../../hooks/useAuthed'
 
-const EMOJI_NUMBER_MAP = {
-  0: '0️⃣',
-  1: '1️⃣',
-  2: '2️⃣',
-  3: '3️⃣',
-  4: '4️⃣',
-  5: '5️⃣',
-  6: '6️⃣',
-  7: '7️⃣',
-  8: '8️⃣',
-  9: '9️⃣',
-}
-
-function convertNumberToEmoji(number) {
-  let tempNumber = `${number}`
-  const numberSize = tempNumber.length
-  if (numberSize < 5) {
-    for (let i = 0; i < 5 - numberSize; i++) {
-      tempNumber = '0' + tempNumber
-    }
-  }
-  tempNumber = `${tempNumber.split('').reduce((prev, curr) => prev + EMOJI_NUMBER_MAP[curr], '')}\n`
-  return tempNumber
-}
-
 const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
   const theme = useTheme()
   const [shareText, setShareText] = React.useState('')

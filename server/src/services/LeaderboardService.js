@@ -1,4 +1,4 @@
-const { Puzzle, Leaderboard, LeaderboardEntry, Day, User } = require('../database/models')
+const { Puzzle, Leaderboard, LeaderboardEntry, Day, User, PuzzleSubmission } = require('../database/models')
 const leaderboard = require('../database/models/leaderboard')
 const { getTodaysDate } = require('../utils')
 
@@ -19,7 +19,17 @@ service.getTodaysRankedEntries = async () => {
         context: today.Puzzles[0].contextId,
       },
       include: [
-        { model: LeaderboardEntry, attributes: ['score'], include: [{ model: User, attributes: ['displayName'] }] },
+        {
+          model: LeaderboardEntry,
+          attributes: ['score'],
+          include: [
+            {
+              model: User,
+              attributes: ['displayName'],
+              include: [{ model: PuzzleSubmission, where: { dayId: today.id }, attributes: ['bonusWord'] }],
+            },
+          ],
+        },
       ],
     })
     return leaderboard
