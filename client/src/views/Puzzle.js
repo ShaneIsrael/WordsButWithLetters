@@ -199,10 +199,9 @@ const Puzzle = (props) => {
 
   return (
     <Box sx={{ overflow: 'hidden' }}>
-      <Appbar setModalOpen={setStartModalOpen} />
+      <Appbar setInstructionModalOpen={setStartModalOpen} setFeedbackModalOpen={setFeedbackModalOpen} />
       <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
       <InstructionModal open={startModalOpen} onClose={handleModalClose} />
-      <Button onClick={() => setFeedbackModalOpen(true)}>Feedback</Button>
       <PageWrapper>
         <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
           <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>

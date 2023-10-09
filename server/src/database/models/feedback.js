@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
   Feedback.init(
     {
       body: DataTypes.STRING,
+      dismissed: DataTypes.BOOLEAN,
     },
     {
       sequelize,

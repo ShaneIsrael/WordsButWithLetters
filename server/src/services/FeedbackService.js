@@ -7,7 +7,24 @@ const service = {}
 service.getAllFeedback = async () => {
   const feedback = await Feedback.findAll({
     order: [['createdAt', 'DESC']],
+    where: {
+      dismissed: false,
+    },
   })
+  return feedback
+}
+
+/**
+ * Dismiss specific feedback message
+ * @param {String} id
+ */
+service.dismissFeedbackMessage = async (id) => {
+  const feedback = await Feedback.update(
+    {
+      dismissed: true,
+    },
+    { where: { id: id } },
+  )
   return feedback
 }
 
@@ -18,6 +35,7 @@ service.getAllFeedback = async () => {
 service.submitUserFeedback = async (message) => {
   const accepted = await Feedback.create({
     body: message,
+    dismissed: false,
   })
   return accepted
 }

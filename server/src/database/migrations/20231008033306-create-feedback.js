@@ -10,7 +10,11 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       body: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(500),
+      },
+      dismissed: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

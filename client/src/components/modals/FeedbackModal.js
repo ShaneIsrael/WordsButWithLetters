@@ -12,8 +12,10 @@ function FeedbackModal({ open, onClose }) {
 
   const onSubmit = async () => {
     try {
-      const resp = await FeedbackService.submitFeedback(message)
-      console.log(resp)
+      await FeedbackService.submitFeedback(message)
+      toast.success('Feedback submitted. Thank you!')
+      setMessage('')
+      onClose()
     } catch (err) {
       toast.error('Error submitting feedback')
       console.error(err)
@@ -49,7 +51,10 @@ function FeedbackModal({ open, onClose }) {
       >
         <IconButton
           variant="plain"
-          onClick={() => onClose()}
+          onClick={() => {
+            setMessage('')
+            onClose()
+          }}
           sx={{
             height: 20,
             width: 20,
@@ -71,10 +76,22 @@ function FeedbackModal({ open, onClose }) {
             height: 'calc(100% - 81px)',
             '& .MuiTextarea-textarea': { overflow: 'auto !important' },
           }}
+          slotProps={{
+            textarea: {
+              id: 'feedbackTextarea',
+            },
+          }}
           value={message}
           onChange={(e) => {
-            setMessage(e.target.value)
+            const val = e.target.value
+            if (val.length <= 500) setMessage(e.target.value)
           }}
+          endDecorator={
+            <Typography level="body-xs" sx={{ ml: 'auto' }}>
+              {message.length}/500 character(s)
+            </Typography>
+          }
+          autoFocus
         />
         <Button sx={{ height: 40, mt: 2, mb: 2, width: '100%' }} onClick={onSubmit}>
           Submit

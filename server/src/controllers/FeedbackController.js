@@ -11,14 +11,22 @@ controller.getAllFeedback = async (req, res, next) => {
   }
 }
 
-controller.submitFeedback = async (req, res, next) => {
-  console.log('------------Here------------')
+controller.dismissFeedback = async (req, res, next) => {
+  try {
+    const { id } = req.body
+    const dismissed = await dismissFeedbackMessage(id)
+    return res.status(200).send(dismissed)
+  } catch (err) {
+    next(err)
+  }
+}
 
+controller.submitFeedback = async (req, res, next) => {
   const { message } = req.body
   if (!message) res.status(400).send('Cannot submit feedback with message being empty')
+  if (message.length > 500) res.status(400).send('Cannot submit feedback with a length of over 500 characters')
   try {
     const accepted = await submitUserFeedback(message)
-    console.log(accepted)
     return res.status(200).send({
       accepted,
     })

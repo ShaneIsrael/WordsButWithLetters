@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from '@emotion/react'
-import { Grid, Typography, Menu, MenuItem, MenuButton, Dropdown, IconButton, Box } from '@mui/joy'
+import { Grid, Typography, Menu, MenuItem, MenuButton, Dropdown, IconButton, Box, Tooltip } from '@mui/joy'
 import { AppBar, Toolbar } from '@mui/material'
 
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
@@ -8,12 +8,13 @@ import LeaderboardIcon from '@mui/icons-material/Leaderboard'
 import LoginIcon from '@mui/icons-material/Login'
 import LogoutIcon from '@mui/icons-material/Logout'
 import MoreVert from '@mui/icons-material/MoreVert'
+import ChatIcon from '@mui/icons-material/Chat'
 
 import { useAuthed } from '../../hooks/useAuthed'
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 
-function Appbar({ setModalOpen, hideInstructions }) {
+function Appbar({ setModalOpen, setFeedbackModalOpen, hideInstructions }) {
   const theme = useTheme()
   const navigate = useNavigate()
 
@@ -53,7 +54,7 @@ function Appbar({ setModalOpen, hideInstructions }) {
               <MenuItem onClick={isAuthenticated ? handleLogout : handleLogin}>
                 {isAuthenticated ? 'Logout' : 'Login'}
               </MenuItem>
-              <MenuItem onClick={() => navigate('/leaderboard')}>Leaderboards</MenuItem>
+              <MenuItem onClick={() => navigate('/leaderboard')}>Leaderboard</MenuItem>
               {!hideInstructions && (
                 <MenuItem
                   onClick={() => {
@@ -63,6 +64,7 @@ function Appbar({ setModalOpen, hideInstructions }) {
                   Instructions
                 </MenuItem>
               )}
+              <MenuItem onClick={() => setFeedbackModalOpen(true)}>Feedback</MenuItem>
             </Menu>
           </Dropdown>
         </Grid>
@@ -95,21 +97,36 @@ function Appbar({ setModalOpen, hideInstructions }) {
           gap={2}
         >
           {!hideInstructions && (
-            <IconButton size="large" color="inherit" onClick={() => setModalOpen(true)}>
-              <QuestionMarkIcon />
-            </IconButton>
+            <Tooltip title="View Instructions">
+              <IconButton size="large" color="inherit" onClick={() => setModalOpen(true)}>
+                <QuestionMarkIcon />
+              </IconButton>
+            </Tooltip>
           )}
-          <IconButton size="large" color="inherit" onClick={() => navigate('/leaderboard')}>
-            <LeaderboardIcon />
-          </IconButton>
+          <Tooltip title="Leave Feedback">
+            <IconButton size="large" color="inherit" onClick={() => setFeedbackModalOpen(true)}>
+              <ChatIcon />
+            </IconButton>
+          </Tooltip>
+
+          <Tooltip title="View Leaderboard">
+            <IconButton size="large" color="inherit" onClick={() => navigate('/leaderboard')}>
+              <LeaderboardIcon />
+            </IconButton>
+          </Tooltip>
+
           {isAuthenticated ? (
-            <IconButton size="large" color="inherit" onClick={handleLogout}>
-              <LogoutIcon />
-            </IconButton>
+            <Tooltip title="Logout">
+              <IconButton size="large" color="inherit" onClick={handleLogout}>
+                <LogoutIcon />
+              </IconButton>
+            </Tooltip>
           ) : (
-            <IconButton size="large" color="inherit" onClick={handleLogin}>
-              <LoginIcon />
-            </IconButton>
+            <Tooltip title="Login">
+              <IconButton size="large" color="inherit" onClick={handleLogin}>
+                <LoginIcon />
+              </IconButton>
+            </Tooltip>
           )}
         </Grid>
       </Toolbar>

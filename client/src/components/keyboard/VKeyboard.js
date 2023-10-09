@@ -49,6 +49,10 @@ const VKeyboard = ({
 
   React.useEffect(() => {
     function handleKeyDown(e) {
+      if (e.target.id === 'feedbackTextarea') {
+        return
+      }
+
       if (e.target.id === 'tutorialButton') {
         e.target.blur()
       }
