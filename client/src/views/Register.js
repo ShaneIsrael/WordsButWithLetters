@@ -1,6 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Alert, IconButton, Button, FormControl, FormLabel, Input, Link, Sheet, Typography, Box } from '@mui/joy'
+import {
+  Alert,
+  IconButton,
+  Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Link,
+  Sheet,
+  Typography,
+  Box,
+  useTheme,
+} from '@mui/joy'
 import ErrorIcon from '@mui/icons-material/Error'
 import CloseIcon from '@mui/icons-material/Close'
 import validator from 'email-validator'
@@ -9,9 +21,11 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { sleep } from '../common/utils'
 import logo from '../assets/logo.png'
+import logoLight from '../assets/logo-light.png'
 
 const Register = () => {
   const navigate = useNavigate()
+  const theme = useTheme()
   const [email, setEmail] = React.useState('')
   const [displayName, setDisplayName] = React.useState('')
   const [password, setPassword] = React.useState('')
@@ -76,7 +90,7 @@ const Register = () => {
         height: '100vh',
       }}
     >
-      <img src={logo} width={350} />
+      <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={350} />
       <Sheet
         sx={{
           display: 'flex',
