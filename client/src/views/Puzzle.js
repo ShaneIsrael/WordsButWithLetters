@@ -100,8 +100,8 @@ const Puzzle = (props) => {
     // local storage IF local storage does not have an entry for today
     if (!loadPuzzleData(getPTDate())) {
       const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
-      setPuzzle(puzzleData.Puzzle)
-      savePuzzleData(puzzleData.date, puzzleData.Puzzle, PLAY_DATA)
+      setPuzzle(puzzleData.Puzzles[0])
+      savePuzzleData(puzzleData.date, puzzleData.Puzzles[0], PLAY_DATA)
       setPuzzleComplete(false)
       setShowPuzzle(true)
     }
@@ -159,6 +159,7 @@ const Puzzle = (props) => {
             savePuzzleData(response.date, response.puzzle, response.progress)
             setPlayData(response.progress)
             if (response.progress.puzzleComplete) {
+              umami.track('Casual puzzle complete')
               toast.success(response.message || 'Puzzle Complete!')
               return sleep(1800).then(() => setPuzzleComplete(response.progress.puzzleComplete)) // Give final row animation time to complete.
             }
@@ -227,7 +228,7 @@ const Puzzle = (props) => {
                 Puzzle #{puzzleNumber}
               </Typography>
               <Box>
-                <Button onClick={handleBegin} size="lg">
+                <Button onClick={handleBegin} size="lg" data-umami-event="Begin Casual Button">
                   <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
                     Begin Todays Puzzle
                   </Typography>

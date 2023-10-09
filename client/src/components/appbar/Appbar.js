@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTheme } from '@emotion/react'
-import { Grid, Typography, Menu, MenuItem, MenuButton, Dropdown, IconButton } from '@mui/joy'
+import { Grid, Typography, Menu, MenuItem, MenuButton, Dropdown, IconButton, Box } from '@mui/joy'
 import { AppBar, Toolbar } from '@mui/material'
 
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark'
@@ -13,7 +13,7 @@ import { useAuthed } from '../../hooks/useAuthed'
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 
-function Appbar({ setModalOpen }) {
+function Appbar({ setModalOpen, hideInstructions }) {
   const theme = useTheme()
   const navigate = useNavigate()
 
@@ -53,30 +53,34 @@ function Appbar({ setModalOpen }) {
               <MenuItem onClick={isAuthenticated ? handleLogout : handleLogin}>
                 {isAuthenticated ? 'Logout' : 'Login'}
               </MenuItem>
-              <MenuItem onClick={() => {}}>Leaderboards</MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setModalOpen(true)
-                }}
-              >
-                Instructions
-              </MenuItem>
+              <MenuItem onClick={() => navigate('/leaderboard')}>Leaderboards</MenuItem>
+              {!hideInstructions && (
+                <MenuItem
+                  onClick={() => {
+                    setModalOpen(true)
+                  }}
+                >
+                  Instructions
+                </MenuItem>
+              )}
             </Menu>
           </Dropdown>
         </Grid>
         <Grid container xs={4} justifyContent="center">
-          <Typography
-            level="h2"
-            textAlign="center"
-            sx={{
-              fontSize: {
-                xs: 18,
-                md: 32,
-              },
-            }}
-          >
-            Words But With Letters
-          </Typography>
+          <Box onClick={() => navigate(isAuthenticated ? '/ranked' : '/casual')} sx={{ cursor: 'pointer' }}>
+            <Typography
+              level="h2"
+              textAlign="center"
+              sx={{
+                fontSize: {
+                  xs: 18,
+                  md: 32,
+                },
+              }}
+            >
+              Words But With Letters
+            </Typography>
+          </Box>
         </Grid>
         <Grid
           container
@@ -90,10 +94,12 @@ function Appbar({ setModalOpen }) {
           }}
           gap={2}
         >
-          <IconButton size="large" color="inherit" onClick={() => setModalOpen(true)}>
-            <QuestionMarkIcon />
-          </IconButton>
-          <IconButton size="large" color="inherit" onClick={() => {}}>
+          {!hideInstructions && (
+            <IconButton size="large" color="inherit" onClick={() => setModalOpen(true)}>
+              <QuestionMarkIcon />
+            </IconButton>
+          )}
+          <IconButton size="large" color="inherit" onClick={() => navigate('/leaderboard')}>
             <LeaderboardIcon />
           </IconButton>
           {isAuthenticated ? (

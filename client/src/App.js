@@ -11,6 +11,7 @@ import VerifyEmail from './views/VerifyEmail'
 import { useAuthed } from './hooks/useAuthed'
 import Loading from './views/Loading'
 import RankedPuzzle from './views/RankedPuzzle'
+import Leaderboard from './views/Leaderboard'
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
           }
         />
         <Route path="/casual" element={<Puzzle />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify/:email/:token" element={<VerifyEmail />} />

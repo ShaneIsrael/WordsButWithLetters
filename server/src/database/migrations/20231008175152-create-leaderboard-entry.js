@@ -1,25 +1,31 @@
 'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Puzzles', {
+    await queryInterface.createTable('LeaderboardEntries', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      dayId: {
+      leaderboardId: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Days',
+          model: 'Leaderboards',
           key: 'id',
         },
       },
-      board: {
-        type: Sequelize.JSON,
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
       },
-      contextId: {
-        type: Sequelize.STRING,
+      score: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +38,6 @@ module.exports = {
     })
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Puzzles')
+    await queryInterface.dropTable('LeaderboardEntries')
   },
 }

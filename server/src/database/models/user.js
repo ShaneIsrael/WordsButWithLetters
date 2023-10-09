@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       this.hasMany(models.PuzzleSubmission, {
         foreignKey: 'userId',
       })
+      this.hasMany(models.LeaderboardEntry, {
+        foreignKey: 'userId',
+      })
     }
   }
   User.init(

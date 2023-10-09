@@ -73,7 +73,7 @@ const Register = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        my: 4,
+        height: '100vh',
       }}
     >
       <img src={logo} width={350} />

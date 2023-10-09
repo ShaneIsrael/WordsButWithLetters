@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const { Day, Puzzle, PuzzleSubmission } = require('../database/models')
 const { validateWord, calculateWordScore } = require('./WordService')
-const puzzle = require('../routes/puzzle')
 const service = {}
 
 /**

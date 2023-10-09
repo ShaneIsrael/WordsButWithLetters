@@ -1,7 +1,7 @@
 'use strict'
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Puzzles', {
+    await queryInterface.createTable('Leaderboards', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -15,11 +15,10 @@ module.exports = {
           key: 'id',
         },
       },
-      board: {
-        type: Sequelize.JSON,
-      },
-      contextId: {
+      context: {
         type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
       },
       createdAt: {
         allowNull: false,
@@ -32,6 +31,6 @@ module.exports = {
     })
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Puzzles')
+    await queryInterface.dropTable('Leaderboards')
   },
 }
