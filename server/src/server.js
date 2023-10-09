@@ -45,6 +45,7 @@ require('./routes/auth')(app)
 require('./routes/comment')(app)
 require('./routes/word')(app)
 require('./routes/puzzle')(app)
+require('./routes/leaderboard')(app)
 require('./routes')(app)
 
 // Error Handler

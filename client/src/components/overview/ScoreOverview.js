@@ -7,7 +7,6 @@ import BonusWord from './BonusWord'
 
 const ScoreOverview = ({ progress, scoreModifiers }) => {
   const theme = useTheme()
-  console.log(progress)
   return (
     <Sheet
       variant="plain"

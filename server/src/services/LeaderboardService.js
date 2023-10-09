@@ -1,7 +1,32 @@
-const { Leaderboard, LeaderboardEntry } = require('../database/models')
+const { Puzzle, Leaderboard, LeaderboardEntry, Day, User } = require('../database/models')
 const leaderboard = require('../database/models/leaderboard')
+const { getTodaysDate } = require('../utils')
 
 const service = {}
+
+service.getTodaysRankedEntries = async () => {
+  try {
+    const today = await Day.findOne({
+      where: {
+        date: getTodaysDate(),
+      },
+      include: [{ model: Puzzle, where: { type: 'ranked' } }],
+    })
+    const leaderboard = await Leaderboard.findOne({
+      attributes: ['createdAt'],
+      where: {
+        dayId: today.id,
+        context: today.Puzzles[0].contextId,
+      },
+      include: [
+        { model: LeaderboardEntry, attributes: ['score'], include: [{ model: User, attributes: ['displayName'] }] },
+      ],
+    })
+    return leaderboard
+  } catch (err) {
+    throw err
+  }
+}
 
 service.createLeaderboardEntry = async (score, userId, contextId) => {
   try {
