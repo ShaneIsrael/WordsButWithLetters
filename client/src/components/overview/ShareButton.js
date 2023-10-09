@@ -7,6 +7,7 @@ import { useTheme } from '@emotion/react'
 import { toast } from 'sonner'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuthed } from '../../hooks/useAuthed'
+import { convertNumberToEmoji } from '../../common/utils'
 
 const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
   const theme = useTheme()

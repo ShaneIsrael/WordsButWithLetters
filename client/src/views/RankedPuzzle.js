@@ -94,7 +94,7 @@ const RankedPuzzle = (props) => {
 
   const handleBegin = async () => {
     if (!puzzle) {
-      const submission = (await PuzzleService.createPuzzleSubmission()).data
+      const submission = (await PuzzleService.createPuzzleSubmission()).data?.submission
       const rankedPuzzle = (await PuzzleService.getTodaysRankedPuzzle()).data
       setPuzzle(rankedPuzzle.Puzzles[0])
       setPuzzleSubmission(submission)
