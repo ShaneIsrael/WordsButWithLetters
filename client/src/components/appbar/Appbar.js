@@ -12,7 +12,7 @@ import ChatIcon from '@mui/icons-material/Chat'
 
 import { useAuthed } from '../../hooks/useAuthed'
 import { useAuth } from '../../hooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import FeedbackModal from '../modals/FeedbackModal'
 import Cookies from 'js-cookie'
 import InstructionModal from '../modals/InstructionModal'
@@ -20,6 +20,8 @@ import InstructionModal from '../modals/InstructionModal'
 function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle }) {
   const theme = useTheme()
   const navigate = useNavigate()
+  const location = useLocation()
+
   const [feedbackModalOpen, setFeedbackModalOpen] = React.useState(false)
   const [instructionsModalOpen, setInstructionsModalOpen] = React.useState(false)
 
@@ -44,7 +46,9 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle 
     const instructionsDisabled = Cookies.get('instructionsDisabled')
 
     if ((!instructionsDisabled || instructionsDisabled === 'false') && !puzzleCompleted) {
-      setInstructionsModalOpen(true)
+      if (!['/login', '/register', '/leaderboard'].includes(location.pathname)) {
+        setInstructionsModalOpen(true)
+      }
     }
   }, [])
 
