@@ -18,6 +18,8 @@ import Appbar from '../components/appbar/Appbar'
 import wrongSfx from '../sounds/wrong.wav'
 import useSound from 'use-sound'
 import { toast } from 'sonner'
+import { useAuthed } from '../hooks/useAuthed'
+import { useNavigate } from 'react-router-dom'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -43,6 +45,9 @@ const PLAY_DATA = {
 
 const Puzzle = (props) => {
   const theme = useTheme()
+  const navigate = useNavigate()
+  const { isAuthenticated } = useAuthed()
+
   const [playInvalid] = useSound(wrongSfx, {
     volume: 0.2,
     interrupt: true,
@@ -79,6 +84,7 @@ const Puzzle = (props) => {
   }, [])
 
   const handleBegin = async () => {
+    umami.track('Begin Casual Button')
     // only allow fetching the puzzle and setting the initial
     // local storage IF local storage does not have an entry for today
     if (!loadPuzzleData(getPTDate())) {
@@ -207,13 +213,25 @@ const Puzzle = (props) => {
               >
                 Puzzle #{puzzleNumber}
               </Typography>
-              <Box>
-                <Button onClick={handleBegin} size="lg" data-umami-event="Begin Casual Button">
+              <Grid container direction="column" gap={2} alignItems="center">
+                <Button onClick={handleBegin} size="lg">
                   <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
                     Begin Todays Puzzle
                   </Typography>
                 </Button>
-              </Box>
+                {!isAuthenticated && (
+                  <>
+                    <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                      OR
+                    </Typography>
+                    <Button color="success" onClick={() => navigate('/login')} size="lg">
+                      <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                        Login for Ranked Play
+                      </Typography>
+                    </Button>
+                  </>
+                )}
+              </Grid>
               <Box />
             </Sheet>
             <Box className={clsx('card-face', 'card-back')}>

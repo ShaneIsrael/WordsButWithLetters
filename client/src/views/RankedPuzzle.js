@@ -21,6 +21,7 @@ import ShareButton from '../components/overview/ShareButton'
 import Appbar from '../components/appbar/Appbar'
 import wrongSfx from '../sounds/wrong.wav'
 import InstructionModal from '../components/modals/InstructionModal'
+import { useNavigate } from 'react-router-dom'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
@@ -50,6 +51,7 @@ const PLAY_DATA = {
 
 const RankedPuzzle = (props) => {
   const theme = useTheme()
+  const navigate = useNavigate()
   const [playInvalid] = useSound(wrongSfx, {
     volume: 0.2,
     interrupt: true,
@@ -80,6 +82,7 @@ const RankedPuzzle = (props) => {
   }, [])
 
   const handleBegin = async () => {
+    umami.track('Begin Ranked Button')
     if (!puzzle) {
       const submission = (await PuzzleService.createPuzzleSubmission()).data?.submission
       const rankedPuzzle = (await PuzzleService.getTodaysRankedPuzzle()).data
@@ -222,13 +225,28 @@ const RankedPuzzle = (props) => {
               >
                 Ranked Puzzle #{puzzleNumber}
               </Typography>
-              <Box>
-                <Button onClick={handleBegin} size="lg" data-umami-event="Begin Ranked Button">
+              {/* <Box>
+                <Button onClick={handleBegin} size="lg">
                   <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
                     Begin Todays Ranked Puzzle
                   </Typography>
                 </Button>
-              </Box>
+              </Box> */}
+              <Grid container direction="column" gap={2} alignItems="center">
+                <Button onClick={handleBegin} size="lg">
+                  <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                    Begin Todays Ranked Puzzle
+                  </Typography>
+                </Button>
+                <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                  OR
+                </Typography>
+                <Button color="success" onClick={() => navigate('/casual')} size="lg">
+                  <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                    Play Todays Casual Puzzle
+                  </Typography>
+                </Button>
+              </Grid>
               <Box />
             </Sheet>
             <Box className={clsx('card-face', 'card-back')}>

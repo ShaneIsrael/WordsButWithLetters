@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 import { sleep } from '../common/utils'
 import logo from '../assets/logo.png'
 import logoLight from '../assets/logo-light.png'
+import Appbar from '../components/appbar/Appbar'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -81,116 +82,117 @@ const Register = () => {
   }
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-      }}
-    >
-      <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={350} />
-      <Sheet
+    <>
+      <Appbar hideLoginLogout hideTitle />
+      <Box
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: 350,
-          // mx: 'auto',
-          my: 4,
-          py: 3,
-          px: 2,
-
-          gap: 2,
-          borderRadius: 'sm',
-          boxShadow: 'md',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 'calc(100vh - 64px)',
         }}
-        variant="outlined"
       >
-        <div>
-          <Typography level="h4" component="h1">
-            <b>Register</b>
-          </Typography>
-        </div>
-        <FormControl>
-          <FormLabel>Email</FormLabel>
-          <Input
-            value={email}
-            name="email"
-            type="email"
-            placeholder="johndoe@email.com"
-            onChange={handleEmailChange}
-            error={errors.email}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Display name</FormLabel>
-          <Input
-            value={displayName}
-            name="displayName"
-            type="text"
-            placeholder="AwesomeSauce"
-            onChange={handleDisplayNameChange}
-            error={errors.displayName}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Password</FormLabel>
-          <Input
-            value={password}
-            name="password"
-            type="password"
-            placeholder="password"
-            onChange={handlePasswordChange}
-            error={errors.password}
-          />
-        </FormControl>
-        <FormControl>
-          <FormLabel>Confirm password</FormLabel>
-          <Input
-            value={confPassword}
-            name="password"
-            type="password"
-            placeholder="confirm password"
-            onChange={handleConfPasswordChange}
-            disabled={!password || password.length <= 5}
-            error={errors.confirmPassword}
-          />
-        </FormControl>
-
-        <Button
-          sx={{ mt: 1 /* margin top */ }}
-          onClick={handleRegister}
-          disabled={
-            !password ||
-            !confPassword ||
-            confPassword !== password ||
-            errors.password ||
-            errors.confirmPassword ||
-            errors.email
-          }
+        <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={345} />
+        <Sheet
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: 350,
+            mt: 0.5,
+            py: 3,
+            px: 2,
+            gap: 2,
+            borderRadius: 'sm',
+            boxShadow: 'md',
+          }}
+          variant="outlined"
         >
-          Register
-        </Button>
-        {message && (
-          <Alert
-            variant="solid"
-            color="danger"
-            startDecorator={<ErrorIcon />}
-            endDecorator={
-              <IconButton variant="solid" size="sm" color="danger" onClick={() => setMessage(null)}>
-                <CloseIcon />
-              </IconButton>
+          <div>
+            <Typography level="h4" component="h1">
+              <b>Register</b>
+            </Typography>
+          </div>
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              value={email}
+              name="email"
+              type="email"
+              placeholder="johndoe@email.com"
+              onChange={handleEmailChange}
+              error={errors.email}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Display name</FormLabel>
+            <Input
+              value={displayName}
+              name="displayName"
+              type="text"
+              placeholder="AwesomeSauce"
+              onChange={handleDisplayNameChange}
+              error={errors.displayName}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Password</FormLabel>
+            <Input
+              value={password}
+              name="password"
+              type="password"
+              placeholder="password"
+              onChange={handlePasswordChange}
+              error={errors.password}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Confirm password</FormLabel>
+            <Input
+              value={confPassword}
+              name="password"
+              type="password"
+              placeholder="confirm password"
+              onChange={handleConfPasswordChange}
+              disabled={!password || password.length <= 5}
+              error={errors.confirmPassword}
+            />
+          </FormControl>
+
+          <Button
+            sx={{ mt: 1 /* margin top */ }}
+            onClick={handleRegister}
+            disabled={
+              !password ||
+              !confPassword ||
+              confPassword !== password ||
+              errors.password ||
+              errors.confirmPassword ||
+              errors.email
             }
           >
-            {message}
-          </Alert>
-        )}
-        <Typography endDecorator={<Link href="/#/login">Login</Link>} fontSize="sm" sx={{ alignSelf: 'center' }}>
-          Already have an account?
-        </Typography>
-      </Sheet>
-    </Box>
+            Register
+          </Button>
+          {message && (
+            <Alert
+              variant="solid"
+              color="danger"
+              startDecorator={<ErrorIcon />}
+              endDecorator={
+                <IconButton variant="solid" size="sm" color="danger" onClick={() => setMessage(null)}>
+                  <CloseIcon />
+                </IconButton>
+              }
+            >
+              {message}
+            </Alert>
+          )}
+          <Typography endDecorator={<Link href="/#/login">Login</Link>} fontSize="sm" sx={{ alignSelf: 'center' }}>
+            Already have an account?
+          </Typography>
+        </Sheet>
+      </Box>
+    </>
   )
 }
 

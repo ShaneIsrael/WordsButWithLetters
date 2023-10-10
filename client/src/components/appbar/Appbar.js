@@ -17,7 +17,7 @@ import FeedbackModal from '../modals/FeedbackModal'
 import Cookies from 'js-cookie'
 import InstructionModal from '../modals/InstructionModal'
 
-function Appbar({ hideInstructions, puzzleCompleted }) {
+function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle }) {
   const theme = useTheme()
   const navigate = useNavigate()
   const [feedbackModalOpen, setFeedbackModalOpen] = React.useState(false)
@@ -91,20 +91,22 @@ function Appbar({ hideInstructions, puzzleCompleted }) {
           </Dropdown>
         </Grid>
         <Grid container xs={4} justifyContent="center">
-          <Box onClick={() => navigate(isAuthenticated ? '/' : '/casual')} sx={{ cursor: 'pointer' }}>
-            <Typography
-              level="h2"
-              textAlign="center"
-              sx={{
-                fontSize: {
-                  xs: 18,
-                  md: 32,
-                },
-              }}
-            >
-              Words But With Letters
-            </Typography>
-          </Box>
+          {!hideTitle && (
+            <Box onClick={() => navigate(isAuthenticated ? '/' : '/casual')} sx={{ cursor: 'pointer' }}>
+              <Typography
+                level="h2"
+                textAlign="center"
+                sx={{
+                  fontSize: {
+                    xs: 18,
+                    md: 32,
+                  },
+                }}
+              >
+                Words But With Letters
+              </Typography>
+            </Box>
+          )}
         </Grid>
         <Grid
           container
@@ -136,14 +138,14 @@ function Appbar({ hideInstructions, puzzleCompleted }) {
               <LeaderboardIcon />
             </IconButton>
           </Tooltip>
-
-          {isAuthenticated ? (
+          {!hideLoginLogout && isAuthenticated && (
             <Tooltip title="Logout">
               <IconButton size="large" color="inherit" onClick={handleLogout}>
                 <LogoutIcon />
               </IconButton>
             </Tooltip>
-          ) : (
+          )}
+          {!hideLoginLogout && !isAuthenticated && (
             <Tooltip title="Login">
               <IconButton size="large" color="inherit" onClick={handleLogin}>
                 <LoginIcon />
