@@ -9,6 +9,7 @@ RUN npm i -g --silent npm@9.1.3
 RUN npm i --silent
 RUN npm install react-scripts@5.0.1 -g --silent
 COPY client/ ./
+ENV REACT_APP_ENVIRONMENT=production
 RUN npm run build
 
 # production environment
