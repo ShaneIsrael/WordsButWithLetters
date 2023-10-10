@@ -14,7 +14,13 @@ const Leaderboard = (props) => {
   const { isAuthenticated } = useAuthed()
   const navigate = useNavigate()
 
-  const user = JSON.parse(Cookies.get('user'))
+  const userCookie = Cookies.get('user')
+  let user
+  try {
+    user = userCookie ? JSON.parse(userCookie) : null
+  } catch (err) {
+    console.error(err)
+  }
 
   React.useEffect(() => {
     async function fetch() {
