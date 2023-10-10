@@ -13,10 +13,15 @@ import ChatIcon from '@mui/icons-material/Chat'
 import { useAuthed } from '../../hooks/useAuthed'
 import { useAuth } from '../../hooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import FeedbackModal from '../modals/FeedbackModal'
+import Cookies from 'js-cookie'
+import InstructionModal from '../modals/InstructionModal'
 
-function Appbar({ setModalOpen, setFeedbackModalOpen, hideInstructions }) {
+function Appbar({ hideInstructions, puzzleCompleted }) {
   const theme = useTheme()
   const navigate = useNavigate()
+  const [feedbackModalOpen, setFeedbackModalOpen] = React.useState(false)
+  const [instructionsModalOpen, setInstructionsModalOpen] = React.useState(false)
 
   let { isAuthenticated } = useAuthed()
   let { logout } = useAuth()
@@ -28,6 +33,21 @@ function Appbar({ setModalOpen, setFeedbackModalOpen, hideInstructions }) {
     logout()
   }
 
+  const handleInstructionModalClose = (disable) => {
+    Cookies.set('instructionsDisabled', disable, {
+      sameSite: 'Strict',
+    })
+    setInstructionsModalOpen(false)
+  }
+
+  React.useEffect(() => {
+    const instructionsDisabled = Cookies.get('instructionsDisabled')
+
+    if ((!instructionsDisabled || instructionsDisabled === 'false') && !puzzleCompleted) {
+      setInstructionsModalOpen(true)
+    }
+  }, [])
+
   return (
     <AppBar
       position="static"
@@ -35,6 +55,8 @@ function Appbar({ setModalOpen, setFeedbackModalOpen, hideInstructions }) {
         background: theme.palette.background.surface,
       }}
     >
+      <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
+      <InstructionModal open={instructionsModalOpen} onClose={handleInstructionModalClose} />
       <Toolbar>
         <Grid container xs={4}>
           <Dropdown>
@@ -58,7 +80,7 @@ function Appbar({ setModalOpen, setFeedbackModalOpen, hideInstructions }) {
               {!hideInstructions && (
                 <MenuItem
                   onClick={() => {
-                    setModalOpen(true)
+                    setInstructionsModalOpen(true)
                   }}
                 >
                   Instructions
@@ -98,7 +120,7 @@ function Appbar({ setModalOpen, setFeedbackModalOpen, hideInstructions }) {
         >
           {!hideInstructions && (
             <Tooltip title="View Instructions">
-              <IconButton size="large" color="inherit" onClick={() => setModalOpen(true)}>
+              <IconButton size="large" color="inherit" onClick={() => setInstructionsModalOpen(true)}>
                 <QuestionMarkIcon />
               </IconButton>
             </Tooltip>

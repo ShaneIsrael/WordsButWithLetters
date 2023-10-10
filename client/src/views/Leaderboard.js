@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import LeaderboardService from '../services/LeaderboardService'
-import { Box, Button, Sheet, Table, Typography } from '@mui/joy'
+import { Box, Button, Sheet, Table, Tooltip, Typography } from '@mui/joy'
 import Appbar from '../components/appbar/Appbar'
 import Cookies from 'js-cookie'
 import { format } from 'date-fns'
@@ -14,7 +14,7 @@ const Leaderboard = (props) => {
   const { isAuthenticated } = useAuthed()
   const navigate = useNavigate()
 
-  const user = Cookies.get('user')
+  const user = JSON.parse(Cookies.get('user'))
 
   React.useEffect(() => {
     async function fetch() {
@@ -30,7 +30,7 @@ const Leaderboard = (props) => {
   }
   return (
     <Box sx={{ overflow: 'hidden', height: '100vh' }}>
-      <Appbar setModalOpen={false} hideInstructions />
+      <Appbar hideInstructions />
       <Box
         sx={{
           display: 'flex',
@@ -98,28 +98,34 @@ const Leaderboard = (props) => {
                       </Typography>
                     </td>
                     <td>
-                      <Typography
-                        color={user?.displayName === entry.User.displayName ? 'primary' : ''}
-                        level="h2"
-                        fontSize={22}
-                      >
-                        {entry.User.displayName}
-                      </Typography>
+                      <Tooltip title={entry.User.displayName}>
+                        <Typography
+                          color={user?.displayName === entry.User.displayName ? 'primary' : ''}
+                          level="h2"
+                          fontSize={22}
+                        >
+                          {entry.User.displayName}
+                        </Typography>
+                      </Tooltip>
                     </td>
                     <td>
-                      <Typography
-                        color={user?.displayName === entry.User.displayName ? 'primary' : ''}
-                        level={entry.User.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
-                        fontSize={entry.User.PuzzleSubmissions[0].bonusWord ? 18 : 16}
-                        letterSpacing={entry.User.PuzzleSubmissions[0].bonusWord ? '8px' : ''}
-                      >
-                        {entry.User.PuzzleSubmissions[0].bonusWord?.toUpperCase() || '❌❌❌❌'}
-                      </Typography>
+                      <Tooltip title={entry.User.PuzzleSubmissions[0].bonusWord || '-----'}>
+                        <Typography
+                          color={user?.displayName === entry.User.displayName ? 'primary' : ''}
+                          level={entry.User.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
+                          fontSize={entry.User.PuzzleSubmissions[0].bonusWord ? 18 : 16}
+                          letterSpacing={entry.User.PuzzleSubmissions[0].bonusWord ? '8px' : ''}
+                        >
+                          {entry.User.PuzzleSubmissions[0].bonusWord?.toUpperCase() || '❌❌❌❌'}
+                        </Typography>
+                      </Tooltip>
                     </td>
                     <td>
-                      <Typography color={user?.displayName === entry.User.displayName ? 'primary' : ''} fontSize={18}>
-                        {convertNumberToEmoji(entry.score)}
-                      </Typography>
+                      <Tooltip title={entry.score}>
+                        <Typography color={user?.displayName === entry.User.displayName ? 'primary' : ''} fontSize={18}>
+                          {convertNumberToEmoji(entry.score)}
+                        </Typography>
+                      </Tooltip>
                     </td>
                   </tr>
                 ))}

@@ -91,7 +91,6 @@ controller.login = async (req, res, next) => {
           .cookie(
             'user',
             JSON.stringify({
-              id: user.id,
               displayName: user.displayName,
               email: user.email,
             }),

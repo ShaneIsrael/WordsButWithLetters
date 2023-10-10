@@ -102,10 +102,10 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
               size="md"
               variant="soft"
               onClick={() => {
-                navigate('/casual')
+                navigate('/leaderboard')
               }}
             >
-              Complete Todays Casual Puzzle
+              View Leaderboard
             </Button>
           </Grid>
         )}
