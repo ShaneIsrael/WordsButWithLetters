@@ -8,6 +8,7 @@ import { format } from 'date-fns'
 import { convertNumberToEmoji, getPTDate } from '../common/utils'
 import { useAuthed } from '../hooks/useAuthed'
 import { useNavigate } from 'react-router-dom'
+import PageWrapper from '../components/wrappers/PageWrapper'
 
 const Leaderboard = (props) => {
   const [entries, setEntries] = React.useState([])
@@ -37,134 +38,139 @@ const Leaderboard = (props) => {
   return (
     <Box sx={{ overflow: 'hidden', height: '100vh' }}>
       <Appbar hideInstructions />
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          height: '100%',
-          mt: 4,
-        }}
-      >
-        <Typography color="primary" level="h2" fontSize={42}>
-          Ranked Leaderboard
-        </Typography>
-        <Typography color="" level="h2" fontSize={32}>
-          {formatDate(getPTDate())}
-        </Typography>
-        <Sheet
+      <PageWrapper>
+        <Box
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            width: 475,
-            height: 530,
-            overflow: 'auto',
-            borderRadius: 'sm',
-            boxShadow: 'md',
-            mt: 2,
+            alignItems: 'center',
+            height: '100%',
+            mt: 4,
           }}
-          variant="outlined"
         >
-          {entries && entries.length > 0 && (
-            <Table borderAxis="none" color="primary" size="lg" stickyFooter={false} stickyHeader variant="plain">
-              <thead>
-                <tr>
-                  <th style={{ width: 80 }}>
-                    <Typography level="h2" fontSize={28}>
-                      Rank
-                    </Typography>
-                  </th>
-                  <th style={{ width: 110 }}>
-                    <Typography level="h2" fontSize={28}>
-                      Player
-                    </Typography>
-                  </th>
-                  <th style={{ width: 115 }}>
-                    <Typography level="h2" fontSize={28}>
-                      Word
-                    </Typography>
-                  </th>
-                  <th>
-                    <Typography level="h2" fontSize={28}>
-                      Score
-                    </Typography>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {entries.map((entry, index) => (
-                  <tr key={`entry_${index}`}>
-                    <td>
-                      <Typography
-                        color={user?.displayName === entry.User.displayName ? 'primary' : ''}
-                        level="h2"
-                        fontSize={26}
-                      >
-                        {index + 1} .
+          <Typography color="primary" level="h2" fontSize={42}>
+            Ranked Leaderboard
+          </Typography>
+          <Typography color="" level="h2" fontSize={32}>
+            {formatDate(getPTDate())}
+          </Typography>
+          <Sheet
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: 475,
+              height: 530,
+              overflow: 'auto',
+              borderRadius: 'sm',
+              boxShadow: 'md',
+              mt: 2,
+            }}
+            variant="outlined"
+          >
+            {entries && entries.length > 0 && (
+              <Table borderAxis="none" color="primary" size="lg" stickyFooter={false} stickyHeader variant="plain">
+                <thead>
+                  <tr>
+                    <th style={{ width: 80 }}>
+                      <Typography level="h2" fontSize={28}>
+                        Rank
                       </Typography>
-                    </td>
-                    <td>
-                      <Tooltip title={entry.User.displayName}>
+                    </th>
+                    <th style={{ width: 110 }}>
+                      <Typography level="h2" fontSize={28}>
+                        Player
+                      </Typography>
+                    </th>
+                    <th style={{ width: 115 }}>
+                      <Typography level="h2" fontSize={28}>
+                        Word
+                      </Typography>
+                    </th>
+                    <th>
+                      <Typography level="h2" fontSize={28}>
+                        Score
+                      </Typography>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entries.map((entry, index) => (
+                    <tr key={`entry_${index}`}>
+                      <td>
                         <Typography
                           color={user?.displayName === entry.User.displayName ? 'primary' : ''}
                           level="h2"
-                          fontSize={22}
+                          fontSize={26}
                         >
-                          {entry.User.displayName}
+                          {index + 1} .
                         </Typography>
-                      </Tooltip>
-                    </td>
-                    <td>
-                      <Tooltip title={entry.User.PuzzleSubmissions[0].bonusWord || '-----'}>
-                        <Typography
-                          color={user?.displayName === entry.User.displayName ? 'primary' : ''}
-                          level={entry.User.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
-                          fontSize={entry.User.PuzzleSubmissions[0].bonusWord ? 18 : 16}
-                          letterSpacing={entry.User.PuzzleSubmissions[0].bonusWord ? '8px' : ''}
-                        >
-                          {entry.User.PuzzleSubmissions[0].bonusWord?.toUpperCase() || '❌❌❌❌'}
-                        </Typography>
-                      </Tooltip>
-                    </td>
-                    <td>
-                      <Tooltip title={entry.score}>
-                        <Typography color={user?.displayName === entry.User.displayName ? 'primary' : ''} fontSize={18}>
-                          {convertNumberToEmoji(entry.score)}
-                        </Typography>
-                      </Tooltip>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </Table>
-          )}
-          {(!entries || entries.length === 0) && (
-            <Box
-              p={2}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              flexDirection="column"
-              height="100%"
-              gap={3}
-            >
-              <Typography level="h2" textAlign="center" fontSize={42}>
-                No Entries
-              </Typography>
-              <Typography color="success" level="h2" textAlign="center" fontSize={24}>
-                {isAuthenticated ? 'login and ' : ''}complete the ranked puzzle to be the first on the leaderboard
-              </Typography>
-              <Button
-                variant="soft"
-                sx={{ fontFamily: 'Bubblegum Sans', fontSize: 22, width: 200 }}
-                onClick={() => (isAuthenticated ? navigate('/') : navigate('/login'))}
+                      </td>
+                      <td>
+                        <Tooltip title={entry.User.displayName}>
+                          <Typography
+                            color={user?.displayName === entry.User.displayName ? 'primary' : ''}
+                            level="h2"
+                            fontSize={22}
+                          >
+                            {entry.User.displayName}
+                          </Typography>
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <Tooltip title={entry.User.PuzzleSubmissions[0].bonusWord || '-----'}>
+                          <Typography
+                            color={user?.displayName === entry.User.displayName ? 'primary' : ''}
+                            level={entry.User.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
+                            fontSize={entry.User.PuzzleSubmissions[0].bonusWord ? 18 : 16}
+                            letterSpacing={entry.User.PuzzleSubmissions[0].bonusWord ? '8px' : ''}
+                          >
+                            {entry.User.PuzzleSubmissions[0].bonusWord?.toUpperCase() || '❌❌❌❌'}
+                          </Typography>
+                        </Tooltip>
+                      </td>
+                      <td>
+                        <Tooltip title={entry.score}>
+                          <Typography
+                            color={user?.displayName === entry.User.displayName ? 'primary' : ''}
+                            fontSize={18}
+                          >
+                            {convertNumberToEmoji(entry.score)}
+                          </Typography>
+                        </Tooltip>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            )}
+            {(!entries || entries.length === 0) && (
+              <Box
+                p={2}
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                flexDirection="column"
+                height="100%"
+                gap={3}
               >
-                {isAuthenticated ? 'Play Ranked' : 'Login'}
-              </Button>
-            </Box>
-          )}
-        </Sheet>
-      </Box>
+                <Typography level="h2" textAlign="center" fontSize={42}>
+                  No Entries
+                </Typography>
+                <Typography color="success" level="h2" textAlign="center" fontSize={24}>
+                  {isAuthenticated ? 'login and ' : ''}complete the ranked puzzle to be the first on the leaderboard
+                </Typography>
+                <Button
+                  variant="soft"
+                  sx={{ fontFamily: 'Bubblegum Sans', fontSize: 22, width: 200 }}
+                  onClick={() => (isAuthenticated ? navigate('/') : navigate('/login'))}
+                >
+                  {isAuthenticated ? 'Play Ranked' : 'Login'}
+                </Button>
+              </Box>
+            )}
+          </Sheet>
+        </Box>
+      </PageWrapper>
     </Box>
   )
 }
