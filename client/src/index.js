@@ -45,7 +45,7 @@ function ModeToggle() {
   const { setMode: setMaterialMode } = useMaterialColorScheme()
 
   React.useEffect(() => {
-    if (!process.env.REACT_APP_ENVIRONMENT === 'production') {
+    if (process.env.REACT_APP_ENVIRONMENT === 'production') {
       const script = document.createElement('script')
 
       script.src = 'https://umami.shaneisrael.net/script.js'
