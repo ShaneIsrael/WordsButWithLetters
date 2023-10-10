@@ -44,6 +44,18 @@ function ModeToggle() {
   const { mode, setMode } = useColorScheme(localStorage.getItem('theme') || 'dark')
   const { setMode: setMaterialMode } = useMaterialColorScheme()
 
+  React.useEffect(() => {
+    if (!process.env.REACT_APP_ENVIRONMENT === 'production') {
+      const script = document.createElement('script')
+
+      script.src = 'https://umami.shaneisrael.net/script.js'
+      script.setAttribute('data-website-id', '6d89ddf8-0e11-4eb4-9a1f-6dff361d63c9')
+      script.setAttribute('async', true)
+
+      document.head.appendChild(script)
+    }
+  }, [])
+
   return (
     <Button
       variant="plain"
