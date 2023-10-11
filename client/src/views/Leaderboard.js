@@ -11,7 +11,9 @@ import { useNavigate } from 'react-router-dom'
 import PageWrapper from '../components/wrappers/PageWrapper'
 
 const Leaderboard = (props) => {
-  const [entries, setEntries] = React.useState([])
+  const [entries, setEntries] = React.useState([
+    // { score: 5000, User: { displayName: 'TheBestAround', PuzzleSubmissions: [{ bonusWord: 'BATHE' }] } },
+  ])
   const { isAuthenticated } = useAuthed()
   const navigate = useNavigate()
 
@@ -58,7 +60,7 @@ const Leaderboard = (props) => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              width: 475,
+              width: 525,
               height: 530,
               overflow: 'auto',
               borderRadius: 'sm',
@@ -76,7 +78,7 @@ const Leaderboard = (props) => {
                         Rank
                       </Typography>
                     </th>
-                    <th style={{ width: 110 }}>
+                    <th style={{ width: 150 }}>
                       <Typography level="h2" fontSize={28}>
                         Player
                       </Typography>
