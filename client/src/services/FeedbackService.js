@@ -7,6 +7,9 @@ class FeedbackService {
   submitFeedback(message) {
     return Api().post('/feedback', { message })
   }
+  dismissFeedback(id) {
+    return Api().put('/feedback', { id })
+  }
 }
 
 const service = new FeedbackService()

@@ -12,6 +12,7 @@ import { useAuthed } from './hooks/useAuthed'
 import Loading from './views/Loading'
 import RankedPuzzle from './views/RankedPuzzle'
 import Leaderboard from './views/Leaderboard'
+import Admin from './views/Admin'
 
 function App() {
   return (
@@ -30,6 +31,14 @@ function App() {
           element={
             <RequireAuth redirectTo="/login">
               <Home />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <RequireAuth redirectTo="/casual">
+              <Admin />
             </RequireAuth>
           }
         />

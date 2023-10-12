@@ -5,9 +5,13 @@
     "requireConfigFile": false,
     "ecmaVersion": "latest",
     "sourceType": "module",
-    "allowImportExportEverywhere": false
+    "allowImportExportEverywhere": false,
+    "babelOptions": {
+      "parserOpts": {
+        "plugins": ["jsx"]
+      }
+    }
   },
-
   "globals": {
     "umami": "readonly"
   }

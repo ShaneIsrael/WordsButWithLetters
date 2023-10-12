@@ -7,6 +7,7 @@ const service = {}
 service.getAllFeedback = async () => {
   const feedback = await Feedback.findAll({
     order: [['createdAt', 'DESC']],
+    limit: 50,
     where: {
       dismissed: false,
     },

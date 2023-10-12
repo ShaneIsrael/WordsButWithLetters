@@ -1,4 +1,4 @@
-const { getAllFeedback, submitUserFeedback } = require('../services/FeedbackService')
+const { dismissFeedbackMessage, getAllFeedback, submitUserFeedback } = require('../services/FeedbackService')
 
 const controller = {}
 
