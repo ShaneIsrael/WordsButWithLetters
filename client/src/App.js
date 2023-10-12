@@ -1,17 +1,18 @@
 import React from 'react'
-import { Navigate, Route, HashRouter as Router, Routes } from 'react-router-dom'
+import { HashRouter as Router, Navigate, Route, Routes } from 'react-router-dom'
 
-import Login from './views/Login'
-import Register from './views/Register'
 import Home from './views/Home'
-import User from './views/User'
+import Login from './views/Login'
 import Puzzle from './views/Puzzle'
+import Register from './views/Register'
+import User from './views/User'
 import VerifyEmail from './views/VerifyEmail'
 
 import { useAuthed } from './hooks/useAuthed'
+import Admin from './views/Admin'
+import Leaderboard from './views/Leaderboard'
 import Loading from './views/Loading'
 import RankedPuzzle from './views/RankedPuzzle'
-import Leaderboard from './views/Leaderboard'
 
 function App() {
   return (
@@ -33,6 +34,14 @@ function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/admin"
+          element={
+            <RequireAuth redirectTo="/casual">
+              <Admin />
+            </RequireAuth>
+          }
+        />
         <Route path="/casual" element={<Puzzle />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/login" element={<Login />} />
@@ -46,7 +55,7 @@ function App() {
 }
 
 function RequireAuth({ children, redirectTo }) {
-  let { loading, isAuthenticated } = useAuthed()
+  const { loading, isAuthenticated } = useAuthed()
 
   return loading ? <Loading /> : isAuthenticated ? children : <Navigate to={redirectTo} />
 }

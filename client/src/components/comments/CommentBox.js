@@ -1,14 +1,14 @@
-import React from 'react'
+import SendIcon from '@mui/icons-material/Send'
+import { ButtonGroup, Sheet } from '@mui/joy'
 import Box from '@mui/joy/Box'
 import Button from '@mui/joy/Button'
 import FormControl from '@mui/joy/FormControl'
 import Textarea from '@mui/joy/Textarea'
-import CommentService from '../../services/CommentService'
 import PropTypes from 'prop-types'
-import { ButtonGroup, Sheet } from '@mui/joy'
+import React from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import remarkGfm from 'remark-gfm'
-import SendIcon from '@mui/icons-material/Send'
+import CommentService from '../../services/CommentService'
 
 function isEmptyOrSpaces(str) {
   return str === null || str.match(/^ *$/) !== null
@@ -52,7 +52,7 @@ const CommentBox = ({ threadId, parentId, onSubmit, onCancel }) => {
                 size="sm"
                 aria-pressed={preview ? 'true' : 'false'}
                 sx={(theme) => ({
-                  [`&[aria-pressed="true"]`]: {
+                  '&[aria-pressed="true"]': {
                     ...theme.variants.outlinedActive.primary,
                     borderColor: theme.vars.palette.primary.outlinedHoverBorder,
                   },

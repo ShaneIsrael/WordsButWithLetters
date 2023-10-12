@@ -1,6 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { useNavigate } from 'react-router-dom'
+import CloseIcon from '@mui/icons-material/Close'
+import ErrorIcon from '@mui/icons-material/Error'
 import {
   Alert,
   Box,
@@ -14,13 +13,14 @@ import {
   Typography,
   useTheme,
 } from '@mui/joy'
-import ErrorIcon from '@mui/icons-material/Error'
-import CloseIcon from '@mui/icons-material/Close'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-import logo from '../assets/logo.png'
 import logoLight from '../assets/logo-light.png'
-import { useAuth } from '../hooks/useAuth'
+import logo from '../assets/logo.png'
 import Appbar from '../components/appbar/Appbar'
+import { useAuth } from '../hooks/useAuth'
 
 const Login = (props) => {
   const [email, setEmail] = React.useState('')
@@ -63,7 +63,7 @@ const Login = (props) => {
           height: 'calc(100vh - 64px)',
         }}
       >
-        <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={345} />
+        <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={345} alt="logo" />
         <Sheet
           sx={{
             display: 'flex',

@@ -1,33 +1,33 @@
-import React from 'react'
-import _ from 'lodash'
-import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
-import { toast } from 'sonner'
 import { Box, Button, Grid, Sheet, Typography } from '@mui/joy'
+import clsx from 'clsx'
 import Cookies from 'js-cookie'
+import _ from 'lodash'
+import React from 'react'
+import { toast } from 'sonner'
 import useSound from 'use-sound'
 
-import PageWrapper from '../components/wrappers/PageWrapper'
-import VKeyboard from '../components/keyboard/VKeyboard'
-import GameBoard from '../components/board/GameBoard'
-import PuzzleService from '../services/PuzzleService'
-import ScoreModifiers from '../components/board/ScoreModifiers'
-import BonusWordComponent from '../components/board/BonusWordComponent'
-import TitleKeyboard from '../components/keyboard/TitleKeyboard'
-import Clock from '../components/clock/Clock'
+import { useNavigate } from 'react-router-dom'
 import { getPTDate, sleep } from '../common/utils'
+import Appbar from '../components/appbar/Appbar'
+import BonusWordComponent from '../components/board/BonusWordComponent'
+import GameBoard from '../components/board/GameBoard'
+import ScoreModifiers from '../components/board/ScoreModifiers'
+import Clock from '../components/clock/Clock'
+import TitleKeyboard from '../components/keyboard/TitleKeyboard'
+import VKeyboard from '../components/keyboard/VKeyboard'
+import InstructionModal from '../components/modals/InstructionModal'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
-import Appbar from '../components/appbar/Appbar'
+import PageWrapper from '../components/wrappers/PageWrapper'
+import PuzzleService from '../services/PuzzleService'
 import wrongSfx from '../sounds/wrong.wav'
-import InstructionModal from '../components/modals/InstructionModal'
-import { useNavigate } from 'react-router-dom'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
 
 function createWordMatrix(submission) {
-  let rows = []
+  const rows = []
   for (let i = 0; i < MAX_BOARD_ROWS; i++) {
     if (!submission) {
       rows.push(new Array(BOARD_ROW_LENGTH).fill())
@@ -115,7 +115,7 @@ const RankedPuzzle = (props) => {
     setPlayData((data) => ({
       ...data,
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
-        let trow = row
+        const trow = row
         if (rowIndex === playData.activeRow) {
           for (let i = 0; i < puzzle.board.boardRowLength; i++) {
             if (!trow[i]) {
@@ -137,7 +137,7 @@ const RankedPuzzle = (props) => {
     setPlayData((data) => ({
       ...data,
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
-        let trow = row
+        const trow = row
         if (rowIndex === playData.activeRow) {
           for (let i = puzzle.board.boardRowLength; i >= 0; i--) {
             if (trow[i]) {

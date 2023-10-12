@@ -1,13 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import clsx from 'clsx'
-import { Button, Grid, Sheet, Typography } from '@mui/joy'
 import { useTheme } from '@emotion/react'
-import useSound from 'use-sound'
-import BoardRow from './BoardRow'
+import { Button, Grid, Sheet, Typography } from '@mui/joy'
+import clsx from 'clsx'
 import _ from 'lodash'
-import popSound from '../../sounds/pop.wav'
+import PropTypes from 'prop-types'
+import React from 'react'
+import useSound from 'use-sound'
 import { sleep } from '../../common/utils'
+import popSound from '../../sounds/pop.wav'
+import BoardRow from './BoardRow'
 
 const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHighlights, onStart, failedAttempt }) => {
   const theme = useTheme()
@@ -40,7 +40,7 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHigh
   function getBoard() {
     if (!hide)
       return new Array(rows).fill().map((_, index) => (
-        <div key={index} className={clsx({ invalid: invalidAnimationOn && index === activeRow })}>
+        <div key={`Row-${index}`} className={clsx({ invalid: invalidAnimationOn && index === activeRow })}>
           <BoardRow
             active={activeRow === index}
             completed={index < activeRow}

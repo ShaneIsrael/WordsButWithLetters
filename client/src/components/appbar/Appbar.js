@@ -46,7 +46,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle 
     const instructionsDisabled = Cookies.get('instructionsDisabled')
 
     if ((!instructionsDisabled || instructionsDisabled === 'false') && !puzzleCompleted) {
-      if (!['/login', '/register', '/leaderboard'].includes(location.pathname)) {
+      if (!['/login', '/register', '/leaderboard', '/admin'].includes(location.pathname)) {
         setInstructionsModalOpen(true)
       }
     }

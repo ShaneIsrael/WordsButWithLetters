@@ -1,28 +1,28 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import CloseIcon from '@mui/icons-material/Close'
+import ErrorIcon from '@mui/icons-material/Error'
 import {
   Alert,
-  IconButton,
+  Box,
   Button,
   FormControl,
   FormLabel,
+  IconButton,
   Input,
   Link,
   Sheet,
   Typography,
-  Box,
   useTheme,
 } from '@mui/joy'
-import ErrorIcon from '@mui/icons-material/Error'
-import CloseIcon from '@mui/icons-material/Close'
 import validator from 'email-validator'
-import AuthService from '../services/AuthService'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
-import { sleep } from '../common/utils'
-import logo from '../assets/logo.png'
 import logoLight from '../assets/logo-light.png'
+import logo from '../assets/logo.png'
+import { sleep } from '../common/utils'
 import Appbar from '../components/appbar/Appbar'
+import AuthService from '../services/AuthService'
 
 const Register = () => {
   const navigate = useNavigate()
@@ -93,7 +93,7 @@ const Register = () => {
           height: 'calc(100vh - 64px)',
         }}
       >
-        <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={345} />
+        <img src={theme.palette.mode === 'dark' ? logo : logoLight} width={345} alt="logo" />
         <Sheet
           sx={{
             display: 'flex',

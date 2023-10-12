@@ -1,7 +1,7 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import { Box, Grid, Sheet, styled } from '@mui/joy'
 import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 const HIGHLIGHT_COLORS = {
   red: {
@@ -77,7 +77,7 @@ const MiniBoard = ({ wordMatrix, scoreModifiers }) => {
     <Sheet variant="outlined" sx={{ p: 1 }}>
       <Grid container gap={0.5} width={186}>
         {wordMatrix.map((word, index) => (
-          <Grid key={`${word}_row_${index}`} container height={`calc(100%/6)`} gap={0.5}>
+          <Grid key={`${word}_row_${index}`} container height={'calc(100%/6)'} gap={0.5}>
             {word.map((letter, index) => (
               <Grid xs key={`${letter}_${index}`}>
                 {letter && (

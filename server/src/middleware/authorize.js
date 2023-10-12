@@ -14,6 +14,14 @@ const authorize = (req, res, next) => {
   }
 }
 
+const verifyAdmin = (req, res, next) => {
+  const email = req.user.email
+
+  if (email !== 'sethwelch85@gmail.com') return res.sendStatus(401)
+
+  return next()
+}
+
 const isAuthenticated = (sessionCookie) => {
   if (!sessionCookie) return false
 
@@ -28,4 +36,5 @@ const isAuthenticated = (sessionCookie) => {
 module.exports = {
   authorize,
   isAuthenticated,
+  verifyAdmin,
 }

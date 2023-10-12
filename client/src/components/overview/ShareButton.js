@@ -1,13 +1,13 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Button, Grid, Sheet, Tooltip } from '@mui/joy'
-import ShareIcon from '@mui/icons-material/Share'
-import PuzzleService from '../../services/PuzzleService'
 import { useTheme } from '@emotion/react'
-import { toast } from 'sonner'
+import ShareIcon from '@mui/icons-material/Share'
+import { Button, Grid, Sheet, Tooltip } from '@mui/joy'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuthed } from '../../hooks/useAuthed'
+import { toast } from 'sonner'
 import { convertNumberToEmoji } from '../../common/utils'
+import { useAuthed } from '../../hooks/useAuthed'
+import PuzzleService from '../../services/PuzzleService'
 
 const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
   const theme = useTheme()
@@ -19,7 +19,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
   React.useEffect(() => {
     async function init() {
       const flatModifiers = scoreModifiers?.reduce((prev, curr) => prev.concat(curr))
-      let finalScore = progress.wordScores.filter((score) => score).reduce((prev, curr) => prev + curr, 0)
+      const finalScore = progress.wordScores.filter((score) => score).reduce((prev, curr) => prev + curr, 0)
 
       let shareText = `WBWL -- #${puzzleNumber}\n\n`
 
