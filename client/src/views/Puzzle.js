@@ -1,31 +1,31 @@
-import React from 'react'
-import PageWrapper from '../components/wrappers/PageWrapper'
-import VKeyboard from '../components/keyboard/VKeyboard'
-import GameBoard from '../components/board/GameBoard'
-import PuzzleService from '../services/PuzzleService'
-import _ from 'lodash'
-import ScoreModifiers from '../components/board/ScoreModifiers'
-import BonusWordComponent from '../components/board/BonusWordComponent'
-import { Box, Button, Grid, Sheet, Typography } from '@mui/joy'
-import TitleKeyboard from '../components/keyboard/TitleKeyboard'
-import Clock from '../components/clock/Clock'
-import clsx from 'clsx'
 import { useTheme } from '@emotion/react'
-import { loadPuzzleData, getPTDate, savePuzzleData, sleep } from '../common/utils'
+import { Box, Button, Grid, Sheet, Typography } from '@mui/joy'
+import clsx from 'clsx'
+import _ from 'lodash'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import useSound from 'use-sound'
+import { getPTDate, loadPuzzleData, savePuzzleData, sleep } from '../common/utils'
+import Appbar from '../components/appbar/Appbar'
+import BonusWordComponent from '../components/board/BonusWordComponent'
+import GameBoard from '../components/board/GameBoard'
+import ScoreModifiers from '../components/board/ScoreModifiers'
+import Clock from '../components/clock/Clock'
+import TitleKeyboard from '../components/keyboard/TitleKeyboard'
+import VKeyboard from '../components/keyboard/VKeyboard'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
-import Appbar from '../components/appbar/Appbar'
-import wrongSfx from '../sounds/wrong.wav'
-import useSound from 'use-sound'
-import { toast } from 'sonner'
+import PageWrapper from '../components/wrappers/PageWrapper'
 import { useAuthed } from '../hooks/useAuthed'
-import { useNavigate } from 'react-router-dom'
+import PuzzleService from '../services/PuzzleService'
+import wrongSfx from '../sounds/wrong.wav'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
 
 function initBoardRows() {
-  let rows = []
+  const rows = []
   for (let i = 0; i < MAX_BOARD_ROWS; i++) {
     rows.push(new Array(BOARD_ROW_LENGTH).fill())
   }
@@ -102,7 +102,7 @@ const Puzzle = (props) => {
     setPlayData((data) => ({
       ...data,
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
-        let trow = row
+        const trow = row
         if (rowIndex === playData.activeRow) {
           for (let i = 0; i < puzzle.board.boardRowLength; i++) {
             if (!trow[i]) {
@@ -124,7 +124,7 @@ const Puzzle = (props) => {
     setPlayData((data) => ({
       ...data,
       wordMatrix: data.wordMatrix.map((row, rowIndex) => {
-        let trow = row
+        const trow = row
         if (rowIndex === playData.activeRow) {
           for (let i = puzzle.board.boardRowLength; i >= 0; i--) {
             if (trow[i]) {

@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import clsx from 'clsx'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 import { Grid, Sheet, styled } from '@mui/joy'
 import { sleep } from '../../common/utils'
@@ -104,7 +104,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
                 })}
                 active={letter}
                 color={'red'}
-                highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
+                highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS.yellow.borderActiveDark : ''}
                 sx={{ animationDelay }}
               >
                 {letter}
@@ -113,7 +113,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
           if (completed)
             return (
               <HighlightLetterHolder
-                key={'completed_' + letter + index}
+                key={`completed_${letter}${index}`}
                 className={clsx({
                   [`hop${index}`]: true,
                 })}
@@ -129,7 +129,7 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
               key={(letter ? letter : 'blank_') + index}
               // className={clsx({'tilt-shake': letter, 'goldPulse': modifierLetters.includes(letter)})}
               active={letter}
-              highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS['yellow'].borderActiveDark : ''}
+              highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS.yellow.borderActiveDark : ''}
               sx={{ animationDelay }}
             >
               {letter}
@@ -144,9 +144,9 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
       {letters.map((_, index) => {
         const highlight = highlightIndexes.filter((e) => e.index === index)[0]
         return highlight ? (
-          <HighlightLetterHolder key={'blank_' + index} className={highlight.animation} color={'red'} />
+          <HighlightLetterHolder key={`blank_${index}`} className={highlight.animation} color={'red'} />
         ) : (
-          <LetterHolder key={'blank_' + index} />
+          <LetterHolder key={`blank_${index}`} />
         )
       })}
     </Grid>

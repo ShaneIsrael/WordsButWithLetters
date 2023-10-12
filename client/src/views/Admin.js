@@ -1,9 +1,9 @@
-import { Box, Grid, IconButton, List, ListItem } from '@mui/joy'
-import React, { useEffect } from 'react'
-import FeedbackService from '../services/FeedbackService'
-import Appbar from '../components/appbar/Appbar'
 import { useTheme } from '@emotion/react'
 import DeleteIcon from '@mui/icons-material/Delete'
+import { Box, Grid, IconButton, List, ListItem } from '@mui/joy'
+import React, { useEffect } from 'react'
+import Appbar from '../components/appbar/Appbar'
+import FeedbackService from '../services/FeedbackService'
 
 function Admin() {
   const [feedback, setFeedback] = React.useState([])
@@ -52,7 +52,7 @@ function Admin() {
       >
         <Grid
           container
-          sx={{ width: 1200, height: 800, borderRadius: 8, border: '1px solid ' + theme.palette.neutral[100] }}
+          sx={{ width: 1200, height: 800, borderRadius: 8, border: `1px solid ${theme.palette.neutral[100]}` }}
         >
           <Grid
             xs={3}
@@ -71,7 +71,7 @@ function Admin() {
                 const selectedValue = f.id === selected.id
                 return (
                   <ListItem
-                    key={'li-' + i}
+                    key={`li-${i}`}
                     sx={{
                       border: '2px solid',
                       borderColor: selectedValue ? theme.palette.primary[600] : '#616161',

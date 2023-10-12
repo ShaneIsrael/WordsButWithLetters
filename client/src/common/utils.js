@@ -23,8 +23,8 @@ export const getUrl = () => {
 }
 
 export const convertFlatCommentsToNested = (comments) => {
-  let index = _.mapKeys(comments, 'id')
-  let obj = {}
+  const index = _.mapKeys(comments, 'id')
+  const obj = {}
   _.each(index, function (v) {
     if (!v.parentId) {
       obj[v.id] = v
@@ -82,7 +82,7 @@ export const convertNumberToEmoji = (number) => {
   const numberSize = tempNumber.length
   if (numberSize < 5) {
     for (let i = 0; i < 5 - numberSize; i++) {
-      tempNumber = '0' + tempNumber
+      tempNumber = `0${tempNumber}`
     }
   }
   tempNumber = `${tempNumber.split('').reduce((prev, curr) => prev + EMOJI_NUMBER_MAP[curr], '')}\n`

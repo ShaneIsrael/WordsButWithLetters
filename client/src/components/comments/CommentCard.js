@@ -1,22 +1,22 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
+import DeleteIcon from '@mui/icons-material/Delete'
+import OpenInFullIcon from '@mui/icons-material/OpenInFull'
+import ReplyIcon from '@mui/icons-material/Reply'
+import { Box, Button, ButtonGroup, Grid } from '@mui/joy'
 import Card from '@mui/joy/Card'
 import CardContent from '@mui/joy/CardContent'
 import CardOverflow from '@mui/joy/CardOverflow'
-import Typography from '@mui/joy/Typography'
 import IconButton from '@mui/joy/IconButton'
 import Link from '@mui/joy/Link'
+import Typography from '@mui/joy/Typography'
 import { formatDistanceToNow } from 'date-fns'
-import { Box, Button, ButtonGroup, Grid } from '@mui/joy'
-import OpenInFullIcon from '@mui/icons-material/OpenInFull'
-import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen'
-import CommentBox from './CommentBox'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { ReactMarkdown } from 'react-markdown/lib/react-markdown'
 import remarkGfm from 'remark-gfm'
-import CommentService from '../../services/CommentService'
-import ReplyIcon from '@mui/icons-material/Reply'
-import DeleteIcon from '@mui/icons-material/Delete'
 import { getSessionUser } from '../../common/utils'
+import CommentService from '../../services/CommentService'
+import CommentBox from './CommentBox'
 
 const LEVEL_COLORS = ['#1f77ff', '#65ffe9', '#0bff0b', '#ff4040', '#ff720b', '#ffff74', 'white']
 const STRIPE_COLORS = ['#0952C0', '#24B8A1', '#28A928', '#A41616', '#A55013', '#A3A31F', 'gray']
@@ -168,6 +168,7 @@ const CommentCard = ({ comment, level, readonly }) => {
           </CardOverflow>
           {!close && (
             <CardContent>
+              {/* biome-ignore lint/correctness/noChildrenProp: <explanation> */}
               <ReactMarkdown children={intComment.body} remarkPlugins={[[remarkGfm, { singleTilde: false }]]} />
               {reply && (
                 <Box pt={1} pb={1} mr={1}>

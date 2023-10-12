@@ -1,6 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import { Box, Grid, Sheet, styled } from '@mui/joy'
+import PropTypes from 'prop-types'
+import React from 'react'
 const HIGHLIGHT_COLORS = {
   red: {
     backgroundLight: '#FF000057',
@@ -53,7 +53,7 @@ const Diagonal = styled(Box)(({ theme, leftright }) => ({
   width: '140%',
   transform: leftright ? 'translate3d(-50%, -50%, 0) rotate(45deg)' : 'translate3d(-50%, -50%, 0) rotate(-45deg)',
   borderTop: `1px solid ${
-    theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS['red'].borderDark : HIGHLIGHT_COLORS['red'].borderLight
+    theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS.red.borderDark : HIGHLIGHT_COLORS.red.borderLight
   }`,
 }))
 
