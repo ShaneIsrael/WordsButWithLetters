@@ -53,6 +53,10 @@ function ModeToggle() {
       script.setAttribute('async', true)
 
       document.head.appendChild(script)
+    } else {
+      window.umami = {
+        track: (val) => console.log('umami.track -> ', val),
+      }
     }
   }, [])
 
