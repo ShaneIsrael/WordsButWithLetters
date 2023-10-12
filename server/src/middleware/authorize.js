@@ -15,10 +15,9 @@ const authorize = (req, res, next) => {
 }
 
 const verifyAdmin = (req, res, next) => {
-  console.log(req.user)
   const email = req.user.email
 
-  if (email !== 'sethwelch85@gmail.com') return false
+  if (email !== 'sethwelch85@gmail.com') return res.sendStatus(401)
 
   return next()
 }
