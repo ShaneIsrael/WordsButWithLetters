@@ -50,6 +50,11 @@ module.exports = (sequelize, DataTypes) => {
       token: {
         type: DataTypes.STRING,
       },
+      admin: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
       verified: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
