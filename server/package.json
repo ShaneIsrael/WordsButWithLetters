@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "local": "export NODE_ENV=development && export PORT=3001 && nodemon src/server.js",
-    "migrate": "sequelize db:migrate"
+    "migrate": "sequelize db:migrate",
+    "undoMigrate": "sequelize db:migrate:undo"
   },
   "author": "",
   "license": "ISC",

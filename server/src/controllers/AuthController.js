@@ -20,7 +20,8 @@ const COOKIE_PARAMS = {
   secure: true,
 }
 
-const signUserJwt = ({ id, email, displayName }) => jwt.sign({ id, email, displayName }, process.env.SECRET_KEY)
+const signUserJwt = ({ id, email, displayName, admin }) =>
+  jwt.sign({ id, email, displayName, admin }, process.env.SECRET_KEY)
 
 controller.register = async (req, res, next) => {
   try {
@@ -84,6 +85,7 @@ controller.login = async (req, res, next) => {
 
       if (await bcrypt.compare(password, user.password)) {
         const accessToken = signUserJwt(user)
+
         res.cookie('session', accessToken, COOKIE_PARAMS)
 
         logger.info(`logging in user with email: ${user.email}`)
