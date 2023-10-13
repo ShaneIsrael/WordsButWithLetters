@@ -119,7 +119,7 @@ function Admin() {
                   Feedback
                 </Typography>
               </Token>
-              <Box sx={{ m: 1 }}>{selected?.body}</Box>
+              <Box sx={{ m: 1, fontSize: 18 }}>{selected?.body}</Box>
             </Box>
 
             <IconButton
