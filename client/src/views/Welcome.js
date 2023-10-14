@@ -10,15 +10,19 @@ import Cookies from 'js-cookie'
 const Welcome = (props) => {
   const navigate = useNavigate()
   const { isAuthenticated } = useAuthed()
+  const [user, setUser] = React.useState()
 
-  const userCookie = Cookies.get(!isAuthenticated ? 'casualUser' : 'user')
+  React.useEffect(() => {
+    const userCookie = Cookies.get(!isAuthenticated ? 'casualUser' : 'user')
 
-  let user
-  try {
-    user = userCookie ? JSON.parse(userCookie) : null
-  } catch (err) {
-    console.error(err)
-  }
+    let userJson
+    try {
+      userJson = userCookie ? JSON.parse(userCookie) : null
+      setUser(userJson)
+    } catch (err) {
+      console.error(err)
+    }
+  }, [isAuthenticated])
 
   return (
     <Appbar>
