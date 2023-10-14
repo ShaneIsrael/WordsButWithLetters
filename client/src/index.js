@@ -19,6 +19,8 @@ import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import { Toaster } from 'sonner'
 
+import AuthService from './services/AuthService'
+
 const theme = extendTheme({
   fontFamily: {
     display: 'Bubblegum Sans',
@@ -51,13 +53,20 @@ function ModeToggle() {
       script.src = 'https://umami.shaneisrael.net/script.js'
       script.setAttribute('data-website-id', '6d89ddf8-0e11-4eb4-9a1f-6dff361d63c9')
       script.setAttribute('async', true)
-
       document.head.appendChild(script)
     } else {
       window.umami = {
         track: (val) => console.log('umami.track -> ', val),
       }
     }
+    async function init() {
+      try {
+        await AuthService.createCasualSession()
+      } catch (err) {
+        console.error(err)
+      }
+    }
+    init()
   }, [])
 
   return (

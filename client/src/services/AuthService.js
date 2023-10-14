@@ -17,6 +17,9 @@ class AuthService {
   hasSession() {
     return Api().get('/auth/session')
   }
+  createCasualSession() {
+    return Api().post('/auth/casual/create')
+  }
 }
 
 const service = new AuthService()

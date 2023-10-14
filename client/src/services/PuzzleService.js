@@ -7,8 +7,8 @@ class PuzzleService {
   validateWord(word) {
     return Api().get('/word/validate', { params: { word } })
   }
-  getTodaysPuzzle() {
-    return Api().get('/puzzle/today')
+  getTodaysCasualPuzzle() {
+    return Api().get('/puzzle/today/casual')
   }
   getTodaysRankedPuzzle() {
     return Api().get('/puzzle/today/ranked')
@@ -16,14 +16,20 @@ class PuzzleService {
   getTodaysPuzzleNumber() {
     return Api().get('/puzzle/today/number')
   }
+  getCasualPuzzleSubmission() {
+    return Api().get('/puzzle/casual/submission')
+  }
+  createCasualPuzzleSubmission() {
+    return Api().post('/puzzle/casual/submission')
+  }
+  submitCasual(word, date) {
+    return Api().post('/puzzle/submit/casual', { word, date })
+  }
   getPuzzleSubmission() {
     return Api().get('/puzzle/submission')
   }
   createPuzzleSubmission() {
     return Api().post('/puzzle/submission')
-  }
-  submitCasual(puzzleProgress) {
-    return Api().post('/puzzle/submit/casual', { puzzleProgress })
   }
   submitRanked(word, date) {
     return Api().post('/puzzle/submit/ranked', { word, date })

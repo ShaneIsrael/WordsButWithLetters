@@ -48,12 +48,43 @@ service.createSubmission = async (userId, puzzleId, dayId) => {
 }
 
 /**
- * Validates and updates a ranked submission
+ * Fetches the users submission for the days ranked puzzle
+ * @param {Integer} casualUserId
+ * @param {Integer} puzzleId
+ * @param {Integer} dayId
+ */
+service.fetchCasualSubmission = async (casualUserId, puzzleId, dayId) => {
+  const submission = await PuzzleSubmission.findOne({
+    where: { casualUserId, puzzleId, dayId },
+  })
+  return submission
+}
+
+/**
+ * Creates the users submission for the days ranked puzzle or returns the existing submission
+ * @param {Integer} userId
+ * @param {Integer} puzzleId
+ * @param {Integer} dayId
+ */
+service.createCasualSubmission = async (casualUserId, puzzleId, dayId) => {
+  const [submission, created] = await PuzzleSubmission.findOrCreate({
+    where: { casualUserId, puzzleId, dayId },
+    defaults: {
+      casualUserId,
+      puzzleId,
+      dayId,
+    },
+  })
+  return [submission, created]
+}
+
+/**
+ * Validates and updates a submission
  * @param {String} word
  * @param {Object} submission
  * @param {Object} puzzle
  */
-service.validateRankedSubmission = async (word, puzzleSubmission, puzzle) => {
+service.validateSubmission = async (word, puzzleSubmission, puzzle) => {
   const board = puzzle.board
   const submission = puzzleSubmission
   const usedWords = [
@@ -116,75 +147,6 @@ service.validateRankedSubmission = async (word, puzzleSubmission, puzzle) => {
   }
   submission.activeRow += 1
   return [true, submission, completeMessage]
-}
-
-/**
- * Checks if the current submission is valid and updates the players progress
- * @param {*} puzzleProgress
- * @param {*} puzzle
- * @param {*} puzzleDate
- * @returns
- */
-service.validateSubmissionProgress = async (puzzleProgress, puzzle, puzzleDate) => {
-  let progress = puzzleProgress
-  const board = puzzle.board
-  const usedWords = progress.wordMatrix.map((word) => word.join(''))
-  const currentWord = usedWords[progress.activeRow]
-
-  if (progress.date !== puzzleDate) {
-    progress.puzzleComplete = true
-    return [true, progress, 'Puzzle no longer valid. A new puzzle exists.']
-  }
-
-  // if the row is not completely filled, do not allow submission
-  if (currentWord.length !== 5) return [false, progress, 'Must be a 5 letter word']
-
-  if (
-    usedWords
-      .filter((word) => word)
-      .slice(0, -1)
-      .includes(currentWord)
-  )
-    return [false, progress, 'Word already used']
-
-  if (progress.banishedLetters.length > 0 && progress.banishedLetters.some((bl) => currentWord.includes(bl))) {
-    return [false, progress, 'Invalid letters']
-  }
-  const thisWord = currentWord.toLowerCase()
-
-  const isValid = validateWord(thisWord)
-  if (!isValid) {
-    return [false, progress, 'Word not in dictionary']
-  }
-
-  const indexesToRemove = board.banishedIndexes.filter((bi) => bi[0] === progress.activeRow).map((i) => i[1])
-  const lettersToRemove = thisWord.split('').filter((l, index) => indexesToRemove.includes(index))
-  progress.banishedLetters = progress.banishedLetters.concat([...lettersToRemove.map((l) => l.toUpperCase())])
-  progress.wordScores.push(
-    calculateWordScore(thisWord, board.scoreModifiers, board.scoreMultipliers, board.baseWordValue),
-  )
-
-  const [puzzleComplete, completeMessage] = service.validatePuzzleComplete(progress, board)
-
-  if (puzzleComplete) {
-    progress.puzzleComplete = true
-    progress.completeMessage = completeMessage
-    // check for bonus word
-    for (let i = 0; i < 5; i += 1) {
-      const wordToCheck = progress.banishedLetters.slice(i, 5 + i).join('')
-      const bonusFound = validateWord(wordToCheck)
-      if (bonusFound) {
-        progress.bonusWordFound = wordToCheck
-        progress.wordScores.push(
-          calculateWordScore(wordToCheck, board.scoreModifiers, board.scoreMultipliers, board.baseBonusWordValue),
-        )
-        break
-      }
-    }
-  }
-
-  progress.activeRow += 1
-  return [true, progress]
 }
 
 service.validatePuzzleComplete = (progress, board) => {

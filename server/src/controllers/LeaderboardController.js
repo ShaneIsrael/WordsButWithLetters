@@ -1,10 +1,19 @@
-const { getTodaysRankedEntries } = require('../services/LeaderboardService')
+const { getTodaysRankedEntries, getTodaysCasualEntries } = require('../services/LeaderboardService')
 
 const controller = {}
 
 controller.getAllRankedToday = async (req, res, next) => {
   try {
     const all = await getTodaysRankedEntries()
+    return res.status(200).send(all)
+  } catch (err) {
+    throw err
+  }
+}
+
+controller.getAllCasualToday = async (req, res, next) => {
+  try {
+    const all = await getTodaysCasualEntries()
     return res.status(200).send(all)
   } catch (err) {
     throw err

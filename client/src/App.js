@@ -10,18 +10,20 @@ import VerifyEmail from './views/VerifyEmail'
 
 import { useAuthed } from './hooks/useAuthed'
 import Admin from './views/Admin'
-import Leaderboard from './views/Leaderboard'
+import LeaderboardPage from './views/LeaderboardPage'
 import Loading from './views/Loading'
 import RankedPuzzle from './views/RankedPuzzle'
+import Welcome from './views/Welcome'
 
 function App() {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<Welcome />} />
         <Route
-          path="/"
+          path="/ranked"
           element={
-            <RequireAuth redirectTo="/casual">
+            <RequireAuth redirectTo="/login">
               <RankedPuzzle />
             </RequireAuth>
           }
@@ -37,13 +39,13 @@ function App() {
         <Route
           path="/admin"
           element={
-            <RequireAuth redirectTo="/casual">
+            <RequireAuth redirectTo="/">
               <Admin />
             </RequireAuth>
           }
         />
         <Route path="/casual" element={<Puzzle />} />
-        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/leaderboard" element={<LeaderboardPage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/verify/:email/:token" element={<VerifyEmail />} />

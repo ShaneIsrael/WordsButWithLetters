@@ -8,21 +8,17 @@ async function GenerateLeaderboards(puzzles, dayId) {
   try {
     const leaderboardPromises = []
     puzzles.forEach(async (puzzle) => {
-      // We only want to generate a puzzle for the ranked play
-      // since we are not tracking for the casual play
-      if (puzzle.type === 'ranked') {
-        leaderboardPromises.push(
-          Leaderboard.findOrCreate({
-            where: {
-              context: puzzle.contextId,
-            },
-            defaults: {
-              dayId: dayId ? dayId : day.id,
-              context: puzzle.contextId,
-            },
-          }),
-        )
-      }
+      leaderboardPromises.push(
+        Leaderboard.findOrCreate({
+          where: {
+            context: puzzle.contextId,
+          },
+          defaults: {
+            dayId: dayId ? dayId : day.id,
+            context: puzzle.contextId,
+          },
+        }),
+      )
     })
     await Promise.all(leaderboardPromises)
   } catch (err) {

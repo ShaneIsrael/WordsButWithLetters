@@ -3,10 +3,11 @@ import { Box, Button, Grid, Sheet, Typography } from '@mui/joy'
 import clsx from 'clsx'
 import _ from 'lodash'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import useSound from 'use-sound'
-import { getPTDate, loadPuzzleData, savePuzzleData, sleep } from '../common/utils'
+
+import { useNavigate } from 'react-router-dom'
+import { getPTDate, sleep } from '../common/utils'
 import Appbar from '../components/appbar/Appbar'
 import BonusWordComponent from '../components/board/BonusWordComponent'
 import GameBoard from '../components/board/GameBoard'
@@ -16,51 +17,48 @@ import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 import VKeyboard from '../components/keyboard/VKeyboard'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
-import PageWrapper from '../components/wrappers/PageWrapper'
-import { useAuthed } from '../hooks/useAuthed'
 import PuzzleService from '../services/PuzzleService'
 import wrongSfx from '../sounds/wrong.wav'
 
 const MAX_BOARD_ROWS = 6
 const BOARD_ROW_LENGTH = 5
 
-function initBoardRows() {
+function createWordMatrix(submission) {
   const rows = []
   for (let i = 0; i < MAX_BOARD_ROWS; i++) {
-    rows.push(new Array(BOARD_ROW_LENGTH).fill())
+    if (!submission) {
+      rows.push(new Array(BOARD_ROW_LENGTH).fill())
+    } else {
+      const word = submission[`word${i}`]
+      rows.push(word ? word.toUpperCase().split('') : new Array(BOARD_ROW_LENGTH).fill())
+    }
   }
   return rows
 }
 
 const PLAY_DATA = {
   activeRow: 0,
-  wordMatrix: initBoardRows(),
+  wordMatrix: createWordMatrix(),
   banishedLetters: [],
-  bonusWordFound: '',
+  bonusWordFound: null,
   wordScores: [],
   puzzleComplete: false,
   finalTime: null,
-  date: getPTDate(),
 }
 
 const Puzzle = (props) => {
   const theme = useTheme()
   const navigate = useNavigate()
-  const { isAuthenticated } = useAuthed()
-
   const [playInvalid] = useSound(wrongSfx, {
     volume: 0.2,
     interrupt: true,
   })
 
-  const [puzzle, setPuzzle] = React.useState({
-    board: {
-      banishedIndexes: [],
-      scoreModifiers: [[], [], []],
-    },
-  })
+  const [puzzle, setPuzzle] = React.useState()
   const [playData, setPlayData] = React.useState(PLAY_DATA)
-  const [showPuzzle, setShowPuzzle] = React.useState(false)
+  const [puzzleSubmission, setPuzzleSubmission] = React.useState()
+  const [date, setDate] = React.useState(getPTDate())
+
   const [puzzleComplete, setPuzzleComplete] = React.useState(false)
   const [failedAttempt, setFailedAttempt] = React.useState(0)
   const [submitting, setSubmitting] = React.useState(false)
@@ -69,35 +67,48 @@ const Puzzle = (props) => {
   React.useEffect(() => {
     async function init() {
       const pNumber = (await PuzzleService.getTodaysPuzzleNumber()).data?.number
-      setPuzzleNumber(pNumber)
-      const puzzleProgress = loadPuzzleData(getPTDate())
-      const completed = puzzleProgress?.progress.puzzleComplete
 
-      if (puzzleProgress) {
-        setPuzzle(puzzleProgress.puzzle)
-        setPlayData(puzzleProgress.progress)
-        setPuzzleComplete(completed)
-        setShowPuzzle(true)
-      }
+      const puzzle = (await PuzzleService.getTodaysCasualPuzzle()).data
+      const submission = (await PuzzleService.getCasualPuzzleSubmission()).data
+      setPuzzle(puzzle.Puzzles?.[0])
+      setPuzzleSubmission(submission)
+      setPuzzleComplete(submission.puzzleComplete)
+      setPuzzleNumber(pNumber)
     }
     init()
   }, [])
 
   const handleBegin = async () => {
     umami.track('Begin Casual Button')
-    // only allow fetching the puzzle and setting the initial
-    // local storage IF local storage does not have an entry for today
-    if (!loadPuzzleData(getPTDate())) {
-      const puzzleData = (await PuzzleService.getTodaysPuzzle()).data
-      setPuzzle(puzzleData.Puzzles[0])
-      savePuzzleData(puzzleData.date, puzzleData.Puzzles[0], PLAY_DATA)
-      setPuzzleComplete(false)
-      setShowPuzzle(true)
+    console.log(puzzle)
+    if (!puzzle) {
+      const submission = (await PuzzleService.createCasualPuzzleSubmission()).data?.submission
+      const casualPuzzle = (await PuzzleService.getTodaysCasualPuzzle()).data
+      setPuzzle(casualPuzzle.Puzzles[0])
+      setPuzzleSubmission(submission)
     }
   }
 
+  const updatePlayData = (submission) => {
+    if (submission) {
+      setPlayData({
+        activeRow: submission.activeRow,
+        wordMatrix: createWordMatrix(submission),
+        banishedLetters: submission.bonusLetters,
+        bonusWordFound: submission.bonusWord,
+        wordScores: submission.wordScores,
+        puzzleComplete: submission.puzzleComplete,
+        finalTime: submission.timeToComplete,
+      })
+    }
+  }
+
+  React.useEffect(() => {
+    updatePlayData(puzzleSubmission)
+  }, [puzzleSubmission])
+
   const handleKeyPress = (key) => {
-    if (playData.banishedLetters.indexOf(key) >= 0) return
+    if (playData.banishedLetters?.indexOf(key) >= 0) return
 
     setPlayData((data) => ({
       ...data,
@@ -139,18 +150,18 @@ const Puzzle = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (!puzzleComplete) {
-      if (playData.wordMatrix[playData.activeRow].filter((l) => l).join('').length === 5) {
+    if (!submitting && !puzzle?.puzzleComplete) {
+      const word = playData.wordMatrix[playData.activeRow]
+      if (word.filter((l) => l).join('').length === 5) {
         setSubmitting(true)
         try {
-          const response = (await PuzzleService.submitCasual(playData)).data
+          const response = (await PuzzleService.submitCasual(word.join(''), date)).data
           if (response.accepted) {
-            savePuzzleData(response.date, response.puzzle, response.progress)
-            setPlayData(response.progress)
-            if (response.progress.puzzleComplete) {
+            setPuzzleSubmission(response.submission)
+            if (response.submission.puzzleComplete) {
               umami.track('Casual puzzle complete')
               toast.success(response.message || 'Puzzle Complete!')
-              return sleep(1800).then(() => setPuzzleComplete(response.progress.puzzleComplete)) // Give final row animation time to complete.
+              return sleep(1800).then(() => setPuzzleComplete(response.submission.puzzleComplete)) // Give final row animation time to complete.
             }
             return setSubmitting(false)
           } else {
@@ -168,7 +179,6 @@ const Puzzle = (props) => {
   }
 
   const handleTimeExpire = () => {
-    setShowPuzzle(false)
     // On timeout, hit the timeout route (doesnt yet exist)
     // on the server which will force the server to compare
     // the timestamps and finalize the score if the time allotted
@@ -187,119 +197,125 @@ const Puzzle = (props) => {
   }
 
   return (
-    <Box sx={{ overflow: 'hidden' }}>
-      <Appbar puzzleCompleted={playData?.puzzleComplete} />
-      <PageWrapper>
-        <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
-          <Box className={clsx('card', showPuzzle && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
-            <Sheet
-              className={clsx('card-face')}
-              sx={{
-                height: 'calc(100% - 2px)',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-                background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
-              }}
-            >
-              <Typography
-                level="h3"
-                textAlign="center"
-                sx={{ width: '100%', fontWeight: 500, fontFamily: 'Bubblegum Sans', padding: 1 }}
+    <Appbar puzzleCompleted={puzzleComplete}>
+      <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+        <div>
+          <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
+            <Box className={clsx('card', puzzleSubmission && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
+              <Sheet
+                className={clsx('card-face')}
+                sx={{
+                  height: 'calc(100% - 2px)',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                  background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+                }}
               >
-                Puzzle #{puzzleNumber}
-              </Typography>
-              <Grid container direction="column" gap={2} alignItems="center">
+                <Typography
+                  level="h3"
+                  textAlign="center"
+                  sx={{ width: '100%', fontWeight: 500, fontFamily: 'Bubblegum Sans', padding: 1 }}
+                >
+                  Casual Puzzle #{puzzleNumber}
+                </Typography>
+                {/* <Box>
                 <Button onClick={handleBegin} size="lg">
                   <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                    Begin Todays Puzzle
+                    Begin Todays Ranked Puzzle
                   </Typography>
                 </Button>
-                {!isAuthenticated && (
-                  <>
+              </Box> */}
+                <Grid container direction="column" gap={2} alignItems="center">
+                  <Button onClick={handleBegin} size="lg">
                     <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                      OR
+                      Begin Todays Casual Puzzle
                     </Typography>
-                    <Button color="success" onClick={() => navigate('/login')} size="lg">
-                      <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                        Login for Ranked Play
-                      </Typography>
-                    </Button>
-                  </>
-                )}
-              </Grid>
-              <Box />
-            </Sheet>
-            <Box className={clsx('card-face', 'card-back')}>
-              <Grid container>
-                {!puzzleComplete && (
-                  <>
-                    <GameBoard
-                      hide={!showPuzzle}
-                      rows={MAX_BOARD_ROWS}
-                      activeRow={playData.activeRow}
-                      rowLetters={playData.wordMatrix}
-                      modifierLetters={puzzle.board.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
-                      rowHighlights={puzzle.board.banishedIndexes}
-                      onStart={handleBegin}
-                      failedAttempt={failedAttempt}
-                    />
-                    <Box sx={{ ml: '4px' }}>
-                      <Clock
-                        seconds={puzzle.board.timeToComplete || 300}
-                        start={showPuzzle}
-                        handleExpire={handleTimeExpire}
-                        finalTime={playData.finalTime}
-                        noLimit
+                  </Button>
+                  <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                    OR
+                  </Typography>
+                  <Button color="success" onClick={() => navigate('/login')} size="lg">
+                    <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                      Play Todays Ranked Puzzle
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Box />
+              </Sheet>
+              <Box className={clsx('card-face', 'card-back')}>
+                <Grid container>
+                  {puzzle && !puzzleComplete && (
+                    <>
+                      <GameBoard
+                        hide={!puzzleSubmission}
+                        rows={MAX_BOARD_ROWS}
+                        activeRow={playData.activeRow}
+                        rowLetters={playData.wordMatrix}
+                        modifierLetters={puzzle?.board.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
+                        rowHighlights={puzzle?.board.banishedIndexes}
+                        onStart={handleBegin}
+                        failedAttempt={failedAttempt}
                       />
-                      <ScoreModifiers
-                        modifiers={puzzle.board.scoreModifiers}
-                        disabledKeys={playData.banishedLetters}
-                        hide={!showPuzzle}
-                      />
-                    </Box>
-                  </>
+                      <Box sx={{ ml: '4px' }}>
+                        <Clock
+                          seconds={puzzle?.board.timeToComplete || 300}
+                          start={puzzleSubmission}
+                          handleExpire={handleTimeExpire}
+                          finalTime={playData.finalTime}
+                          noLimit
+                        />
+                        <ScoreModifiers
+                          modifiers={puzzle?.board.scoreModifiers}
+                          disabledKeys={playData.banishedLetters}
+                          hide={!puzzleSubmission}
+                        />
+                      </Box>
+                    </>
+                  )}
+                  {puzzleComplete && (
+                    <ScoreOverview progress={playData} scoreModifiers={puzzle?.board.scoreModifiers} />
+                  )}
+                </Grid>
+                <div style={{ marginBottom: 4 }} />
+                {puzzle && !puzzleComplete ? (
+                  <BonusWordComponent
+                    letters={playData.banishedLetters}
+                    maxLetters={puzzle?.board.banishedIndexes.length}
+                    bonusWordFound={playData.bonusWordFound}
+                  />
+                ) : (
+                  <ShareButton
+                    progress={playData}
+                    scoreModifiers={puzzle?.board.scoreModifiers}
+                    puzzleNumber={puzzleNumber}
+                  />
                 )}
-                {puzzleComplete && <ScoreOverview progress={playData} scoreModifiers={puzzle?.board.scoreModifiers} />}
-              </Grid>
-              <div style={{ marginBottom: 4 }} />
-              {!puzzleComplete ? (
-                <BonusWordComponent
-                  letters={playData.banishedLetters}
-                  maxLetters={puzzle?.board.banishedIndexes.length}
-                  bonusWordFound={playData.bonusWordFound}
-                />
-              ) : (
-                <ShareButton
-                  progress={playData}
-                  scoreModifiers={puzzle?.board.scoreModifiers}
-                  puzzleNumber={puzzleNumber}
-                />
-              )}
+              </Box>
             </Box>
           </Box>
-        </Box>
 
-        {showPuzzle ? (
-          <VKeyboard
-            onKeyPressed={handleKeyPress}
-            onDelete={handleDelete}
-            onEnter={handleSubmit}
-            onInvalidKey={handleInvalidKey}
-            disabledKeys={playData.banishedLetters}
-            highlightKeys={playData.wordMatrix[playData.activeRow]}
-            keyboardEnabled={showPuzzle && !puzzleComplete}
-            invalidAnimationOn={invalidKeyAnimationOn}
-          />
-        ) : (
-          <TitleKeyboard />
-        )}
-      </PageWrapper>
-    </Box>
+          {puzzleSubmission ? (
+            <VKeyboard
+              onKeyPressed={handleKeyPress}
+              onDelete={handleDelete}
+              onEnter={handleSubmit}
+              onInvalidKey={handleInvalidKey}
+              disabledKeys={playData.banishedLetters}
+              highlightKeys={playData.wordMatrix[playData.activeRow]}
+              keyboardEnabled={puzzleSubmission && !puzzleComplete}
+              invalidAnimationOn={invalidKeyAnimationOn}
+            />
+          ) : (
+            <TitleKeyboard />
+          )}
+        </div>
+      </Box>
+    </Appbar>
   )
 }
 

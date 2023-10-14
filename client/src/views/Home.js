@@ -9,7 +9,6 @@ import CommentThread from '../components/comments/CommentThread'
 import _ from 'lodash'
 import { convertFlatCommentsToNested, getSessionUser } from '../common/utils'
 import CommentCard from '../components/comments/CommentCard'
-import PageWrapper from '../components/wrappers/PageWrapper'
 import { useAuth } from '../hooks/useAuth'
 import { useAuthed } from '../hooks/useAuthed'
 

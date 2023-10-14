@@ -15,6 +15,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         foreignKey: 'userId',
       })
+      this.belongsTo(models.CasualUser, {
+        foreignKey: 'casualUserId',
+      })
     }
   }
   LeaderboardEntry.init(
@@ -30,6 +33,13 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         references: {
           model: 'Users',
+          key: 'id',
+        },
+      },
+      casualUserId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'CasualUsers',
           key: 'id',
         },
       },
