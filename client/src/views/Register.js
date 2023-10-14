@@ -82,8 +82,7 @@ const Register = () => {
   }
 
   return (
-    <>
-      <Appbar hideLoginLogout hideTitle />
+    <Appbar hideLoginLogout hideTitle>
       <Box
         sx={{
           display: 'flex',
@@ -192,7 +191,7 @@ const Register = () => {
           </Typography>
         </Sheet>
       </Box>
-    </>
+    </Appbar>
   )
 }
 

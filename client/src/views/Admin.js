@@ -39,8 +39,7 @@ function Admin() {
   }
 
   return (
-    <>
-      <Appbar hideInstructions />
+    <Appbar hideInstructions>
       <Box
         sx={{
           height: 'calc(100vh - 70px)',
@@ -110,7 +109,7 @@ function Admin() {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Appbar>
   )
 }
 

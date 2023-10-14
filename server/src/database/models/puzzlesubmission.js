@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       this.belongsTo(models.User, {
         foreignKey: 'userId',
       })
+      this.belongsTo(models.CasualUser, {
+        foreignKey: 'casualUserId',
+      })
     }
   }
   PuzzleSubmission.init(
@@ -39,9 +42,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: 'Users',
+          key: 'id',
+        },
+      },
+      casualUserId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'CasualUsers',
           key: 'id',
         },
       },

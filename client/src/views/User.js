@@ -4,7 +4,7 @@ import CommentService from '../services/CommentService'
 import { useParams } from 'react-router-dom'
 import _ from 'lodash'
 import CommentCard from '../components/comments/CommentCard'
-import PageWrapper from '../components/wrappers/PageWrapper'
+import Appbar from '../components/appbar/Appbar'
 
 const User = (props) => {
   const { id } = useParams()
@@ -26,7 +26,7 @@ const User = (props) => {
   const commentThreads = comments.map((c, index) => <CommentCard key={c.id} comment={c} level={0} readonly />)
 
   return (
-    <PageWrapper>
+    <Appbar>
       <Sheet
         sx={{
           width: '100%',
@@ -42,7 +42,7 @@ const User = (props) => {
       >
         {commentThreads}
       </Sheet>
-    </PageWrapper>
+    </Appbar>
   )
 }
 

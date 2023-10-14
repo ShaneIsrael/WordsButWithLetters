@@ -86,7 +86,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
                 size="md"
                 variant="soft"
                 onClick={() => {
-                  if (isAuthenticated) navigate('/')
+                  if (isAuthenticated) navigate('/ranked')
                   else navigate('/login')
                 }}
               >

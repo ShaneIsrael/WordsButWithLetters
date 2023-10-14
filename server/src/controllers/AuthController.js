@@ -1,12 +1,14 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const { User } = require('../database/models')
+const { User, CasualUser } = require('../database/models')
 const { isValidEmail } = require('../utils')
 const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 const { sendVerificationEmail } = require('../services/EmailService')
 const logger = require('../utils/logger')
 const { isAuthenticated } = require('../middleware/authorize')
+const md5 = require('md5')
+const { generateCasualDisplayName } = require('../services/CasualUserService')
 
 const isProduction = process.env.NODE_ENV === 'production'
 
@@ -21,6 +23,8 @@ const COOKIE_PARAMS = {
 }
 
 const signUserJwt = ({ id, email, displayName }) => jwt.sign({ id, email, displayName }, process.env.SECRET_KEY)
+
+const signCasualUserJwt = ({ id, iphash, displayName }) => jwt.sign({ id, iphash, displayName }, process.env.SECRET_KEY)
 
 controller.register = async (req, res, next) => {
   try {
@@ -132,12 +136,6 @@ controller.verifyEmail = async (req, res, next) => {
   }
 }
 
-controller.logout = async (req, res, next) => {
-  res.clearCookie('user')
-  res.clearCookie('session')
-  return res.status(200).json({ message: 'Successfully logged out!' })
-}
-
 controller.hasSession = async (req, res, next) => {
   try {
     const hasSession = isAuthenticated(req.cookies.session)
@@ -145,6 +143,61 @@ controller.hasSession = async (req, res, next) => {
   } catch (err) {
     next(err)
   }
+}
+
+controller.createCasualSession = async (req, res, next) => {
+  const token = req.cookies.casualSession
+  try {
+    if (!token) {
+      const iphash = md5(req.ip)
+      let user = await CasualUser.findOne({
+        where: { iphash },
+      })
+      if (!user) {
+        do {
+          const casualDisplayName = generateCasualDisplayName()
+          const exists = await CasualUser.findOne({ where: { displayName: casualDisplayName } })
+          if (!exists) {
+            user = await CasualUser.create({ displayName: casualDisplayName, iphash })
+            logger.info(`Created casual user with displayName: ${casualDisplayName}`)
+          }
+        } while (!user)
+      }
+
+      const accessToken = signCasualUserJwt({
+        id: user.id,
+        iphash: user.iphash,
+        displayName: user.displayName,
+      })
+      res.cookie('casualSession', accessToken, {
+        maxAge: 2147483647,
+        httpOnly: true,
+        sameSite: 'Strict',
+        secure: true,
+      })
+      return res
+        .cookie(
+          'casualUser',
+          JSON.stringify({
+            displayName: user.displayName,
+          }),
+        )
+        .sendStatus(201)
+    }
+    jwt.verify(token, process.env.SECRET_KEY)
+    return res.sendStatus(200)
+  } catch (err) {
+    res.clearCookie('casualUser')
+    res.clearCookie('casualSession')
+
+    next(err)
+  }
+}
+
+controller.logout = async (req, res, next) => {
+  res.clearCookie('user')
+  res.clearCookie('session')
+  return res.status(200).json({ message: 'Successfully logged out!' })
 }
 
 module.exports = controller

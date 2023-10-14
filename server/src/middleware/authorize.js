@@ -14,6 +14,20 @@ const authorize = (req, res, next) => {
   }
 }
 
+const authorizeCasual = (req, res, next) => {
+  const token = req.cookies.casualSession
+
+  if (!token) return res.sendStatus(403)
+
+  try {
+    const data = jwt.verify(token, process.env.SECRET_KEY)
+    req.casualUser = data
+    return next()
+  } catch (err) {
+    return res.sendStatus(403)
+  }
+}
+
 const verifyAdmin = (req, res, next) => {
   const email = req.user.email
 
@@ -35,6 +49,7 @@ const isAuthenticated = (sessionCookie) => {
 
 module.exports = {
   authorize,
+  authorizeCasual,
   isAuthenticated,
   verifyAdmin,
 }

@@ -1,7 +1,6 @@
 import { useTheme } from '@emotion/react'
 import { Box, Button, Grid, Sheet, Typography } from '@mui/joy'
 import clsx from 'clsx'
-import Cookies from 'js-cookie'
 import _ from 'lodash'
 import React from 'react'
 import { toast } from 'sonner'
@@ -16,10 +15,8 @@ import ScoreModifiers from '../components/board/ScoreModifiers'
 import Clock from '../components/clock/Clock'
 import TitleKeyboard from '../components/keyboard/TitleKeyboard'
 import VKeyboard from '../components/keyboard/VKeyboard'
-import InstructionModal from '../components/modals/InstructionModal'
 import ScoreOverview from '../components/overview/ScoreOverview'
 import ShareButton from '../components/overview/ShareButton'
-import PageWrapper from '../components/wrappers/PageWrapper'
 import PuzzleService from '../services/PuzzleService'
 import wrongSfx from '../sounds/wrong.wav'
 
@@ -199,122 +196,125 @@ const RankedPuzzle = (props) => {
   }
 
   return (
-    <Box sx={{ overflow: 'hidden' }}>
-      <Appbar puzzleCompleted={puzzleComplete} />
-      <PageWrapper>
-        <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
-          <Box className={clsx('card', puzzleSubmission && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
-            <Sheet
-              className={clsx('card-face')}
-              sx={{
-                height: 'calc(100% - 2px)',
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-                borderTopLeftRadius: 8,
-                borderTopRightRadius: 8,
-                background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
-              }}
-            >
-              <Typography
-                level="h3"
-                textAlign="center"
-                sx={{ width: '100%', fontWeight: 500, fontFamily: 'Bubblegum Sans', padding: 1 }}
+    <Appbar puzzleCompleted={puzzleComplete}>
+      <Box sx={{ display: 'flex', width: '100%', overflow: 'hidden', justifyContent: 'center' }}>
+        <div>
+          <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
+            <Box className={clsx('card', puzzleSubmission && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
+              <Sheet
+                className={clsx('card-face')}
+                sx={{
+                  height: 'calc(100% - 2px)',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  borderTopLeftRadius: 8,
+                  borderTopRightRadius: 8,
+                  background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+                }}
               >
-                Ranked Puzzle #{puzzleNumber}
-              </Typography>
-              {/* <Box>
+                <Typography
+                  level="h3"
+                  textAlign="center"
+                  sx={{ width: '100%', fontWeight: 500, fontFamily: 'Bubblegum Sans', padding: 1 }}
+                >
+                  Ranked Puzzle #{puzzleNumber}
+                </Typography>
+                {/* <Box>
                 <Button onClick={handleBegin} size="lg">
                   <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
                     Begin Todays Ranked Puzzle
                   </Typography>
                 </Button>
               </Box> */}
-              <Grid container direction="column" gap={2} alignItems="center">
-                <Button onClick={handleBegin} size="lg">
+                <Grid container direction="column" gap={2} alignItems="center">
+                  <Button onClick={handleBegin} size="lg">
+                    <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                      Begin Todays Ranked Puzzle
+                    </Typography>
+                  </Button>
                   <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                    Begin Todays Ranked Puzzle
+                    OR
                   </Typography>
-                </Button>
-                <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                  OR
-                </Typography>
-                <Button color="success" onClick={() => navigate('/casual')} size="lg">
-                  <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                    Play Todays Casual Puzzle
-                  </Typography>
-                </Button>
-              </Grid>
-              <Box />
-            </Sheet>
-            <Box className={clsx('card-face', 'card-back')}>
-              <Grid container>
-                {puzzle && !puzzleComplete && (
-                  <>
-                    <GameBoard
-                      hide={!puzzleSubmission}
-                      rows={MAX_BOARD_ROWS}
-                      activeRow={playData.activeRow}
-                      rowLetters={playData.wordMatrix}
-                      modifierLetters={puzzle?.board.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
-                      rowHighlights={puzzle?.board.banishedIndexes}
-                      onStart={handleBegin}
-                      failedAttempt={failedAttempt}
-                    />
-                    <Box sx={{ ml: '4px' }}>
-                      <Clock
-                        seconds={puzzle?.board.timeToComplete || 300}
-                        start={puzzleSubmission}
-                        handleExpire={handleTimeExpire}
-                        finalTime={playData.finalTime}
-                        noLimit
-                      />
-                      <ScoreModifiers
-                        modifiers={puzzle?.board.scoreModifiers}
-                        disabledKeys={playData.banishedLetters}
+                  <Button color="success" onClick={() => navigate('/casual')} size="lg">
+                    <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                      Play Todays Casual Puzzle
+                    </Typography>
+                  </Button>
+                </Grid>
+                <Box />
+              </Sheet>
+              <Box className={clsx('card-face', 'card-back')}>
+                <Grid container>
+                  {puzzle && !puzzleComplete && (
+                    <>
+                      <GameBoard
                         hide={!puzzleSubmission}
+                        rows={MAX_BOARD_ROWS}
+                        activeRow={playData.activeRow}
+                        rowLetters={playData.wordMatrix}
+                        modifierLetters={puzzle?.board.scoreModifiers.reduce((prev, curr) => prev.concat(curr))}
+                        rowHighlights={puzzle?.board.banishedIndexes}
+                        onStart={handleBegin}
+                        failedAttempt={failedAttempt}
                       />
-                    </Box>
-                  </>
+                      <Box sx={{ ml: '4px' }}>
+                        <Clock
+                          seconds={puzzle?.board.timeToComplete || 300}
+                          start={puzzleSubmission}
+                          handleExpire={handleTimeExpire}
+                          finalTime={playData.finalTime}
+                          noLimit
+                        />
+                        <ScoreModifiers
+                          modifiers={puzzle?.board.scoreModifiers}
+                          disabledKeys={playData.banishedLetters}
+                          hide={!puzzleSubmission}
+                        />
+                      </Box>
+                    </>
+                  )}
+                  {puzzleComplete && (
+                    <ScoreOverview progress={playData} scoreModifiers={puzzle?.board.scoreModifiers} />
+                  )}
+                </Grid>
+                <div style={{ marginBottom: 4 }} />
+                {puzzle && !puzzleComplete ? (
+                  <BonusWordComponent
+                    letters={playData.banishedLetters}
+                    maxLetters={puzzle?.board.banishedIndexes.length}
+                    bonusWordFound={playData.bonusWordFound}
+                  />
+                ) : (
+                  <ShareButton
+                    progress={playData}
+                    scoreModifiers={puzzle?.board.scoreModifiers}
+                    puzzleNumber={puzzleNumber}
+                  />
                 )}
-                {puzzleComplete && <ScoreOverview progress={playData} scoreModifiers={puzzle?.board.scoreModifiers} />}
-              </Grid>
-              <div style={{ marginBottom: 4 }} />
-              {puzzle && !puzzleComplete ? (
-                <BonusWordComponent
-                  letters={playData.banishedLetters}
-                  maxLetters={puzzle?.board.banishedIndexes.length}
-                  bonusWordFound={playData.bonusWordFound}
-                />
-              ) : (
-                <ShareButton
-                  progress={playData}
-                  scoreModifiers={puzzle?.board.scoreModifiers}
-                  puzzleNumber={puzzleNumber}
-                />
-              )}
+              </Box>
             </Box>
           </Box>
-        </Box>
 
-        {puzzleSubmission ? (
-          <VKeyboard
-            onKeyPressed={handleKeyPress}
-            onDelete={handleDelete}
-            onEnter={handleSubmit}
-            onInvalidKey={handleInvalidKey}
-            disabledKeys={playData.banishedLetters}
-            highlightKeys={playData.wordMatrix[playData.activeRow]}
-            keyboardEnabled={puzzleSubmission && !puzzleComplete}
-            invalidAnimationOn={invalidKeyAnimationOn}
-          />
-        ) : (
-          <TitleKeyboard />
-        )}
-      </PageWrapper>
-    </Box>
+          {puzzleSubmission ? (
+            <VKeyboard
+              onKeyPressed={handleKeyPress}
+              onDelete={handleDelete}
+              onEnter={handleSubmit}
+              onInvalidKey={handleInvalidKey}
+              disabledKeys={playData.banishedLetters}
+              highlightKeys={playData.wordMatrix[playData.activeRow]}
+              keyboardEnabled={puzzleSubmission && !puzzleComplete}
+              invalidAnimationOn={invalidKeyAnimationOn}
+            />
+          ) : (
+            <TitleKeyboard />
+          )}
+        </div>
+      </Box>
+    </Appbar>
   )
 }
 

@@ -52,8 +52,7 @@ const Login = (props) => {
     }
   }
   return (
-    <>
-      <Appbar hideLoginLogout hideTitle />
+    <Appbar hideLoginLogout hideTitle>
       <Box
         sx={{
           display: 'flex',
@@ -132,7 +131,7 @@ const Login = (props) => {
           </Typography>
         </Sheet>
       </Box>
-    </>
+    </Appbar>
   )
 }
 
