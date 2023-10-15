@@ -101,7 +101,7 @@ const Leaderboard = ({ title, type, hideAction }) => {
                           <Typography
                             key={`dn_${c}_${index}`}
                             display="inline-block"
-                            color="primary"
+                            color={isAuthenticated ? 'success' : 'primary'}
                             level="h1"
                             textAlign="center"
                             sx={{
@@ -122,7 +122,9 @@ const Leaderboard = ({ title, type, hideAction }) => {
                     <td>
                       <Tooltip title={entryUser.PuzzleSubmissions[0].bonusWord || '-----'}>
                         <Typography
-                          color={user?.displayName === entryUser.displayName ? 'primary' : ''}
+                          color={
+                            user?.displayName === entryUser.displayName ? (isAuthenticated ? 'success' : 'primary') : ''
+                          }
                           level={entryUser.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
                           fontSize={entryUser.PuzzleSubmissions[0].bonusWord ? 18 : 16}
                           letterSpacing={entryUser.PuzzleSubmissions[0].bonusWord ? '8px' : ''}
