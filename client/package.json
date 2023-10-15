@@ -26,6 +26,7 @@
 		"remark-gfm": "^3.0.1",
 		"remark-parse": "^10.0.2",
 		"remark-rehype": "^10.1.0",
+		"sass": "^1.69.3",
 		"sonner": "^1.0.3",
 		"use-sound": "^4.0.1"
 	},
