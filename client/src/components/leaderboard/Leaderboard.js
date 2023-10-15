@@ -57,12 +57,12 @@ const Leaderboard = ({ title, type }) => {
           <Table borderAxis="none" color="primary" size="lg" stickyFooter={false} stickyHeader variant="plain">
             <thead>
               <tr>
-                <th style={{ width: 80 }}>
+                <th style={{ width: 70 }}>
                   <Typography level="h2" fontSize={28}>
                     Rank
                   </Typography>
                 </th>
-                <th style={{ width: 150 }}>
+                <th style={{ width: 170 }}>
                   <Typography level="h2" fontSize={28}>
                     Player
                   </Typography>
@@ -94,15 +94,28 @@ const Leaderboard = ({ title, type }) => {
                       </Typography>
                     </td>
                     <td>
-                      <Tooltip title={entryUser.displayName}>
-                        <Typography
-                          color={user?.displayName === entryUser.displayName ? 'primary' : ''}
-                          level="h2"
-                          fontSize={22}
-                        >
+                      {user?.displayName === entryUser.displayName &&
+                        user?.displayName.split('').map((c, index) => (
+                          <Typography
+                            key={`dn_${c}_${index}`}
+                            display="inline-block"
+                            color="primary"
+                            level="h1"
+                            textAlign="center"
+                            sx={{
+                              fontSize: 22,
+                              animation: 'waveAnimation 1s infinite',
+                              animationDelay: `calc(.06s * ${index})`,
+                            }}
+                          >
+                            {c}
+                          </Typography>
+                        ))}
+                      {user?.displayName !== entryUser.displayName && (
+                        <Typography level="h2" fontSize={22}>
                           {entryUser.displayName}
                         </Typography>
-                      </Tooltip>
+                      )}
                     </td>
                     <td>
                       <Tooltip title={entryUser.PuzzleSubmissions[0].bonusWord || '-----'}>
@@ -145,7 +158,7 @@ const Leaderboard = ({ title, type }) => {
             {type === 'ranked' ? (
               <>
                 <Typography color="success" level="h2" textAlign="center" fontSize={24}>
-                  {isAuthenticated ? 'login and ' : ''}complete the ranked puzzle to be the first on the leaderboard
+                  {isAuthenticated ? 'login and c' : 'C'}omplete the ranked puzzle to be the first on the leaderboard
                 </Typography>
                 <Button
                   variant="soft"
