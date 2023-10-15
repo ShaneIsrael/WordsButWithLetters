@@ -170,7 +170,11 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
           sx={{
             pt: '64px',
             width: '100%',
-            height: 'calc(100vh - 64px)',
+            height: 'calc(100vh + 64px)',
+            background:
+              theme.palette.mode === 'dark'
+                ? 'radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%)'
+                : '#fbfcfe',
           }}
         >
           {children}
