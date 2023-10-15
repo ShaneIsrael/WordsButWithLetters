@@ -117,7 +117,7 @@ const VKeyboard = ({
         padding: 2,
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
-        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
       }}
     >
       {layout.map((row, index) => (

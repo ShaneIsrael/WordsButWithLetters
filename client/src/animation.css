@@ -128,3 +128,14 @@
     transform: translateY(0px) scale(1);
   }
 }
+
+@keyframes waveAnimation {
+  0%,
+  40%,
+  100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-10px);
+  }
+}

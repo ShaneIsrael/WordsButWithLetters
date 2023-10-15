@@ -48,6 +48,7 @@ const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder 
   height: 60,
   fontSize: '1.75em',
   fontWeight: 'bold',
+  background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0)' : theme.palette.neutral[100],
 }))
 
 const HighlightLetterHolder = styled(Sheet)(({ theme, active, color, highlightborder }) => ({
