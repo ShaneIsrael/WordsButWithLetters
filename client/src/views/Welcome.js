@@ -37,7 +37,7 @@ const Welcome = (props) => {
               <Typography level="h1" textAlign="center" sx={{ fontSize: 64 }}>
                 Welcome{' '}
                 <Typography
-                  color="primary"
+                  color={isAuthenticated ? 'success' : 'primary'}
                   level="h1"
                   textAlign="center"
                   sx={{
@@ -55,6 +55,16 @@ const Welcome = (props) => {
                   sx={{ fontSize: 20, fontWeight: 'lighter' }}
                 >
                   This is your casual play name provided automatically by us.
+                </Typography>
+              )}
+              {isAuthenticated && (
+                <Typography
+                  level="h1"
+                  textAlign="center"
+                  color="neutral.800"
+                  sx={{ fontSize: 20, fontWeight: 'lighter' }}
+                >
+                  Why not try and complete todays ranked puzzle?
                 </Typography>
               )}
             </div>
