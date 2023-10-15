@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Appbar from '../components/appbar/Appbar'
-import { Button, Grid, Stack, Typography } from '@mui/joy'
+import { Button, Grid, Stack, Typography, useTheme } from '@mui/joy'
 import Leaderboard from '../components/leaderboard/Leaderboard'
 import { useNavigate } from 'react-router-dom'
 import { useAuthed } from '../hooks/useAuthed'
@@ -12,6 +12,7 @@ import ShootingStars from '../components/misc/ShootingStars'
 
 const Welcome = (props) => {
   const navigate = useNavigate()
+  const theme = useTheme()
   const { isAuthenticated, loading } = useAuthed()
   const [user, setUser] = React.useState()
 
@@ -29,7 +30,7 @@ const Welcome = (props) => {
 
   return (
     <Appbar>
-      <ShootingStars />
+      {theme.palette.mode === 'dark' && <ShootingStars />}
       <Grid container justifyContent="center" spacing={4} mt={4}>
         <Grid xs={12} mb={4}>
           <Fade in={!loading} timeout={500}>

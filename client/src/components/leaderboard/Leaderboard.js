@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import Cookies from 'js-cookie'
 import LeaderboardService from '../../services/LeaderboardService'
 import { useAuthed } from '../../hooks/useAuthed'
-import { Box, Button, Sheet, Table, Tooltip, Typography } from '@mui/joy'
+import { Box, Button, Sheet, Table, Tooltip, Typography, useTheme } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { convertNumberToEmoji } from '../../common/utils'
 
 const Leaderboard = ({ title, type, hideAction }) => {
   const navigate = useNavigate()
+  const theme = useTheme()
 
   const [entries, setEntries] = React.useState([
     // { score: 5000, User: { displayName: 'TheBestAround', PuzzleSubmissions: [{ bonusWord: 'BATHE' }] } },
@@ -50,7 +51,7 @@ const Leaderboard = ({ title, type, hideAction }) => {
           overflow: 'auto',
           borderRadius: 'sm',
           boxShadow: 'md',
-          background: 'rgba(11, 13, 14, 0.5)',
+          background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : false,
         }}
         variant="outlined"
       >
