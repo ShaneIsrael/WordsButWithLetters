@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom'
 import { useAuthed } from '../hooks/useAuthed'
 import Cookies from 'js-cookie'
 import { Fade } from '@mui/material'
+import BackgroundSquares from '../components/misc/BackgroundSquares'
+import ShootingStars from '../components/misc/ShootingStars'
 
 const Welcome = (props) => {
   const navigate = useNavigate()
@@ -27,6 +29,7 @@ const Welcome = (props) => {
 
   return (
     <Appbar>
+      <ShootingStars />
       <Grid container justifyContent="center" spacing={4} mt={4}>
         <Grid xs={12} mb={4}>
           <Fade in={!loading} timeout={500}>
@@ -67,7 +70,7 @@ const Welcome = (props) => {
               >
                 Play Casual
               </Button>
-              <Leaderboard title="Todays Casual Leaderbaord" type={'casual'} />
+              <Leaderboard title="Todays Casual Leaderbaord" type={'casual'} hideAction />
             </Stack>
           </Fade>
         </Grid>
@@ -81,7 +84,7 @@ const Welcome = (props) => {
               >
                 Play Ranked
               </Button>
-              <Leaderboard title="Todays Ranked Leaderboard" type={'ranked'} />
+              <Leaderboard title="Todays Ranked Leaderboard" type={'ranked'} hideAction />
             </Stack>
           </Fade>
         </Grid>

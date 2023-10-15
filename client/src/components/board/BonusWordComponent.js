@@ -50,6 +50,7 @@ const LetterHolder = styled(Sheet)(({ theme }) => ({
   height: 46,
   fontSize: '1.25em',
   fontWeight: 'bold',
+  background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0)' : theme.palette.neutral[100],
 }))
 
 const HighlightLetterHolder = styled(Sheet)(({ theme, color }) => ({
@@ -83,8 +84,7 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
         justifyContent: 'center',
         width: 534,
         height: 108,
-        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
-        // border: '1px solid ' + theme.palette.primary[600],
+        background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
       }}
     >
       <Typography level="h2" sx={{ fontWeight: 'bold', fontSize: 26 }}>

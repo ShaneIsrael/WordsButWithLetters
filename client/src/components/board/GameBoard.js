@@ -72,7 +72,7 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHigh
         borderTopLeftRadius: 8,
         width: (390 / 5) * rowLetters[0]?.length || 5,
         height: (438 / 6) * rows,
-        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
       }}
     >
       {getBoard()}

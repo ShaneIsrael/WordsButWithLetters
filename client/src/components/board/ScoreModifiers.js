@@ -47,7 +47,7 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
         width: 140,
         height: 'calc(100% - 104px)',
         paddingTop: 1,
-        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
         display: 'flex',
         justifyContent: 'center',
       }}

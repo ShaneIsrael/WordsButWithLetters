@@ -150,11 +150,11 @@ controller.hasSession = async (req, res, next) => {
 controller.createCasualSession = async (req, res, next) => {
   const token = req.cookies.casualSession
   try {
+    const iphash = md5(req.ip)
+    let user = await CasualUser.findOne({
+      where: { iphash },
+    })
     if (!token) {
-      const iphash = md5(req.ip)
-      let user = await CasualUser.findOne({
-        where: { iphash },
-      })
       if (!user) {
         do {
           const casualDisplayName = generateCasualDisplayName()
@@ -177,17 +177,17 @@ controller.createCasualSession = async (req, res, next) => {
         sameSite: 'Strict',
         secure: true,
       })
-      return res
-        .cookie(
-          'casualUser',
-          JSON.stringify({
-            displayName: user.displayName,
-          }),
-        )
-        .sendStatus(201)
+    } else {
+      jwt.verify(token, process.env.SECRET_KEY)
     }
-    jwt.verify(token, process.env.SECRET_KEY)
-    return res.sendStatus(200)
+    return res
+      .cookie(
+        'casualUser',
+        JSON.stringify({
+          displayName: user.displayName,
+        }),
+      )
+      .sendStatus(200)
   } catch (err) {
     res.clearCookie('casualUser')
     res.clearCookie('casualSession')

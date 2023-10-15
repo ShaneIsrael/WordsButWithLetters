@@ -7,7 +7,7 @@ import { Box, Button, Sheet, Table, Tooltip, Typography } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { convertNumberToEmoji } from '../../common/utils'
 
-const Leaderboard = ({ title, type }) => {
+const Leaderboard = ({ title, type, hideAction }) => {
   const navigate = useNavigate()
 
   const [entries, setEntries] = React.useState([
@@ -50,6 +50,7 @@ const Leaderboard = ({ title, type }) => {
           overflow: 'auto',
           borderRadius: 'sm',
           boxShadow: 'md',
+          background: 'rgba(11, 13, 14, 0.5)',
         }}
         variant="outlined"
       >
@@ -160,26 +161,35 @@ const Leaderboard = ({ title, type }) => {
                 <Typography color="success" level="h2" textAlign="center" fontSize={24}>
                   {isAuthenticated ? 'login and c' : 'C'}omplete the ranked puzzle to be the first on the leaderboard
                 </Typography>
-                <Button
-                  variant="soft"
-                  sx={{ fontFamily: 'Bubblegum Sans', fontSize: 22, width: 200 }}
-                  onClick={() => (isAuthenticated ? navigate('/ranked') : navigate('/login'))}
-                >
-                  {isAuthenticated ? 'Play Ranked' : 'Login'}
-                </Button>
+                {!hideAction && (
+                  <Button
+                    variant="soft"
+                    sx={{ fontFamily: 'Bubblegum Sans', fontSize: 22, width: 200 }}
+                    onClick={() => (isAuthenticated ? navigate('/ranked') : navigate('/login'))}
+                  >
+                    {isAuthenticated ? 'Play Ranked' : 'Login'}
+                  </Button>
+                )}
               </>
             ) : (
               <>
-                <Typography color="success" level="h2" textAlign="center" fontSize={24}>
+                <Typography
+                  color={type === 'casual' ? 'primary' : 'success'}
+                  level="h2"
+                  textAlign="center"
+                  fontSize={24}
+                >
                   Complete the casual puzzle to be the first on the leaderboard
                 </Typography>
-                <Button
-                  variant="soft"
-                  sx={{ fontFamily: 'Bubblegum Sans', fontSize: 22, width: 200 }}
-                  onClick={() => navigate('/casual')}
-                >
-                  Play Casual
-                </Button>
+                {!hideAction && (
+                  <Button
+                    variant="soft"
+                    sx={{ fontFamily: 'Bubblegum Sans', fontSize: 22, width: 200 }}
+                    onClick={() => navigate('/casual')}
+                  >
+                    Play Casual
+                  </Button>
+                )}
               </>
             )}
           </Box>

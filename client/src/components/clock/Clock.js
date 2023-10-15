@@ -37,7 +37,7 @@ const Clock = ({ seconds, start, handleExpire, finalTime, noLimit }) => {
         padding: '14px 8px 8px 8px',
         width: 140,
         height: 100,
-        background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
       }}
     >
       {start && !noLimit && (

@@ -69,6 +69,12 @@ function ModeToggle() {
     init()
   }, [])
 
+  //handle application background
+  React.useEffect(() => {
+    document.body.style.background =
+      mode === 'dark' ? 'radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%)' : '#fbfcfe'
+  }, [mode])
+
   return (
     <Button
       variant="plain"
