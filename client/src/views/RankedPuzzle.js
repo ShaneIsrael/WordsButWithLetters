@@ -212,39 +212,36 @@ const RankedPuzzle = (props) => {
                   justifyContent: 'space-between',
                   borderTopLeftRadius: 8,
                   borderTopRightRadius: 8,
-                  background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+                  background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
                 }}
               >
-                <Typography
-                  level="h3"
-                  textAlign="center"
-                  sx={{ width: '100%', fontWeight: 500, fontFamily: 'Bubblegum Sans', padding: 1 }}
-                >
-                  Ranked Puzzle #{puzzleNumber}
-                </Typography>
-                {/* <Box>
-                <Button onClick={handleBegin} size="lg">
-                  <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                    Begin Todays Ranked Puzzle
-                  </Typography>
-                </Button>
-              </Box> */}
-                <Grid container direction="column" gap={2} alignItems="center">
-                  <Button onClick={handleBegin} size="lg">
-                    <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                      Begin Todays Ranked Puzzle
+                {!puzzleSubmission && (
+                  <>
+                    <Typography
+                      level="h3"
+                      textAlign="center"
+                      sx={{ width: '100%', fontWeight: 500, fontFamily: 'Bubblegum Sans', padding: 1 }}
+                    >
+                      Ranked Puzzle #{puzzleNumber}
                     </Typography>
-                  </Button>
-                  <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                    OR
-                  </Typography>
-                  <Button color="success" onClick={() => navigate('/casual')} size="lg">
-                    <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
-                      Play Todays Casual Puzzle
-                    </Typography>
-                  </Button>
-                </Grid>
-                <Box />
+                    <Grid container direction="column" gap={2} alignItems="center">
+                      <Button onClick={handleBegin} size="lg">
+                        <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                          Begin Todays Ranked Puzzle
+                        </Typography>
+                      </Button>
+                      <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                        OR
+                      </Typography>
+                      <Button color="success" onClick={() => navigate('/casual')} size="lg">
+                        <Typography level="h2" fontSize={22} sx={{ color: 'white' }}>
+                          Play Todays Casual Puzzle
+                        </Typography>
+                      </Button>
+                    </Grid>
+                    <Box />
+                  </>
+                )}
               </Sheet>
               <Box className={clsx('card-face', 'card-back')}>
                 <Grid container>
