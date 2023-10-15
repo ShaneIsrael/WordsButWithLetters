@@ -65,7 +65,7 @@ const Welcome = (props) => {
                   color="neutral.800"
                   sx={{ fontSize: 20, fontWeight: 'lighter' }}
                 >
-                  Why not try and complete todays ranked puzzle?
+                  Why not try and complete today's ranked puzzle?
                 </Typography>
               )}
             </div>
@@ -81,7 +81,7 @@ const Welcome = (props) => {
               >
                 Play Casual
               </Button>
-              <Leaderboard title="Todays Casual Leaderbaord" type={'casual'} hideAction />
+              <Leaderboard title="Today's Casual Leaderboard" type={'casual'} hideAction />
             </Stack>
           </Fade>
         </Grid>
@@ -95,7 +95,7 @@ const Welcome = (props) => {
               >
                 Play Ranked
               </Button>
-              <Leaderboard title="Todays Ranked Leaderboard" type={'ranked'} hideAction />
+              <Leaderboard title="Today's Ranked Leaderboard" type={'ranked'} hideAction />
             </Stack>
           </Fade>
         </Grid>
