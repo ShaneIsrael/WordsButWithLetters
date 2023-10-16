@@ -88,7 +88,9 @@ const Leaderboard = ({ title, type, hideAction }) => {
                   <tr key={`entry_${index}`}>
                     <td>
                       <Typography
-                        color={user?.displayName === entryUser.displayName ? 'primary' : ''}
+                        color={
+                          user?.displayName === entryUser.displayName ? (type === 'ranked' ? 'success' : 'primary') : ''
+                        }
                         level="h2"
                         fontSize={26}
                       >
@@ -101,7 +103,13 @@ const Leaderboard = ({ title, type, hideAction }) => {
                           <Typography
                             key={`dn_${c}_${index}`}
                             display="inline-block"
-                            color={isAuthenticated ? 'success' : 'primary'}
+                            color={
+                              user?.displayName === entryUser.displayName
+                                ? type === 'ranked'
+                                  ? 'success'
+                                  : 'primary'
+                                : ''
+                            }
                             level="h1"
                             textAlign="center"
                             sx={{
@@ -123,7 +131,11 @@ const Leaderboard = ({ title, type, hideAction }) => {
                       <Tooltip title={entryUser.PuzzleSubmissions[0].bonusWord || '-----'}>
                         <Typography
                           color={
-                            user?.displayName === entryUser.displayName ? (isAuthenticated ? 'success' : 'primary') : ''
+                            user?.displayName === entryUser.displayName
+                              ? type === 'ranked'
+                                ? 'success'
+                                : 'primary'
+                              : ''
                           }
                           level={entryUser.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
                           fontSize={entryUser.PuzzleSubmissions[0].bonusWord ? 18 : 16}
