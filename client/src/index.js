@@ -78,7 +78,7 @@ function ModeToggle() {
         setMaterialMode(newValue)
         localStorage.setItem('theme', newValue)
       }}
-      sx={{ position: 'fixed', bottom: 10, right: 10 }}
+      sx={{ position: 'fixed', bottom: 10, right: 10, zIndex: 10000 }}
     >
       {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
     </Button>
