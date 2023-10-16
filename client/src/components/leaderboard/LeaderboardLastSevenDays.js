@@ -7,7 +7,7 @@ import { Box, Button, Sheet, Table, Tooltip, Typography, useTheme } from '@mui/j
 import { useNavigate } from 'react-router-dom'
 import { convertNumberToEmoji } from '../../common/utils'
 
-const Leaderboard = ({ title, type, hideAction, height }) => {
+const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
   const navigate = useNavigate()
   const theme = useTheme()
 
@@ -27,15 +27,12 @@ const Leaderboard = ({ title, type, hideAction, height }) => {
 
   React.useEffect(() => {
     async function fetch() {
-      const resp = (
-        type === 'ranked'
-          ? await LeaderboardService.getAllRankedEntriesToday()
-          : await LeaderboardService.getAllCasualEntriesToday()
-      ).data
-      setEntries(resp.LeaderboardEntries.sort((a, b) => b.score - a.score))
+      const resp = (await LeaderboardService.getLastSevenDaysScores(type)).data
+      setEntries(resp)
+      console.log(resp)
     }
     fetch()
-  }, [])
+  }, [type])
 
   return (
     <>
@@ -63,33 +60,26 @@ const Leaderboard = ({ title, type, hideAction, height }) => {
                     Rank
                   </Typography>
                 </th>
-                <th style={{ width: 170 }}>
+                <th style={{ width: 285 }}>
                   <Typography level="h2" fontSize={28}>
                     Player
                   </Typography>
                 </th>
-                <th style={{ width: 115 }}>
-                  <Typography level="h2" fontSize={28}>
-                    Word
-                  </Typography>
-                </th>
                 <th>
                   <Typography level="h2" fontSize={28}>
-                    Score
+                    Total Score
                   </Typography>
                 </th>
               </tr>
             </thead>
             <tbody>
               {entries.map((entry, index) => {
-                const entryUser = type === 'ranked' ? entry.User : entry.CasualUser
+                const displayName = entry.displayName
                 return (
                   <tr key={`entry_${index}`}>
                     <td>
                       <Typography
-                        color={
-                          user?.displayName === entryUser.displayName ? (type === 'ranked' ? 'success' : 'primary') : ''
-                        }
+                        color={user?.displayName === displayName ? (type === 'ranked' ? 'success' : 'primary') : ''}
                         level="h2"
                         fontSize={26}
                       >
@@ -97,18 +87,12 @@ const Leaderboard = ({ title, type, hideAction, height }) => {
                       </Typography>
                     </td>
                     <td>
-                      {user?.displayName === entryUser.displayName &&
+                      {user?.displayName === displayName &&
                         user?.displayName.split('').map((c, index) => (
                           <Typography
                             key={`dn_${c}_${index}`}
                             display="inline-block"
-                            color={
-                              user?.displayName === entryUser.displayName
-                                ? type === 'ranked'
-                                  ? 'success'
-                                  : 'primary'
-                                : ''
-                            }
+                            color={user?.displayName === displayName ? (type === 'ranked' ? 'success' : 'primary') : ''}
                             level="h1"
                             textAlign="center"
                             sx={{
@@ -120,33 +104,15 @@ const Leaderboard = ({ title, type, hideAction, height }) => {
                             {c}
                           </Typography>
                         ))}
-                      {user?.displayName !== entryUser.displayName && (
+                      {user?.displayName !== displayName && (
                         <Typography level="h2" fontSize={22}>
-                          {entryUser.displayName}
+                          {displayName}
                         </Typography>
                       )}
                     </td>
                     <td>
-                      <Tooltip title={entryUser.PuzzleSubmissions[0].bonusWord || '-----'}>
-                        <Typography
-                          color={
-                            user?.displayName === entryUser.displayName
-                              ? type === 'ranked'
-                                ? 'success'
-                                : 'primary'
-                              : ''
-                          }
-                          level={entryUser.PuzzleSubmissions[0].bonusWord ? 'h2' : ''}
-                          fontSize={entryUser.PuzzleSubmissions[0].bonusWord ? 18 : 16}
-                          letterSpacing={entryUser.PuzzleSubmissions[0].bonusWord ? '8px' : ''}
-                        >
-                          {entryUser.PuzzleSubmissions[0].bonusWord?.toUpperCase() || '❌❌❌❌'}
-                        </Typography>
-                      </Tooltip>
-                    </td>
-                    <td>
                       <Tooltip title={entry.score}>
-                        <Typography color={user?.displayName === entryUser.displayName ? 'primary' : ''} fontSize={18}>
+                        <Typography color={user?.displayName === displayName ? 'primary' : ''} fontSize={18}>
                           {convertNumberToEmoji(entry.score)}
                         </Typography>
                       </Tooltip>
@@ -213,6 +179,6 @@ const Leaderboard = ({ title, type, hideAction, height }) => {
   )
 }
 
-Leaderboard.propTypes = {}
+LeaderboardLastSevenDays.propTypes = {}
 
-export default Leaderboard
+export default LeaderboardLastSevenDays

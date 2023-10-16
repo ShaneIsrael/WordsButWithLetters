@@ -136,6 +136,6 @@
     transform: translateY(0);
   }
   20% {
-    transform: translateY(-10px);
+    transform: translateY(-5px);
   }
 }

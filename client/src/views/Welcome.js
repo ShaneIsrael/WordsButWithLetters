@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
 import { Fade } from '@mui/material'
 import BackgroundSquares from '../components/misc/BackgroundSquares'
 import ShootingStars from '../components/misc/ShootingStars'
+import LeaderboardLastSevenDays from '../components/leaderboard/LeaderboardLastSevenDays'
 
 const Welcome = (props) => {
   const navigate = useNavigate()
@@ -30,18 +31,18 @@ const Welcome = (props) => {
 
   return (
     <Appbar>
-      <Grid container justifyContent="center" spacing={4} mt={4}>
-        <Grid xs={12} mb={4}>
+      <Grid container justifyContent="center" spacing={2} mt={4}>
+        <Grid xs={12}>
           <Fade in={!loading} timeout={500}>
             <div>
-              <Typography level="h1" textAlign="center" sx={{ fontSize: 64 }}>
+              <Typography level="h1" textAlign="center" sx={{ fontSize: 52 }}>
                 Welcome{' '}
                 <Typography
                   color={isAuthenticated ? 'success' : 'primary'}
                   level="h1"
                   textAlign="center"
                   sx={{
-                    fontSize: 64,
+                    fontSize: 52,
                   }}
                 >
                   {user?.displayName}
@@ -70,31 +71,33 @@ const Welcome = (props) => {
             </div>
           </Fade>
         </Grid>
-        <Grid>
+        <Grid mt={4}>
           <Fade in={!loading}>
-            <Stack alignItems="center">
+            <Stack alignItems="center" gap={1}>
               <Button
                 color="primary"
-                sx={{ width: 200, height: 100, fontFamily: 'Bubblegum Sans', fontSize: 32, mb: 4 }}
+                sx={{ width: 180, height: 90, fontFamily: 'Bubblegum Sans', fontSize: 29, mb: 6 }}
                 onClick={() => navigate('/casual')}
               >
                 Play Casual
               </Button>
-              <Leaderboard title="Today's Casual Leaderboard" type={'casual'} hideAction />
+              <Leaderboard title="Today's Casual Leaderboard" height={320} type={'casual'} hideAction />
+              <LeaderboardLastSevenDays title="Top Last 7 Days" height={320} type={'casual'} hideAction />
             </Stack>
           </Fade>
         </Grid>
-        <Grid>
+        <Grid mt={4}>
           <Fade in={!loading}>
-            <Stack alignItems="center">
+            <Stack alignItems="center" gap={1}>
               <Button
                 color="success"
-                sx={{ width: 200, height: 100, fontFamily: 'Bubblegum Sans', fontSize: 32, mb: 4 }}
+                sx={{ width: 180, height: 90, fontFamily: 'Bubblegum Sans', fontSize: 29, mb: 6 }}
                 onClick={() => navigate('/ranked')}
               >
                 Play Ranked
               </Button>
-              <Leaderboard title="Today's Ranked Leaderboard" type={'ranked'} hideAction />
+              <Leaderboard title="Today's Ranked Leaderboard" height={320} type={'ranked'} hideAction />
+              <LeaderboardLastSevenDays title="Top Last 7 Days" height={320} type={'ranked'} hideAction />
             </Stack>
           </Fade>
         </Grid>

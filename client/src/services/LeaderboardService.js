@@ -7,6 +7,9 @@ class LeaderboardService {
   getAllCasualEntriesToday() {
     return Api().get('/leaderboard/casual')
   }
+  getLastSevenDaysScores(type = 'casual') {
+    return Api().get('/leaderboard/lastseven', { params: { type } })
+  }
 }
 
 const service = new LeaderboardService()
