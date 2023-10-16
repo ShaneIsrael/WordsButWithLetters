@@ -74,8 +74,6 @@ service.getTodaysCasualEntries = async () => {
 }
 
 service.getLastSevenDaysScores = async (type = 'casual') => {
-  let lastMonday = new Date()
-  lastMonday.setDate(lastMonday.getDate() - ((lastMonday.getDay() + 6) % 7))
   try {
     const days = await Day.findAll({
       order: [['id', 'DESC']],

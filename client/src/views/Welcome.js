@@ -110,8 +110,8 @@ const Welcome = (props) => {
                     },
                   }}
                 >
-                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Today's Top Players</Tab>
-                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Top Last 7 Days</Tab>
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Today's Scores</Tab>
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Last 7 Days</Tab>
                 </TabList>
                 <TabPanel value={0}>
                   <Leaderboard height={530} type={'casual'} hideAction noTitle />
@@ -164,8 +164,8 @@ const Welcome = (props) => {
                     },
                   }}
                 >
-                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Today's Top Players</Tab>
-                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Top Last 7 Days</Tab>
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Today's Scores</Tab>
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Last 7 Days</Tab>
                 </TabList>
                 <TabPanel value={0}>
                   <Leaderboard height={530} type={'ranked'} hideAction noTitle />
