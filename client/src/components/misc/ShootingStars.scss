@@ -11,7 +11,7 @@
 }
 
 .stars {
-  position: fixed;
+  //   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -20,7 +20,7 @@
 }
 
 .star {
-  $star-count: 12;
+  $star-count: 20;
   --star-color: hsl(196, 78%, 61%);
   --star-tail-length: 6em;
   --star-tail-height: 1px;

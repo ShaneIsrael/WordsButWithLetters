@@ -16,6 +16,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import FeedbackModal from '../modals/FeedbackModal'
 import Cookies from 'js-cookie'
 import InstructionModal from '../modals/InstructionModal'
+import ShootingStars from '../misc/ShootingStars'
 
 function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle, children }) {
   const theme = useTheme()
@@ -54,6 +55,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
 
   return (
     <>
+      {theme.palette.mode === 'dark' && location.pathname === '/' && <ShootingStars />}
       <AppBar
         component="nav"
         sx={{
@@ -165,6 +167,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
           background:
             theme.palette.mode === 'dark' ? 'radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%)' : '#fbfcfe',
           backgroundSize: 'cover',
+          overflowY: 'scroll',
         }}
       >
         <Box

@@ -30,7 +30,6 @@ const Welcome = (props) => {
 
   return (
     <Appbar>
-      {theme.palette.mode === 'dark' && <ShootingStars />}
       <Grid container justifyContent="center" spacing={4} mt={4}>
         <Grid xs={12} mb={4}>
           <Fade in={!loading} timeout={500}>
