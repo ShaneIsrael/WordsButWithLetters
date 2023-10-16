@@ -162,6 +162,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
           </Grid>
         </Toolbar>
       </AppBar>
+
       <Box
         sx={{
           background:
