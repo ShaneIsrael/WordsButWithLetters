@@ -1,3 +1,4 @@
+const { Op } = require('sequelize')
 const { Puzzle, Leaderboard, LeaderboardEntry, Day, User, CasualUser, PuzzleSubmission } = require('../database/models')
 const leaderboard = require('../database/models/leaderboard')
 const { getTodaysDate } = require('../utils')
@@ -67,6 +68,39 @@ service.getTodaysCasualEntries = async () => {
       ],
     })
     return leaderboard
+  } catch (err) {
+    throw err
+  }
+}
+
+service.getLastSevenDaysScores = async (type = 'casual') => {
+  try {
+    const days = await Day.findAll({
+      order: [['id', 'DESC']],
+      limit: 7,
+      include: [{ model: Puzzle, where: { type } }],
+    })
+    const contexts = days.map((d) => d.Puzzles[0].contextId)
+    const boards = await Leaderboard.findAll({
+      where: {
+        context: {
+          [Op.in]: contexts,
+        },
+      },
+      include: [{ model: LeaderboardEntry, include: [User, CasualUser] }],
+    })
+    const scoreTally = {}
+    boards.forEach((board) => {
+      board.LeaderboardEntries.forEach((lbe) => {
+        const user = type === 'casual' ? lbe.CasualUser : lbe.User
+        const score = lbe.score
+        if (!scoreTally[user.id]) scoreTally[user.id] = { score: lbe.score, displayName: user.displayName }
+        else scoreTally[user.id].score += score
+      })
+    })
+    const asArray = Object.keys(scoreTally).map((key) => scoreTally[key])
+    const sortedByScore = asArray.sort((a, b) => b.score - a.score)
+    return sortedByScore
   } catch (err) {
     throw err
   }

@@ -3,7 +3,11 @@ const path = require('path')
 const md5 = require('md5')
 
 async function main() {
-  console.log(md5('192.168.0.1'))
+  let currentDateObj = new Date()
+  currentDateObj.setDate(currentDateObj.getDate() - ((currentDateObj.getDay() + 6) % 7))
+  tsObj = currentDateObj.toLocaleString('en-uS', { timeZone: 'America/Los_Angeles' })
+
+  console.log(new Date(tsObj).toISOString())
 }
 
 try {

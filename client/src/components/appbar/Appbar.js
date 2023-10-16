@@ -194,7 +194,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
             sx={{
               pt: '64px',
               width: '100%',
-              height: 'calc(100vh + 64px)',
+              height: 'calc(100vh + 32px)',
             }}
           >
             {children}
