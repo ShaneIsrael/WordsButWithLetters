@@ -29,7 +29,6 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
     async function fetch() {
       const resp = (await LeaderboardService.getLastSevenDaysScores(type)).data
       setEntries(resp)
-      console.log(resp)
     }
     fetch()
   }, [type])
