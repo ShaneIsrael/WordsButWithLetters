@@ -7,7 +7,7 @@ import { Box, Button, Sheet, Table, Tooltip, Typography, useTheme } from '@mui/j
 import { useNavigate } from 'react-router-dom'
 import { convertNumberToEmoji } from '../../common/utils'
 
-const Leaderboard = ({ title, type, hideAction, height }) => {
+const Leaderboard = ({ title, type, hideAction, noTitle, height }) => {
   const navigate = useNavigate()
   const theme = useTheme()
 
@@ -39,9 +39,11 @@ const Leaderboard = ({ title, type, hideAction, height }) => {
 
   return (
     <>
-      <Typography color="" level="h2" fontSize={32} textAlign="center">
-        {title}
-      </Typography>
+      {!noTitle && (
+        <Typography color="" level="h2" fontSize={32} textAlign="center">
+          {title}
+        </Typography>
+      )}
       <Sheet
         sx={{
           display: 'flex',

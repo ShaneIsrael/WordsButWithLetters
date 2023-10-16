@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Appbar from '../components/appbar/Appbar'
-import { Button, Grid, Stack, Typography, useTheme } from '@mui/joy'
+import { Button, Grid, Stack, TabList, TabPanel, Tabs, Typography, useTheme } from '@mui/joy'
+import Tab, { tabClasses } from '@mui/joy/Tab'
 import Leaderboard from '../components/leaderboard/Leaderboard'
 import { useNavigate } from 'react-router-dom'
 import { useAuthed } from '../hooks/useAuthed'
@@ -31,7 +32,7 @@ const Welcome = (props) => {
 
   return (
     <Appbar>
-      <Grid container justifyContent="center" spacing={2} mt={4}>
+      <Grid container justifyContent="center" spacing={2} mt={4} mb={10}>
         <Grid xs={12}>
           <Fade in={!loading} timeout={500}>
             <div>
@@ -81,8 +82,47 @@ const Welcome = (props) => {
               >
                 Play Casual
               </Button>
-              <Leaderboard title="Today's Casual Leaderboard" height={320} type={'casual'} hideAction />
-              <LeaderboardLastSevenDays title="Top Last 7 Days" height={320} type={'casual'} hideAction />
+              <Tabs
+                variant="plain"
+                sx={{ background: 'rgba(0,0,0,0)' }}
+                aria-label="Casual Leaderboard Tabs"
+                defaultValue={0}
+              >
+                <TabList
+                  sx={{
+                    pt: 1,
+                    justifyContent: 'center',
+                    [`&& .${tabClasses.root}`]: {
+                      flex: 'initial',
+                      bgcolor: 'transparent',
+                      '&:hover': {
+                        bgcolor: 'transparent',
+                      },
+                      [`&.${tabClasses.selected}`]: {
+                        color: 'primary.plainColor',
+                        '&::after': {
+                          height: 2,
+                          borderTopLeftRadius: 3,
+                          borderTopRightRadius: 3,
+                          bgcolor: 'primary.500',
+                        },
+                      },
+                    },
+                  }}
+                >
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Today's Top Players</Tab>
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Top Last 7 Days</Tab>
+                </TabList>
+                <TabPanel value={0}>
+                  <Leaderboard height={530} type={'casual'} hideAction noTitle />
+                </TabPanel>
+                <TabPanel value={1}>
+                  <LeaderboardLastSevenDays height={530} type={'casual'} hideAction noTitle />
+                  <Typography textAlign="center" sx={{ fontSize: 18, fontStyle: 'italic', mt: 1 }}>
+                    Updated ~ every 10 minutes
+                  </Typography>
+                </TabPanel>
+              </Tabs>
             </Stack>
           </Fade>
         </Grid>
@@ -96,8 +136,47 @@ const Welcome = (props) => {
               >
                 Play Ranked
               </Button>
-              <Leaderboard title="Today's Ranked Leaderboard" height={320} type={'ranked'} hideAction />
-              <LeaderboardLastSevenDays title="Top Last 7 Days" height={320} type={'ranked'} hideAction />
+              <Tabs
+                variant="plain"
+                sx={{ background: 'rgba(0,0,0,0)' }}
+                aria-label="Casual Leaderboard Tabs"
+                defaultValue={0}
+              >
+                <TabList
+                  sx={{
+                    pt: 1,
+                    justifyContent: 'center',
+                    [`&& .${tabClasses.root}`]: {
+                      flex: 'initial',
+                      bgcolor: 'transparent',
+                      '&:hover': {
+                        bgcolor: 'transparent',
+                      },
+                      [`&.${tabClasses.selected}`]: {
+                        color: 'success.plainColor',
+                        '&::after': {
+                          height: 2,
+                          borderTopLeftRadius: 3,
+                          borderTopRightRadius: 3,
+                          bgcolor: 'success.500',
+                        },
+                      },
+                    },
+                  }}
+                >
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Today's Top Players</Tab>
+                  <Tab sx={{ fontFamily: 'Bubblegum Sans', fontSize: 24 }}>Top Last 7 Days</Tab>
+                </TabList>
+                <TabPanel value={0}>
+                  <Leaderboard height={530} type={'ranked'} hideAction noTitle />
+                </TabPanel>
+                <TabPanel value={1}>
+                  <LeaderboardLastSevenDays height={530} type={'ranked'} hideAction noTitle />
+                  <Typography textAlign="center" sx={{ fontSize: 18, fontStyle: 'italic', mt: 1 }}>
+                    Updated ~ every 10 minutes
+                  </Typography>
+                </TabPanel>
+              </Tabs>
             </Stack>
           </Fade>
         </Grid>
