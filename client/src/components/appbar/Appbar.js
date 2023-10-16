@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useTheme } from '@emotion/react'
 import { Grid, Typography, Menu, MenuItem, MenuButton, Dropdown, IconButton, Box, Tooltip } from '@mui/joy'
 import { AppBar, Toolbar } from '@mui/material'
@@ -23,6 +23,8 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
   const navigate = useNavigate()
   const location = useLocation()
 
+  const scrollRef = useRef()
+
   const [feedbackModalOpen, setFeedbackModalOpen] = React.useState(false)
   const [instructionsModalOpen, setInstructionsModalOpen] = React.useState(false)
 
@@ -43,6 +45,12 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
     setInstructionsModalOpen(false)
   }
 
+  const handleScrolling = (e) => {
+    if (scrollRef.current && e.target.classList.contains('stars')) {
+      scrollRef.current.scrollBy(e.deltaX, e.deltaY / 1)
+    }
+  }
+
   React.useEffect(() => {
     const instructionsDisabled = Cookies.get('instructionsDisabled')
 
@@ -50,6 +58,10 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
       if (!['/login', '/register', '/leaderboard', '/admin', '/'].includes(location.pathname)) {
         setInstructionsModalOpen(true)
       }
+    }
+    document.addEventListener('wheel', handleScrolling)
+    return function cleanup() {
+      document.removeEventListener('wheel', handleScrolling)
     }
   }, [])
 
@@ -164,6 +176,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
       </AppBar>
 
       <Box
+        ref={scrollRef}
         sx={{
           background:
             theme.palette.mode === 'dark' ? 'radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%)' : '#fbfcfe',
