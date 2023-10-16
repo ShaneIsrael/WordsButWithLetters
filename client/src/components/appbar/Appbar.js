@@ -162,22 +162,26 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
       </AppBar>
       <Box
         sx={{
-          '@media screen and (max-width: 30em)': { scale: '0.6' },
+          background:
+            theme.palette.mode === 'dark' ? 'radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%)' : '#fbfcfe',
+          backgroundSize: 'cover',
         }}
       >
         <Box
-          component="main"
           sx={{
-            pt: '64px',
-            width: '100%',
-            height: 'calc(100vh + 64px)',
-            background:
-              theme.palette.mode === 'dark'
-                ? 'radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%)'
-                : '#fbfcfe',
+            '@media screen and (max-width: 30em)': { scale: '0.6' },
           }}
         >
-          {children}
+          <Box
+            component="main"
+            sx={{
+              pt: '64px',
+              width: '100%',
+              height: 'calc(100vh + 64px)',
+            }}
+          >
+            {children}
+          </Box>
         </Box>
       </Box>
     </>
