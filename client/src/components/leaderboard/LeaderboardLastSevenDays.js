@@ -124,7 +124,7 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                       )}
                     </td>
                     <td>
-                      <Tooltip title={entry.score}>
+                      <Tooltip title={entry.games}>
                         <Typography
                           level="h2"
                           color={user?.displayName === displayName ? (type === 'ranked' ? 'success' : 'primary') : ''}
