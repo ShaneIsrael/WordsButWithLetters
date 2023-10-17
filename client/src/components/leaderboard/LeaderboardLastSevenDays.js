@@ -124,8 +124,13 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                       )}
                     </td>
                     <td>
-                      <Tooltip title={entry.score}>
-                        <Typography color="primary" fontSize={22} fontWeight={500}>
+                      <Tooltip title={entry.games}>
+                        <Typography
+                          level="h2"
+                          color={user?.displayName === displayName ? (type === 'ranked' ? 'success' : 'primary') : ''}
+                          fontSize={22}
+                          fontWeight={500}
+                        >
                           {entry.games}
                         </Typography>
                       </Tooltip>
