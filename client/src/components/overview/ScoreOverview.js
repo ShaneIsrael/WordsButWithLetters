@@ -15,9 +15,11 @@ const ScoreOverview = ({ progress, scoreModifiers }) => {
         flexDirection: 'column',
         padding: 2,
         borderTopLeftRadius: 8,
-        width: '100%',
-        height: 438,
+        borderTopRightRadius: 8,
+        width: 534,
+        height: 548,
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        justifyContent: 'center',
       }}
     >
       <Grid container width="100%" justifyContent="center">

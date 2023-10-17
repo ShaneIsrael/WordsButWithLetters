@@ -57,7 +57,15 @@ const Leaderboard = ({ title, type, hideAction, noTitle, height }) => {
         variant="outlined"
       >
         {entries && entries.length > 0 && (
-          <Table borderAxis="none" color="primary" size="lg" stickyFooter={false} stickyHeader variant="plain">
+          <Table
+            borderAxis="none"
+            color="primary"
+            size="lg"
+            stickyFooter={false}
+            stickyHeader
+            variant="plain"
+            sx={{ '& th': { background: '#0B0D0E' } }}
+          >
             <thead>
               <tr>
                 <th style={{ width: 80 }}>
@@ -65,7 +73,7 @@ const Leaderboard = ({ title, type, hideAction, noTitle, height }) => {
                     Rank
                   </Typography>
                 </th>
-                <th style={{ width: 170 }}>
+                <th style={{ width: 200 }}>
                   <Typography level="h2" fontSize={28}>
                     Player
                   </Typography>
@@ -115,8 +123,9 @@ const Leaderboard = ({ title, type, hideAction, noTitle, height }) => {
                             textAlign="center"
                             sx={{
                               fontSize: 22,
-                              animation: 'waveAnimation 1s infinite',
+                              animation: 'waveAnimation 1s',
                               animationDelay: `calc(.06s * ${index})`,
+                              animationIterationCount: 3,
                             }}
                           >
                             {c}

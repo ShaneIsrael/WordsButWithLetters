@@ -94,8 +94,12 @@ service.getLastSevenDaysScores = async (type = 'casual') => {
       board.LeaderboardEntries.forEach((lbe) => {
         const user = type === 'casual' ? lbe.CasualUser : lbe.User
         const score = lbe.score
-        if (!scoreTally[user.id]) scoreTally[user.id] = { score: lbe.score, displayName: user.displayName }
-        else scoreTally[user.id].score += score
+
+        if (!scoreTally[user.id]) scoreTally[user.id] = { score: lbe.score, games: 1, displayName: user.displayName }
+        else {
+          scoreTally[user.id].score += score
+          scoreTally[user.id].games += 1
+        }
       })
     })
     const asArray = Object.keys(scoreTally).map((key) => scoreTally[key])
