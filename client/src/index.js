@@ -21,6 +21,7 @@ import LightModeIcon from '@mui/icons-material/LightMode'
 import { Toaster } from 'sonner'
 
 import AuthService from './services/AuthService'
+import { Fade } from '@mui/material'
 
 const theme = extendTheme({
   fontFamily: {
@@ -86,14 +87,52 @@ function ModeToggle() {
   )
 }
 
+function KofiButtonComponent() {
+  const [show, setShow] = React.useState(true)
+
+  React.useEffect(() => {
+    let timeout = null
+    const handleKofiFade = (e) => {
+      const distancedScrolled = document.getElementById('scrollableViewport').scrollTop
+      if (distancedScrolled > 0 && show) {
+        setShow(false)
+      }
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+      timeout = setTimeout(() => setShow(true), 1000)
+    }
+
+    document.addEventListener('wheel', handleKofiFade)
+    return function cleanup() {
+      if (timeout) {
+        clearTimeout(timeout)
+      }
+      document.removeEventListener('wheel', handleKofiFade)
+    }
+  }, [])
+
+  return (
+    <Fade in={show}>
+      <Box position="absolute" bottom={16} left={16} zIndex={9999}>
+        <KofiButton
+          username="wordsbutwithletters"
+          label="Support us"
+          preset="skinny"
+          backgroundColor="kofiBlue"
+          animation
+        />
+      </Box>
+    </Fade>
+  )
+}
+
 root.render(
   <MaterialCssVarsProvider defaultMode="dark" theme={{ [MATERIAL_THEME_ID]: materialTheme }}>
     <JoyCssVarsProvider defaultMode="dark" theme={theme}>
       <Toaster position="top-center" offset="64px" richColors />
       <ModeToggle />
-      <Box position="absolute" bottom={16} left={16} zIndex={9999}>
-        <KofiButton username="wordsbutwithletters" label="Support us" preset="skinny" animation />
-      </Box>
+      <KofiButtonComponent />
       <CssBaseline />
       <App />
     </JoyCssVarsProvider>

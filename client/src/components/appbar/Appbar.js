@@ -183,6 +183,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
           backgroundSize: 'cover',
           overflowY: 'scroll',
         }}
+        id="scrollableViewport"
       >
         <Box
           sx={{
