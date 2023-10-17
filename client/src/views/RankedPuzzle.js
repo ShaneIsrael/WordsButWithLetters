@@ -278,36 +278,40 @@ const RankedPuzzle = (props) => {
                   )}
                 </Grid>
                 <div style={{ marginBottom: 4 }} />
-                {puzzle && !puzzleComplete ? (
+                {puzzle && !puzzleComplete && (
                   <BonusWordComponent
                     letters={playData.banishedLetters}
                     maxLetters={puzzle?.board.banishedIndexes.length}
                     bonusWordFound={playData.bonusWordFound}
-                  />
-                ) : (
-                  <ShareButton
-                    progress={playData}
-                    scoreModifiers={puzzle?.board.scoreModifiers}
-                    puzzleNumber={puzzleNumber}
                   />
                 )}
               </Box>
             </Box>
           </Box>
 
-          {puzzleSubmission ? (
-            <VKeyboard
-              onKeyPressed={handleKeyPress}
-              onDelete={handleDelete}
-              onEnter={handleSubmit}
-              onInvalidKey={handleInvalidKey}
-              disabledKeys={playData.banishedLetters}
-              highlightKeys={playData.wordMatrix[playData.activeRow]}
-              keyboardEnabled={puzzleSubmission && !puzzleComplete}
-              invalidAnimationOn={invalidKeyAnimationOn}
-            />
+          {!puzzleComplete ? (
+            <>
+              {puzzleSubmission ? (
+                <VKeyboard
+                  onKeyPressed={handleKeyPress}
+                  onDelete={handleDelete}
+                  onEnter={handleSubmit}
+                  onInvalidKey={handleInvalidKey}
+                  disabledKeys={playData.banishedLetters}
+                  highlightKeys={playData.wordMatrix[playData.activeRow]}
+                  keyboardEnabled={puzzleSubmission && !puzzleComplete}
+                  invalidAnimationOn={invalidKeyAnimationOn}
+                />
+              ) : (
+                <TitleKeyboard />
+              )}
+            </>
           ) : (
-            <TitleKeyboard />
+            <ShareButton
+              progress={playData}
+              scoreModifiers={puzzle?.board.scoreModifiers}
+              puzzleNumber={puzzleNumber}
+            />
           )}
         </div>
       </Box>
