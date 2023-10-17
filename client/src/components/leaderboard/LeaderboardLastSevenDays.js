@@ -28,7 +28,6 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
   React.useEffect(() => {
     async function fetch() {
       const resp = (await LeaderboardService.getLastSevenDaysScores(type)).data
-      console.log(resp)
       setEntries(resp)
     }
     fetch()
@@ -87,7 +86,6 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
             </thead>
             <tbody>
               {entries.map((entry, index) => {
-                console.log(entry)
                 const displayName = entry.displayName
                 return (
                   <tr key={`entry_${index}`}>
