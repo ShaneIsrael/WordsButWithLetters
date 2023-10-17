@@ -22,6 +22,7 @@ import { Toaster } from 'sonner'
 
 import AuthService from './services/AuthService'
 import { Fade } from '@mui/material'
+import { BrowserView } from 'react-device-detect'
 
 const theme = extendTheme({
   fontFamily: {
@@ -132,7 +133,9 @@ root.render(
     <JoyCssVarsProvider defaultMode="dark" theme={theme}>
       <Toaster position="top-center" offset="64px" richColors />
       <ModeToggle />
-      <KofiButtonComponent />
+      <BrowserView>
+        <KofiButtonComponent />
+      </BrowserView>
       <CssBaseline />
       <App />
     </JoyCssVarsProvider>
