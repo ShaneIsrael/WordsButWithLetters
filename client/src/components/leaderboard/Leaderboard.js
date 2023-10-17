@@ -57,7 +57,15 @@ const Leaderboard = ({ title, type, hideAction, noTitle, height }) => {
         variant="outlined"
       >
         {entries && entries.length > 0 && (
-          <Table borderAxis="none" color="primary" size="lg" stickyFooter={false} stickyHeader variant="plain">
+          <Table
+            borderAxis="none"
+            color="primary"
+            size="lg"
+            stickyFooter={false}
+            stickyHeader
+            variant="plain"
+            sx={{ '& th': { background: '#0B0D0E' } }}
+          >
             <thead>
               <tr>
                 <th style={{ width: 80 }}>
