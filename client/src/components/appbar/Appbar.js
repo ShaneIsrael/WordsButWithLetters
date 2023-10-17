@@ -95,7 +95,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
                 <MenuItem onClick={isAuthenticated ? handleLogout : handleLogin}>
                   {isAuthenticated ? 'Logout' : 'Login'}
                 </MenuItem>
-                <MenuItem onClick={() => navigate('/leaderboard')}>Leaderboard</MenuItem>
+                <MenuItem onClick={() => navigate('/')}>Leaderboard</MenuItem>
                 {!hideInstructions && (
                   <MenuItem
                     onClick={() => {
@@ -153,7 +153,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
             </Tooltip>
 
             <Tooltip title="View Leaderboard">
-              <IconButton size="large" color="inherit" onClick={() => navigate('/leaderboard')}>
+              <IconButton size="large" color="inherit" onClick={() => navigate('/')}>
                 <LeaderboardIcon />
               </IconButton>
             </Tooltip>
@@ -183,6 +183,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
           backgroundSize: 'cover',
           overflowY: 'scroll',
         }}
+        id="scrollableViewport"
       >
         <Box
           sx={{
