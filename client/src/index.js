@@ -13,8 +13,9 @@ import {
   THEME_ID as MATERIAL_THEME_ID,
 } from '@mui/material/styles'
 import { CssVarsProvider as JoyCssVarsProvider } from '@mui/joy/styles'
+import { KofiButton } from 'react-kofi-button'
 
-import { Button, CssBaseline } from '@mui/joy'
+import { Box, Button, CssBaseline } from '@mui/joy'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import { Toaster } from 'sonner'
@@ -90,6 +91,9 @@ root.render(
     <JoyCssVarsProvider defaultMode="dark" theme={theme}>
       <Toaster position="top-center" offset="64px" richColors />
       <ModeToggle />
+      <Box position="absolute" bottom={16} left={16} zIndex={9999}>
+        <KofiButton username="wordsbutwithletters" label="Support us" preset="skinny" animation />
+      </Box>
       <CssBaseline />
       <App />
     </JoyCssVarsProvider>
