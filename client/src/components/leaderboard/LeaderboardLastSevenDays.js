@@ -28,6 +28,7 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
   React.useEffect(() => {
     async function fetch() {
       const resp = (await LeaderboardService.getLastSevenDaysScores(type)).data
+      console.log(resp)
       setEntries(resp)
     }
     fetch()
@@ -59,9 +60,14 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                     Rank
                   </Typography>
                 </th>
-                <th style={{ width: 285 }}>
+                <th style={{ width: 200 }}>
                   <Typography level="h2" fontSize={28}>
                     Player
+                  </Typography>
+                </th>
+                <th style={{ width: 90 }}>
+                  <Typography level="h2" fontSize={28}>
+                    Games
                   </Typography>
                 </th>
                 <th>
@@ -73,6 +79,7 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
             </thead>
             <tbody>
               {entries.map((entry, index) => {
+                console.log(entry)
                 const displayName = entry.displayName
                 return (
                   <tr key={`entry_${index}`}>
@@ -96,8 +103,9 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                             textAlign="center"
                             sx={{
                               fontSize: 22,
-                              animation: 'waveAnimation 1s infinite',
+                              animation: 'waveAnimation 1s',
                               animationDelay: `calc(.06s * ${index})`,
+                              animationIterationCount: 3,
                             }}
                           >
                             {c}
@@ -108,6 +116,13 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                           {displayName}
                         </Typography>
                       )}
+                    </td>
+                    <td>
+                      <Tooltip title={entry.score}>
+                        <Typography fontSize={22} fontWeight={500}>
+                          {entry.games}
+                        </Typography>
+                      </Tooltip>
                     </td>
                     <td>
                       <Tooltip title={entry.score}>

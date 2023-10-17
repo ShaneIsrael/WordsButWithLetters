@@ -8,6 +8,7 @@ import { toast } from 'sonner'
 import { convertNumberToEmoji } from '../../common/utils'
 import { useAuthed } from '../../hooks/useAuthed'
 import PuzzleService from '../../services/PuzzleService'
+import FeedbackModal from '../modals/FeedbackModal'
 
 const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
   const theme = useTheme()
@@ -15,6 +16,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
   const location = useLocation()
   const navigate = useNavigate()
   const { isAuthenticated } = useAuthed()
+  const [feedbackModalOpen, setFeedbackModalOpen] = React.useState(false)
 
   React.useEffect(() => {
     async function init() {
@@ -58,10 +60,16 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
       variant="plain"
       sx={{
         width: 534,
-        height: 112.5,
+        height: 222,
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
+        borderBottomLeftRadius: 8,
+        borderBottomRightRadius: 8,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
       }}
     >
+      <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
       <Grid container direction="column" alignItems="center" spacing={1}>
         <Grid>
           <Button
@@ -78,6 +86,18 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
             Share
           </Button>
         </Grid>
+        <Grid>
+          <Tooltip title="Give us some feedback.">
+            <Button
+              sx={{ background: '#014CC273' }}
+              size="md"
+              variant="soft"
+              onClick={() => setFeedbackModalOpen(true)}
+            >
+              Leave Feedback
+            </Button>
+          </Tooltip>
+        </Grid>
         {location.pathname === '/casual' && (
           <Grid>
             <Tooltip title="Ranked puzzle scores appear on daily leaderboards and allow you to partake in daily discussions.">
@@ -90,7 +110,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
                   else navigate('/login')
                 }}
               >
-                {isAuthenticated ? 'Complete' : 'Login to Complete'} Todays Ranked Puzzle
+                {isAuthenticated ? 'Complete' : 'Login for'} Today's Ranked Puzzle
               </Button>
             </Tooltip>
           </Grid>
