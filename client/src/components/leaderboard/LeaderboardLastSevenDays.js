@@ -70,7 +70,7 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                 <Th
                   sx={{
                     width: {
-                      xs: 46,
+                      xs: 55,
                       md: 80,
                     },
                   }}
@@ -82,7 +82,7 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                 <Th
                   sx={{
                     width: {
-                      xs: 115,
+                      xs: 106,
                       md: 200,
                     },
                   }}
