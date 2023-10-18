@@ -37,7 +37,7 @@ const HIGHLIGHT_COLORS = {
   },
 }
 
-const LetterHolder = styled(Sheet)(({ theme }) => ({
+const LetterHolder = styled(Sheet)(({ theme, sx }) => ({
   ...theme.typography['body-sm'],
   display: 'flex',
   justifyContent: 'center',
@@ -46,14 +46,12 @@ const LetterHolder = styled(Sheet)(({ theme }) => ({
   border: `2px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
   // borderColor: highlightborder || false,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
-  width: 46,
-  height: 46,
-  fontSize: '1.25em',
   fontWeight: 'bold',
   background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0)' : theme.palette.neutral[100],
+  ...sx,
 }))
 
-const HighlightLetterHolder = styled(Sheet)(({ theme, color }) => ({
+const HighlightLetterHolder = styled(Sheet)(({ theme, color, sx }) => ({
   backgroundColor:
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].backgroundDark : HIGHLIGHT_COLORS[color].backgroundLight,
   ...theme.typography['body-sm'],
@@ -66,10 +64,8 @@ const HighlightLetterHolder = styled(Sheet)(({ theme, color }) => ({
   }`,
   // borderColor: highlightborder || false,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
-  width: 46,
-  height: 46,
-  fontSize: '1.25em',
   fontWeight: 'bold',
+  ...sx,
 }))
 
 function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
@@ -82,12 +78,12 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 534,
-        height: 108,
+        width: { xs: 349.7, md: 534 },
+        height: { xs: 74.3, md: 108 },
         background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
       }}
     >
-      <Typography level="h2" sx={{ fontWeight: 'bold', fontSize: 26 }}>
+      <Typography level="h2" sx={{ fontWeight: 'bold', fontSize: { xs: 20, md: 26 } }}>
         Bonus Word
       </Typography>
       <Box
@@ -102,11 +98,28 @@ function BonusWordComponent({ letters, maxLetters, bonusWordFound }) {
       >
         {new Array(maxLetters).fill().map((_, index) =>
           bonusWordFound?.includes(letters?.[index]) ? (
-            <HighlightLetterHolder color="red" key={`bonus_word_letter_${letters?.[index] || index}_${index}`}>
+            <HighlightLetterHolder
+              color="red"
+              key={`bonus_word_letter_${letters?.[index] || index}_${index}`}
+              sx={{
+                width: { xs: 28, md: 46 },
+                height: { xs: 28, md: 46 },
+                fontSize: { xs: '1em', md: '1.25em' },
+                borderWidth: { xs: '1px', md: '2px' },
+              }}
+            >
               {letters?.[index]}
             </HighlightLetterHolder>
           ) : (
-            <LetterHolder key={`bonus_word_letter_${letters?.[index] || index}_${index}`}>
+            <LetterHolder
+              key={`bonus_word_letter_${letters?.[index] || index}_${index}`}
+              sx={{
+                width: { xs: 28, md: 46 },
+                height: { xs: 28, md: 46 },
+                fontSize: { xs: '1em', md: '1.25em' },
+                borderWidth: { xs: '1px', md: '2px' },
+              }}
+            >
               {letters?.[index] || ''}
             </LetterHolder>
           ),

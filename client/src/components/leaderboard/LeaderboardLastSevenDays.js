@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import Cookies from 'js-cookie'
 import LeaderboardService from '../../services/LeaderboardService'
 import { useAuthed } from '../../hooks/useAuthed'
-import { Box, Button, Sheet, Table, Tooltip, Typography, useTheme } from '@mui/joy'
+import { Box, Button, Sheet, Table, Tooltip, Typography, styled, useTheme } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { convertNumberToEmoji } from '../../common/utils'
+
+const Th = styled('th')(({ sx }) => ({ ...sx }))
 
 const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
   const navigate = useNavigate()
@@ -42,7 +44,10 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          width: 525,
+          width: {
+            xs: 350,
+            md: 550,
+          },
           height,
           overflow: 'auto',
           boxShadow: 'md',
@@ -58,30 +63,51 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
             stickyFooter={false}
             stickyHeader
             variant="plain"
-            sx={{ '& th': { background: '#0B0D0E' } }}
+            sx={{ '& th': { background: '#0B0D0E', height: { xs: 10, md: 48 } } }}
           >
             <thead>
               <tr>
-                <th style={{ width: 80 }}>
-                  <Typography level="h2" fontSize={28}>
+                <Th
+                  sx={{
+                    width: {
+                      xs: 46,
+                      md: 80,
+                    },
+                  }}
+                >
+                  <Typography level="h2" fontSize={{ xs: 16, md: 28 }}>
                     Rank
                   </Typography>
-                </th>
-                <th style={{ width: 200 }}>
-                  <Typography level="h2" fontSize={28}>
+                </Th>
+                <Th
+                  sx={{
+                    width: {
+                      xs: 115,
+                      md: 200,
+                    },
+                  }}
+                >
+                  <Typography level="h2" fontSize={{ xs: 16, md: 28 }}>
                     Player
                   </Typography>
-                </th>
-                <th style={{ width: 90 }}>
-                  <Typography level="h2" fontSize={28}>
+                </Th>
+                <Th
+                  sx={{
+                    width: {
+                      xs: 80,
+                      md: 115,
+                    },
+                  }}
+                >
+                  <Typography level="h2" fontSize={{ xs: 16, md: 28 }}>
                     Games
                   </Typography>
-                </th>
-                <th>
-                  <Typography level="h2" fontSize={28}>
+                </Th>
+                <Th>
+                  <Typography level="h2" fontSize={{ xs: 16, md: 28 }}>
                     Total Score
                   </Typography>
-                </th>
+                </Th>
               </tr>
             </thead>
             <tbody>
@@ -93,7 +119,10 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                       <Typography
                         color={user?.displayName === displayName ? (type === 'ranked' ? 'success' : 'primary') : ''}
                         level="h2"
-                        fontSize={26}
+                        fontSize={{
+                          xs: 18,
+                          md: 26,
+                        }}
                       >
                         {index + 1} .
                       </Typography>
@@ -108,7 +137,10 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                             level="h1"
                             textAlign="center"
                             sx={{
-                              fontSize: 22,
+                              fontSize: {
+                                xs: 18,
+                                md: 26,
+                              },
                               animation: 'waveAnimation 1s',
                               animationDelay: `calc(.06s * ${index})`,
                               animationIterationCount: 3,
@@ -118,7 +150,13 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                           </Typography>
                         ))}
                       {user?.displayName !== displayName && (
-                        <Typography level="h2" fontSize={22}>
+                        <Typography
+                          level="h2"
+                          fontSize={{
+                            xs: 18,
+                            md: 26,
+                          }}
+                        >
                           {displayName}
                         </Typography>
                       )}
@@ -128,7 +166,10 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                         <Typography
                           level="h2"
                           color={user?.displayName === displayName ? (type === 'ranked' ? 'success' : 'primary') : ''}
-                          fontSize={22}
+                          fontSize={{
+                            xs: 18,
+                            md: 26,
+                          }}
                           fontWeight={500}
                         >
                           {entry.games}
@@ -137,7 +178,13 @@ const LeaderboardLastSevenDays = ({ title, type, hideAction, height }) => {
                     </td>
                     <td>
                       <Tooltip title={entry.score}>
-                        <Typography color={user?.displayName === displayName ? 'primary' : ''} fontSize={18}>
+                        <Typography
+                          color={user?.displayName === displayName ? 'primary' : ''}
+                          fontSize={{
+                            xs: 13,
+                            md: 18,
+                          }}
+                        >
                           {convertNumberToEmoji(entry.score)}
                         </Typography>
                       </Tooltip>

@@ -23,7 +23,7 @@ const COLORS = {
   },
 }
 
-const LetterHolder = styled(Sheet)(({ theme, color }) => ({
+const LetterHolder = styled(Sheet)(({ theme, color, sx }) => ({
   ...theme.typography['body-sm'],
   display: 'flex',
   justifyContent: 'center',
@@ -32,9 +32,6 @@ const LetterHolder = styled(Sheet)(({ theme, color }) => ({
   border: `2px solid ${theme.palette.mode === 'dark' ? COLORS[color].borderDark : COLORS[color].borderLight}`,
   background: theme.palette.mode === 'dark' ? COLORS[color].backgroundDark : COLORS[color].backgroundLight,
   color: theme.palette.mode === 'dark' ? COLORS[color].fontColorDark : COLORS[color].fontColorLight,
-  width: 30,
-  height: 30,
-  fontSize: '1.25em',
   fontWeight: 'bold',
 }))
 
@@ -44,38 +41,67 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
   return (
     <Sheet
       sx={{
-        width: 140,
-        height: 'calc(100% - 104px)',
-        paddingTop: 1,
+        width: { xs: 91.7, md: 140 },
+        height: { xs: 'calc(100% - 73px)', md: 'calc(100% - 104px)' },
+        paddingTop: { xs: 0.5, md: 1 },
         background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
         display: 'flex',
         justifyContent: 'center',
       }}
     >
       <Grid direction="column" justifyContent="center" alignItems="stretch" sx={{ height: '100%' }}>
-        <Typography level="h2" fontSize={24} fontWeight={800} textAlign="center" width={120}>
+        <Typography
+          level="h2"
+          fontSize={{ xs: 16, md: 24 }}
+          fontWeight={800}
+          textAlign="center"
+          width={{ xs: 85, md: 120 }}
+        >
           Score Modifiers
         </Typography>
-        <Grid container direction="column" justifyContent="space-between" sx={{ padding: '14px 8px 8px', gap: '18px' }}>
+        <Grid
+          container
+          direction="column"
+          justifyContent="space-between"
+          sx={{ padding: { xs: '4px 8px 8px', md: '14px 8px 8px' }, gap: { xs: '6px', md: '18px' } }}
+        >
           <Grid xs>
-            <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
+            <Typography level="h2" fontSize={{ xs: 16, md: 26 }} fontWeight={900} textAlign="center">
               x2
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[0].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`} color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}>
+                <LetterHolder
+                  key={`modifier_${letter}`}
+                  color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}
+                  sx={{
+                    width: { xs: 20, md: 30 },
+                    height: { xs: 20, md: 30 },
+                    fontSize: '1.25em',
+                    borderWidth: { xs: '1px', md: '2px' },
+                  }}
+                >
                   {letter}
                 </LetterHolder>
               ))}
             </Grid>
           </Grid>
           <Grid xs>
-            <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
+            <Typography level="h2" fontSize={{ xs: 16, md: 26 }} fontWeight={900} textAlign="center">
               x4
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[1].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`} color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}>
+                <LetterHolder
+                  key={`modifier_${letter}`}
+                  color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}
+                  sx={{
+                    width: { xs: 20, md: 30 },
+                    height: { xs: 20, md: 30 },
+                    fontSize: '1.25em',
+                    borderWidth: { xs: '1px', md: '2px' },
+                  }}
+                >
                   {letter}
                 </LetterHolder>
               ))}
@@ -83,12 +109,21 @@ const ScoreModifiers = ({ modifiers, disabledKeys, hide }) => {
           </Grid>
 
           <Grid xs>
-            <Typography level="h2" fontSize={26} fontWeight={900} textAlign="center">
+            <Typography level="h2" fontSize={{ xs: 16, md: 26 }} fontWeight={900} textAlign="center">
               x8
             </Typography>
             <Grid container xs justifyContent="center" gap={0.5}>
               {modifiers[2].map((letter) => (
-                <LetterHolder key={`modifier_${letter}`} color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}>
+                <LetterHolder
+                  key={`modifier_${letter}`}
+                  color={disabledKeys?.includes(letter) ? 'inactive' : 'active'}
+                  sx={{
+                    width: { xs: 20, md: 30 },
+                    height: { xs: 20, md: 30 },
+                    fontSize: '1.25em',
+                    borderWidth: { xs: '1px', md: '2px' },
+                  }}
+                >
                   {letter}
                 </LetterHolder>
               ))}

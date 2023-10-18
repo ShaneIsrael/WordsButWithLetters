@@ -18,7 +18,7 @@ const CountdownTimer = ({ targetDate, onExpire, start, finalTimeMinutes, finalTi
     <>
       <Grid container height="100%" justifyContent="center" alignItems="center" gap={0.5}>
         <Grid container xs={12} justifyContent="center">
-          <TimerIcon sx={{ fontSize: 32 }} />
+          <TimerIcon sx={{ fontSize: { xs: 16, md: 32 } }} />
         </Grid>
         <Grid container gap={0.5}>
           {finalTimeMinutes && finalTimeSeconds ? (

@@ -82,7 +82,7 @@ const Register = () => {
   }
 
   return (
-    <Appbar hideLoginLogout hideTitle>
+    <Appbar hideLoginLogout>
       <Box
         sx={{
           display: 'flex',

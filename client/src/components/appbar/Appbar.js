@@ -77,7 +77,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
         <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
         <InstructionModal open={instructionsModalOpen} onClose={handleInstructionModalClose} />
         <Toolbar>
-          <Grid container xs={4}>
+          <Grid container xs={2} md={4}>
             <Dropdown>
               <MenuButton
                 sx={{
@@ -109,7 +109,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
               </Menu>
             </Dropdown>
           </Grid>
-          <Grid container xs={4} justifyContent="center">
+          <Grid container xs={8} md={4} justifyContent="center">
             {!hideTitle && (
               <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
                 <Typography
@@ -117,7 +117,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
                   textAlign="center"
                   sx={{
                     fontSize: {
-                      xs: 18,
+                      xs: 22,
                       md: 32,
                     },
                   }}
@@ -129,7 +129,8 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
           </Grid>
           <Grid
             container
-            xs={4}
+            xs={2}
+            md={4}
             justifyContent="flex-end"
             sx={{
               display: {
@@ -186,20 +187,14 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
         id="scrollableViewport"
       >
         <Box
+          component="main"
           sx={{
-            '@media screen and (max-width: 30em)': { scale: '0.6' },
+            pt: '64px',
+            width: '100%',
+            height: 'calc(100vh + 32px)',
           }}
         >
-          <Box
-            component="main"
-            sx={{
-              pt: '64px',
-              width: '100%',
-              height: 'calc(100vh + 32px)',
-            }}
-          >
-            {children}
-          </Box>
+          {children}
         </Box>
       </Box>
     </>

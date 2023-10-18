@@ -51,7 +51,7 @@ const HIGHLIGHT_COLORS = {
   },
 }
 
-const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
+const LetterHolder = styled(Sheet)(({ theme, color = 'red', sx }) => ({
   ...theme.typography['body-sm'],
   backgroundColor:
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].backgroundDark : HIGHLIGHT_COLORS[color].backgroundLight,
@@ -62,10 +62,8 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderActiveDark : HIGHLIGHT_COLORS[color].borderActiveLight
   }`,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
-  width: 34,
-  height: 34,
-  fontSize: 18,
   fontWeight: 'bold',
+  ...sx,
 }))
 
 function InstructionModal({ open, onClose }) {
@@ -78,6 +76,11 @@ function InstructionModal({ open, onClose }) {
     if (disabled && disabled === 'true') setInstructionsDisabled(true)
   }, [])
 
+  const lhsx = {
+    width: { xs: 28, md: 34 },
+    height: { xs: 28, md: 34 },
+    fontSize: { xs: 16, md: 18 },
+  }
   return (
     <Modal
       open={open}
@@ -86,11 +89,6 @@ function InstructionModal({ open, onClose }) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        '@media (max-width:1000px) (max-height:1000px)': { scale: '1' },
-        '@media (max-width:800px), (max-height:900px)': { scale: '0.9' },
-        '@media (max-width:700px), (max-height:800px)': { scale: '0.8' },
-        '@media (max-width:600px), (max-height:700px)': { scale: '0.7' },
-        '@media (min-height:500px)': { mt: '-40px' },
         backdropFilter: 'blur(3px)',
       }}
       hideBackdrop
@@ -98,9 +96,9 @@ function InstructionModal({ open, onClose }) {
       <Sheet
         variant="outlined"
         sx={{
-          maxWidth: 500,
+          maxWidth: { xs: 350, md: 500 },
           borderRadius: 'md',
-          p: 3,
+          p: { xs: 1.5, md: 3 },
           boxShadow: 'lg',
           display: 'flex',
         }}
@@ -121,49 +119,71 @@ function InstructionModal({ open, onClose }) {
         >
           <ClearIcon />
         </IconButton>
-        <Grid container sx={{ gap: 1 }}>
+        <Grid container sx={{ gap: { xs: 0.5, md: 1 } }}>
           <Typography level="h1">How to Play</Typography>
           <Typography
             width="100%"
-            fontSize={18}
+            fontSize={{ xs: 12, md: 18 }}
             fontWeight={700}
-            lineHeight={'14px'}
-            sx={{ borderBottom: `3px solid ${theme.palette.neutral[600]}`, pb: 2, lineHeight: '1.5' }}
+            lineHeight={{ md: '14px' }}
+            sx={{ borderBottom: `3px solid ${theme.palette.neutral[600]}`, pb: { xs: 1, md: 2 }, lineHeight: '1.5' }}
           >
             Get the highest score you can by creating 5 letter words while using the score modifier letters.
           </Typography>
           <Box sx={{ display: 'grid', p: '8px 16px', gap: 1 }}>
-            <Typography sx={{ display: 'list-item' }}>
+            <Typography sx={{ display: 'list-item', fontSize: { xs: 12, md: 18 } }}>
               Multiply your word score by using{' '}
               <Typography fontWeight={900} sx={{ color: theme.palette.mode === 'dark' ? 'yellow' : 'goldenrod' }}>
                 score modifiers
               </Typography>
               .
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
-              <LetterHolder color="standard">S</LetterHolder>
-              <LetterHolder color="yellow">C</LetterHolder>
-              <LetterHolder color="standard">O</LetterHolder>
-              <LetterHolder color="yellow">R</LetterHolder>
-              <LetterHolder color="standard">E</LetterHolder>
+            <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1, mb: 1 }}>
+              <LetterHolder color="standard" sx={lhsx}>
+                S
+              </LetterHolder>
+              <LetterHolder color="yellow" sx={lhsx}>
+                C
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                O
+              </LetterHolder>
+              <LetterHolder color="yellow" sx={lhsx}>
+                R
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                E
+              </LetterHolder>
             </Box>
-            <Typography sx={{ display: 'list-item' }}>
+            <Typography sx={{ display: 'list-item', fontSize: { xs: 12, md: 18 } }}>
               Letters placed within{' '}
               <Typography fontWeight={900} sx={{ color: 'red' }}>
                 red tiles
               </Typography>{' '}
               are moved to the bonus word section and will become unusable.
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
-              <LetterHolder color="standard">M</LetterHolder>
-              <LetterHolder color="red">O</LetterHolder>
-              <LetterHolder color="standard">N</LetterHolder>
-              <LetterHolder color="standard">E</LetterHolder>
-              <LetterHolder color="red">Y</LetterHolder>
+            <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1, mb: 1 }}>
+              <LetterHolder color="standard" sx={lhsx}>
+                M
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                O
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                N
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                E
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                Y
+              </LetterHolder>
             </Box>
-            <Typography sx={{ display: 'list-item' }}>If your word is valid, the tiles will change.</Typography>
-            <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
-              <LetterHolder color="completed" className={clsx({ hop0: animate })}>
+            <Typography sx={{ display: 'list-item', fontSize: { xs: 12, md: 18 } }}>
+              If your word is valid, the tiles will change.
+            </Typography>
+            <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1, mb: 1 }}>
+              <LetterHolder color="completed" className={clsx({ hop0: animate })} sx={lhsx}>
                 P
               </LetterHolder>
               <LetterHolder
@@ -171,6 +191,7 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop1: animate })}
                 sx={{
                   animationDelay: '300ms',
+                  ...lhsx,
                 }}
               >
                 L
@@ -180,6 +201,7 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop2: animate })}
                 sx={{
                   animationDelay: '600ms',
+                  ...lhsx,
                 }}
               >
                 A
@@ -189,6 +211,7 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop3: animate })}
                 sx={{
                   animationDelay: '900ms',
+                  ...lhsx,
                 }}
               >
                 C
@@ -198,27 +221,44 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop4: animate })}
                 sx={{
                   animationDelay: '1200ms',
+                  ...lhsx,
                 }}
               >
                 E
               </LetterHolder>
             </Box>
-            <Typography sx={{ display: 'list-item' }}>
+            <Typography sx={{ display: 'list-item', fontSize: { xs: 12, md: 18 } }}>
               Once your puzzle is complete, the first five letter word found in the bonus section will be added to your
               score.
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-              <LetterHolder color="standard">U</LetterHolder>
-              <LetterHolder color="standard">X</LetterHolder>
-              <LetterHolder color="red">R</LetterHolder>
-              <LetterHolder color="red">H</LetterHolder>
-              <LetterHolder color="red">Y</LetterHolder>
-              <LetterHolder color="red">M</LetterHolder>
-              <LetterHolder color="red">E</LetterHolder>
-              <LetterHolder color="standard">P</LetterHolder>
+            <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1 }}>
+              <LetterHolder color="standard" sx={lhsx}>
+                U
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                X
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                R
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                H
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                Y
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                M
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                E
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                P
+              </LetterHolder>
             </Box>
           </Box>
-          <Box display="flex" width="100%" justifyContent="center" mt={1}>
+          <Box display="flex" width="100%" justifyContent="center" mt={{ xs: 0.5, md: 1 }}>
             <Checkbox
               color="primary"
               size="md"

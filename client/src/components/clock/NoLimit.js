@@ -9,10 +9,10 @@ const NoLimit = (props) => {
     <>
       <Grid container height="100%" justifyContent="center" alignItems="center" gap={0.5}>
         <Grid container xs={12} justifyContent="center">
-          <TimerIcon sx={{ fontSize: 32 }} />
+          <TimerIcon sx={{ fontSize: { xs: 24, md: 32 } }} />
         </Grid>
         <Grid container>
-          <AllInclusiveIcon sx={{ fontSize: 40 }} />
+          <AllInclusiveIcon sx={{ fontSize: { xs: 28, md: 40 } }} />
         </Grid>
       </Grid>
     </>

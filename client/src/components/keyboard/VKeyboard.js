@@ -5,14 +5,11 @@ import BackspaceIcon from '@mui/icons-material/Backspace'
 import { useTheme } from '@emotion/react'
 import clsx from 'clsx'
 
-const KeyButton = styled(Button)(({ theme, highlight }) => ({
+const KeyButton = styled(Button)(({ theme, highlight, sx }) => ({
   backgroundColor: highlight ? '#EACB4F59' : false,
   ...theme.typography['body-sm'],
   borderRadius: 0,
   borderColor: highlight ? theme.palette.warning[200] : false,
-  width: 43,
-  height: 58,
-  fontSize: '1.25em',
   fontWeight: 'bold',
   cursor: 'pointer',
   ':hover': {
@@ -21,6 +18,7 @@ const KeyButton = styled(Button)(({ theme, highlight }) => ({
   '&.Mui-disabled': {
     border: theme.palette.mode === 'light' && '1px solid lightGrey',
   },
+  ...sx,
 }))
 
 const layout = [
@@ -97,6 +95,10 @@ const VKeyboard = ({
         sx={{
           backgroundColor: keyDisabled ? 'transparent' : background,
           border: `1px solid ${border}`,
+          paddingInline: { xs: '14px', md: '16px' },
+          width: { xs: 21.5, md: 43 },
+          height: { xs: 25, md: 58 },
+          fontSize: { xs: '1em', md: '1.25em' },
           ...sx,
         }}
         onClick={onClick}
@@ -113,8 +115,9 @@ const VKeyboard = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        width: { xs: 350, md: 534 },
         gap: 1,
-        padding: 2,
+        padding: { xs: 1.5, md: 2 },
         borderBottomRightRadius: 8,
         borderBottomLeftRadius: 8,
         background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
@@ -124,27 +127,37 @@ const VKeyboard = ({
         <Grid
           key={`${row[0]}-${index}`}
           container
-          gap={1}
+          gap={{ xs: 0.5, md: 1 }}
           flexWrap="nowrap"
           justifyContent={'center'}
-          sx={{ height: 58 }}
+          sx={{ height: { xs: 32, md: 58 } }}
         >
           {row.map((key) => (
             <div key={key}>
               {key === 'DELETE' && (
                 <Box>
-                  {getPrimaryButton(<BackspaceIcon />, true, () => onDelete(), disabled, {
-                    maxWidth: 65.4,
-                    width: '100%',
-                  })}
+                  {getPrimaryButton(
+                    <BackspaceIcon
+                      sx={{
+                        width: { xs: 16, md: 24 },
+                      }}
+                    />,
+                    true,
+                    () => onDelete(),
+                    disabled,
+                    {
+                      maxWidth: { xs: 48, md: 65.4 },
+                      width: '100%',
+                    },
+                  )}
                 </Box>
               )}
               {key === 'ENTER' && (
                 <Box>
                   {getPrimaryButton(key, true, () => onEnter(), disabled, {
-                    maxWidth: 65.4,
+                    maxWidth: { xs: 48, md: 65.4 },
                     width: '100%',
-                    fontSize: 12,
+                    fontSize: { xs: 8, md: 12 },
                   })}
                 </Box>
               )}

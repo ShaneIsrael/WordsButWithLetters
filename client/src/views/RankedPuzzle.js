@@ -199,7 +199,10 @@ const RankedPuzzle = (props) => {
     <Appbar puzzleCompleted={puzzleComplete}>
       <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
         <div>
-          <Box className="scene" sx={{ mb: '2px', width: 534, height: 552 }}>
+          <Box
+            className="scene"
+            sx={{ mb: '2px', width: { xs: 350, md: 534 }, height: { xs: puzzleComplete ? 380 : 349, md: 552 } }}
+          >
             <Box className={clsx('card', puzzleSubmission && 'is-flipped')} sx={{ width: '100%', height: '100%' }}>
               <Sheet
                 className={clsx('card-face')}

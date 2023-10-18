@@ -30,10 +30,6 @@ function FeedbackModal({ open, onClose }) {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        '@media (max-width:800px), (max-height:900px)': { scale: '0.8' },
-        '@media (max-width:600px), (max-height:800px)': { scale: '0.7' },
-        '@media (max-width:400px), (max-height:700px)': { scale: '0.6' },
-        '@media (max-width:300px), (max-height:600px)': { scale: '0.5' },
         backdropFilter: 'blur(3px)',
       }}
       hideBackdrop
@@ -41,8 +37,8 @@ function FeedbackModal({ open, onClose }) {
       <Sheet
         variant="outlined"
         sx={{
-          width: 400,
-          height: 480,
+          width: { xs: 350, md: 400 },
+          height: { xs: 400, md: 480 },
           borderRadius: 'md',
           p: '16px 16px 40px 16px',
           boxShadow: 'lg',

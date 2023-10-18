@@ -59,8 +59,8 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
     <Sheet
       variant="plain"
       sx={{
-        width: 534,
-        height: 222,
+        width: { xs: 350, md: 534 },
+        height: { xs: 89, md: 222 },
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
@@ -70,8 +70,8 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
       }}
     >
       <FeedbackModal open={feedbackModalOpen} onClose={() => setFeedbackModalOpen(false)} />
-      <Grid container direction="column" alignItems="center" spacing={1}>
-        <Grid>
+      <Grid container justifyContent="center" alignItems="center" gap={{ xs: 0.5, md: 1 }}>
+        <Grid container justifyContent="center" md={12}>
           <Button
             color="success"
             size="md"
@@ -86,7 +86,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
             Share
           </Button>
         </Grid>
-        <Grid>
+        <Grid container justifyContent="center" md={12}>
           <Tooltip title="Give us some feedback.">
             <Button
               sx={{ background: '#014CC273' }}
@@ -99,7 +99,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
           </Tooltip>
         </Grid>
         {location.pathname === '/casual' && (
-          <Grid>
+          <Grid container justifyContent="center" md={12}>
             <Tooltip title="Ranked puzzle scores appear on daily leaderboards and allow you to partake in daily discussions.">
               <Button
                 color="primary"
@@ -116,7 +116,7 @@ const ShareButton = ({ progress, scoreModifiers, puzzleNumber }) => {
           </Grid>
         )}
         {location.pathname === '/' && (
-          <Grid>
+          <Grid container justifyContent="center" md={12}>
             <Button
               color="primary"
               size="md"
