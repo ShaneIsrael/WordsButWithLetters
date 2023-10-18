@@ -51,7 +51,7 @@ const HIGHLIGHT_COLORS = {
   },
 }
 
-const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
+const LetterHolder = styled(Sheet)(({ theme, color = 'red', sx }) => ({
   ...theme.typography['body-sm'],
   backgroundColor:
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].backgroundDark : HIGHLIGHT_COLORS[color].backgroundLight,
@@ -62,10 +62,8 @@ const LetterHolder = styled(Sheet)(({ theme, color = 'red' }) => ({
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].borderActiveDark : HIGHLIGHT_COLORS[color].borderActiveLight
   }`,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
-  width: 34,
-  height: 34,
-  fontSize: 18,
   fontWeight: 'bold',
+  ...sx,
 }))
 
 function InstructionModal({ open, onClose }) {
@@ -78,6 +76,11 @@ function InstructionModal({ open, onClose }) {
     if (disabled && disabled === 'true') setInstructionsDisabled(true)
   }, [])
 
+  const lhsx = {
+    width: { xs: 28, md: 34 },
+    height: { xs: 28, md: 34 },
+    fontSize: { xs: 16, md: 18 },
+  }
   return (
     <Modal
       open={open}
@@ -95,7 +98,7 @@ function InstructionModal({ open, onClose }) {
         sx={{
           maxWidth: { xs: 350, md: 500 },
           borderRadius: 'md',
-          p: { xs: 1, md: 3 },
+          p: { xs: 1.5, md: 3 },
           boxShadow: 'lg',
           display: 'flex',
         }}
@@ -136,11 +139,21 @@ function InstructionModal({ open, onClose }) {
               .
             </Typography>
             <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1, mb: 1 }}>
-              <LetterHolder color="standard">S</LetterHolder>
-              <LetterHolder color="yellow">C</LetterHolder>
-              <LetterHolder color="standard">O</LetterHolder>
-              <LetterHolder color="yellow">R</LetterHolder>
-              <LetterHolder color="standard">E</LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                S
+              </LetterHolder>
+              <LetterHolder color="yellow" sx={lhsx}>
+                C
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                O
+              </LetterHolder>
+              <LetterHolder color="yellow" sx={lhsx}>
+                R
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                E
+              </LetterHolder>
             </Box>
             <Typography sx={{ display: 'list-item', fontSize: { xs: 12, md: 18 } }}>
               Letters placed within{' '}
@@ -150,17 +163,27 @@ function InstructionModal({ open, onClose }) {
               are moved to the bonus word section and will become unusable.
             </Typography>
             <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1, mb: 1 }}>
-              <LetterHolder color="standard">M</LetterHolder>
-              <LetterHolder color="red">O</LetterHolder>
-              <LetterHolder color="standard">N</LetterHolder>
-              <LetterHolder color="standard">E</LetterHolder>
-              <LetterHolder color="red">Y</LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                M
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                O
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                N
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                E
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                Y
+              </LetterHolder>
             </Box>
             <Typography sx={{ display: 'list-item', fontSize: { xs: 12, md: 18 } }}>
               If your word is valid, the tiles will change.
             </Typography>
             <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1, mb: 1 }}>
-              <LetterHolder color="completed" className={clsx({ hop0: animate })}>
+              <LetterHolder color="completed" className={clsx({ hop0: animate })} sx={lhsx}>
                 P
               </LetterHolder>
               <LetterHolder
@@ -168,6 +191,7 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop1: animate })}
                 sx={{
                   animationDelay: '300ms',
+                  ...lhsx,
                 }}
               >
                 L
@@ -177,6 +201,7 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop2: animate })}
                 sx={{
                   animationDelay: '600ms',
+                  ...lhsx,
                 }}
               >
                 A
@@ -186,6 +211,7 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop3: animate })}
                 sx={{
                   animationDelay: '900ms',
+                  ...lhsx,
                 }}
               >
                 C
@@ -195,6 +221,7 @@ function InstructionModal({ open, onClose }) {
                 className={clsx({ hop4: animate })}
                 sx={{
                   animationDelay: '1200ms',
+                  ...lhsx,
                 }}
               >
                 E
@@ -205,14 +232,30 @@ function InstructionModal({ open, onClose }) {
               score.
             </Typography>
             <Box sx={{ display: 'flex', gap: { xs: 0.5, md: 1 }, mt: 1 }}>
-              <LetterHolder color="standard">U</LetterHolder>
-              <LetterHolder color="standard">X</LetterHolder>
-              <LetterHolder color="red">R</LetterHolder>
-              <LetterHolder color="red">H</LetterHolder>
-              <LetterHolder color="red">Y</LetterHolder>
-              <LetterHolder color="red">M</LetterHolder>
-              <LetterHolder color="red">E</LetterHolder>
-              <LetterHolder color="standard">P</LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                U
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                X
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                R
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                H
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                Y
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                M
+              </LetterHolder>
+              <LetterHolder color="red" sx={lhsx}>
+                E
+              </LetterHolder>
+              <LetterHolder color="standard" sx={lhsx}>
+                P
+              </LetterHolder>
             </Box>
           </Box>
           <Box display="flex" width="100%" justifyContent="center" mt={{ xs: 0.5, md: 1 }}>
