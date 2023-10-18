@@ -197,7 +197,16 @@ const Puzzle = (props) => {
 
   return (
     <Appbar puzzleCompleted={puzzleComplete}>
-      <Box sx={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+      <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          height: '100%',
+          justifyContent: 'center',
+          alignItems: { xs: 'flex-start', md: 'center' },
+          pt: { xs: 4, md: 0 },
+        }}
+      >
         <div>
           <Box
             className="scene"

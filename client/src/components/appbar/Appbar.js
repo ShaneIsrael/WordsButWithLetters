@@ -17,6 +17,7 @@ import FeedbackModal from '../modals/FeedbackModal'
 import Cookies from 'js-cookie'
 import InstructionModal from '../modals/InstructionModal'
 import ShootingStars from '../misc/ShootingStars'
+import { isMobile } from 'react-device-detect'
 
 function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle, children }) {
   const theme = useTheme()
@@ -67,7 +68,7 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
 
   return (
     <>
-      {theme.palette.mode === 'dark' && location.pathname === '/' && <ShootingStars />}
+      {theme.palette.mode === 'dark' && location.pathname === '/' && !isMobile && <ShootingStars />}
       <AppBar
         component="nav"
         sx={{
@@ -189,9 +190,9 @@ function Appbar({ hideInstructions, puzzleCompleted, hideLoginLogout, hideTitle,
         <Box
           component="main"
           sx={{
-            pt: '64px',
+            pt: { xs: '56px', md: '64px' },
             width: '100%',
-            height: 'calc(100vh + 32px)',
+            height: { xs: 'calc(100vh + 28px)', md: 'calc(100vh + 32px)' },
           }}
         >
           {children}
