@@ -34,7 +34,7 @@ const Welcome = (props) => {
 
   return (
     <Appbar>
-      <Grid container justifyContent="center" gap={2} mt={4} mb={5}>
+      <Grid container justifyContent="center" gap={2} mt={4} mb={10}>
         <Grid xs={12}>
           <Fade in={!loading} timeout={500}>
             <div>
