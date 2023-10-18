@@ -34,9 +34,9 @@ const Clock = ({ seconds, start, handleExpire, finalTime, noLimit }) => {
       sx={{
         borderTopRightRadius: 8,
         marginBottom: 0.5,
-        padding: '14px 8px 8px 8px',
-        width: 140,
-        height: 100,
+        padding: { xs: '8px 4px 4px 4px', md: '14px 8px 8px 8px' },
+        width: { xs: 91.7, md: 140 },
+        height: { xs: 68.8, md: 100 },
         background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
       }}
     >

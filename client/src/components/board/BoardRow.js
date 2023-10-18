@@ -33,7 +33,7 @@ const HIGHLIGHT_COLORS = {
   },
 }
 
-const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder }) => ({
+const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder, sx }) => ({
   ...theme.typography['body-sm'],
   display: 'flex',
   justifyContent: 'center',
@@ -44,14 +44,12 @@ const LetterHolder = styled(Sheet)(({ theme, active, highlight, highlightborder 
     : `2px solid ${theme.palette.mode === 'dark' ? '#616161' : '#B6B6B6'}`,
   borderColor: highlightborder || false,
   color: theme.palette.mode === 'dark' ? '#fff' : 'black',
-  width: 60,
-  height: 60,
-  fontSize: '1.75em',
-  fontWeight: 'bold',
   background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0)' : theme.palette.neutral[100],
+  fontWeight: 'bold',
+  ...sx,
 }))
 
-const HighlightLetterHolder = styled(Sheet)(({ theme, active, color, highlightborder }) => ({
+const HighlightLetterHolder = styled(Sheet)(({ theme, active, color, highlightborder, sx }) => ({
   backgroundColor:
     theme.palette.mode === 'dark' ? HIGHLIGHT_COLORS[color].backgroundDark : HIGHLIGHT_COLORS[color].backgroundLight,
   ...theme.typography['body-sm'],
@@ -79,16 +77,13 @@ const HighlightLetterHolder = styled(Sheet)(({ theme, active, color, highlightbo
       : HIGHLIGHT_COLORS[color].borderLight
   }`,
   color: '#fff',
-  width: 60,
-  height: 60,
-  fontSize: '1.75em',
-  fontWeight: 'bold',
+  ...sx,
 }))
 
 const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexes }) => {
   if (letters) {
     return (
-      <Grid container gap={1}>
+      <Grid container gap={{ xs: 0.75, md: 1 }}>
         {letters.map((letter, index) => {
           const highlight = highlightIndexes.find((e) => e[1] === index)
 
@@ -106,7 +101,13 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
                 active={letter}
                 color={'red'}
                 highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS.yellow.borderActiveDark : ''}
-                sx={{ animationDelay }}
+                sx={{
+                  animationDelay,
+                  width: { xs: 38, md: 60 },
+                  height: { xs: 38, md: 60 },
+                  fontSize: { xs: '1em', md: '1.75em' },
+                  borderWidth: { xs: '1px', md: '2px' },
+                }}
               >
                 {letter}
               </HighlightLetterHolder>
@@ -120,7 +121,13 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
                 })}
                 active={letter}
                 color={modifierLetters.includes(letter) ? 'yellow' : 'completed'}
-                sx={{ animationDelay }}
+                sx={{
+                  animationDelay,
+                  width: { xs: 38, md: 60 },
+                  height: { xs: 38, md: 60 },
+                  fontSize: { xs: '1em', md: '1.75em' },
+                  borderWidth: { xs: '1px', md: '2px' },
+                }}
               >
                 {letter}
               </HighlightLetterHolder>
@@ -131,7 +138,13 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
               // className={clsx({'tilt-shake': letter, 'goldPulse': modifierLetters.includes(letter)})}
               active={letter}
               highlightborder={modifierLetters.includes(letter) ? HIGHLIGHT_COLORS.yellow.borderActiveDark : ''}
-              sx={{ animationDelay }}
+              sx={{
+                animationDelay,
+                width: { xs: 38, md: 60 },
+                height: { xs: 38, md: 60 },
+                fontSize: { xs: '1em', md: '1.75em' },
+                borderWidth: { xs: '1px', md: '2px' },
+              }}
             >
               {letter}
             </LetterHolder>
@@ -141,13 +154,31 @@ const BoardRow = ({ active, completed, letters, modifierLetters, highlightIndexe
     )
   }
   return (
-    <Grid container gap={1}>
+    <Grid container gap={{ xs: 0.75, md: 1 }}>
       {letters.map((_, index) => {
         const highlight = highlightIndexes.filter((e) => e.index === index)[0]
         return highlight ? (
-          <HighlightLetterHolder key={`blank_${index}`} className={highlight.animation} color={'red'} />
+          <HighlightLetterHolder
+            key={`blank_${index}`}
+            className={highlight.animation}
+            color={'red'}
+            sx={{
+              width: { xs: 38, md: 60 },
+              height: { xs: 38, md: 60 },
+              fontSize: { xs: '1em', md: '1.75em' },
+              borderWidth: { xs: '1px', md: '2px' },
+            }}
+          />
         ) : (
-          <LetterHolder key={`blank_${index}`} />
+          <LetterHolder
+            key={`blank_${index}`}
+            sx={{
+              width: { xs: 38, md: 60 },
+              height: { xs: 38, md: 60 },
+              fontSize: { xs: '1em', md: '1.75em' },
+              borderWidth: { xs: '1px', md: '2px' },
+            }}
+          />
         )
       })}
     </Grid>

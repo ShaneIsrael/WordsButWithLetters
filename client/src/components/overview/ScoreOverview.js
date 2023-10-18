@@ -16,15 +16,15 @@ const ScoreOverview = ({ progress, scoreModifiers }) => {
         padding: 2,
         borderTopLeftRadius: 8,
         borderTopRightRadius: 8,
-        width: 534,
-        height: 548,
+        width: { xs: 350, md: 534 },
+        height: { xs: 380, md: 548 },
         background: theme.palette.mode === 'dark' ? false : theme.palette.neutral[100],
         justifyContent: 'center',
       }}
     >
       <Grid container width="100%" justifyContent="center">
         <Grid xs={12}>
-          <Typography level="h2" fontSize={34} textAlign="center">
+          <Typography level="h2" fontSize={{ xs: 24, md: 34 }} textAlign="center">
             Results!
           </Typography>
         </Grid>
@@ -41,7 +41,7 @@ const ScoreOverview = ({ progress, scoreModifiers }) => {
           </Grid>
         </Grid>
         <Grid xs={12}>
-          <Typography level="h2" fontSize={48} textAlign="center" mt={1.5}>
+          <Typography level="h2" fontSize={{ xs: 28, md: 48 }} textAlign="center" mt={{ xs: 0.5, md: 1.5 }}>
             {progress.wordScores
               .filter((score) => score)
               .reduce((prev, curr) => prev + curr, 0)

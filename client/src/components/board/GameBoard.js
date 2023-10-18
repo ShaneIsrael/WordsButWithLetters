@@ -67,11 +67,11 @@ const GameBoard = ({ hide, rows, activeRow, rowLetters, modifierLetters, rowHigh
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        gap: 1,
-        padding: 2,
+        gap: { xs: 0.5, md: 1 },
+        padding: { xs: 1, md: 2 },
         borderTopLeftRadius: 8,
-        width: (390 / 5) * rowLetters[0]?.length || 5,
-        height: (438 / 6) * rows,
+        width: { xs: 253, md: 390 },
+        height: { xs: 269, md: 438 },
         background: theme.palette.mode === 'dark' ? 'rgba(11, 13, 14, 0.5)' : theme.palette.neutral[100],
       }}
     >
