@@ -12,6 +12,7 @@ import BackgroundSquares from '../components/misc/BackgroundSquares'
 import ShootingStars from '../components/misc/ShootingStars'
 import LeaderboardLastSevenDays from '../components/leaderboard/LeaderboardLastSevenDays'
 import useScaleFactor from '../hooks/useScaleFactor'
+import { isMobile } from 'react-device-detect'
 
 const Welcome = (props) => {
   const navigate = useNavigate()
@@ -100,31 +101,86 @@ const Welcome = (props) => {
         <Grid mt={4}>
           <Fade in={!loading}>
             <Stack alignItems="center" gap={1}>
-              <Button
-                color="primary"
-                sx={{
-                  width: {
-                    xs: 150,
-                    md: 180,
-                  },
-                  height: {
-                    xs: 75,
-                    md: 90,
-                  },
-                  fontFamily: 'Bubblegum Sans',
-                  fontSize: {
-                    xs: 24,
-                    md: 29,
-                  },
-                  mb: {
-                    xs: 2,
-                    md: 6,
-                  },
-                }}
-                onClick={() => navigate('/casual')}
-              >
-                Play Casual
-              </Button>
+              {!isMobile ? (
+                <Button
+                  color="primary"
+                  sx={{
+                    width: {
+                      xs: 150,
+                      md: 180,
+                    },
+                    height: {
+                      xs: 75,
+                      md: 90,
+                    },
+                    fontFamily: 'Bubblegum Sans',
+                    fontSize: {
+                      xs: 24,
+                      md: 29,
+                    },
+                    mb: {
+                      xs: 2,
+                      md: 6,
+                    },
+                  }}
+                  onClick={() => navigate('/casual')}
+                >
+                  Play Casual
+                </Button>
+              ) : (
+                <Grid container gap={1}>
+                  <Button
+                    color="primary"
+                    sx={{
+                      width: {
+                        xs: 150,
+                        md: 180,
+                      },
+                      height: {
+                        xs: 75,
+                        md: 90,
+                      },
+                      fontFamily: 'Bubblegum Sans',
+                      fontSize: {
+                        xs: 24,
+                        md: 29,
+                      },
+                      mb: {
+                        xs: 2,
+                        md: 6,
+                      },
+                    }}
+                    onClick={() => navigate('/casual')}
+                  >
+                    Play Casual
+                  </Button>
+                  <Button
+                    color="success"
+                    sx={{
+                      width: {
+                        xs: 150,
+                        md: 180,
+                      },
+                      height: {
+                        xs: 75,
+                        md: 90,
+                      },
+                      fontFamily: 'Bubblegum Sans',
+                      fontSize: {
+                        xs: 23,
+                        md: 29,
+                      },
+                      mb: {
+                        xs: 2,
+                        md: 6,
+                      },
+                    }}
+                    onClick={() => navigate('/ranked')}
+                  >
+                    Play Ranked
+                  </Button>
+                </Grid>
+              )}
               <Tabs
                 variant="plain"
                 sx={{ background: 'rgba(0,0,0,0)' }}
@@ -185,34 +241,36 @@ const Welcome = (props) => {
             </Stack>
           </Fade>
         </Grid>
-        <Grid mt={{ xs: 1, md: 4 }}>
+        <Grid mt={{ xs: 0, md: 4 }}>
           <Fade in={!loading}>
             <Stack alignItems="center" gap={1}>
-              <Button
-                color="success"
-                sx={{
-                  width: {
-                    xs: 150,
-                    md: 180,
-                  },
-                  height: {
-                    xs: 75,
-                    md: 90,
-                  },
-                  fontFamily: 'Bubblegum Sans',
-                  fontSize: {
-                    xs: 23,
-                    md: 29,
-                  },
-                  mb: {
-                    xs: 2,
-                    md: 6,
-                  },
-                }}
-                onClick={() => navigate('/ranked')}
-              >
-                Play Ranked
-              </Button>
+              {!isMobile && (
+                <Button
+                  color="success"
+                  sx={{
+                    width: {
+                      xs: 150,
+                      md: 180,
+                    },
+                    height: {
+                      xs: 75,
+                      md: 90,
+                    },
+                    fontFamily: 'Bubblegum Sans',
+                    fontSize: {
+                      xs: 23,
+                      md: 29,
+                    },
+                    mb: {
+                      xs: 2,
+                      md: 6,
+                    },
+                  }}
+                  onClick={() => navigate('/ranked')}
+                >
+                  Play Ranked
+                </Button>
+              )}
               <Tabs
                 variant="plain"
                 sx={{ background: 'rgba(0,0,0,0)' }}
